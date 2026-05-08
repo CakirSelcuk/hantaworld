@@ -25,6 +25,14 @@ export default async function HomePage() {
       <LiveTicker items={tickerItems} />
 
       <main style={{ paddingTop: 64 }}>
+        {/* ── Verified Data Banner ── */}
+        <div style={{ background: 'rgba(34,197,94,0.05)', borderBottom: '1px solid rgba(34,197,94,0.15)', padding: '0.75rem 1.5rem', textAlign: 'center' }}>
+          <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: '#86efac', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+            <span style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: '#22c55e' }} />
+            <strong>STRICT VERIFICATION ENFORCED:</strong> This platform only displays data officially confirmed by WHO, CDC, or ECDC. No estimated or unverified figures are included.
+          </span>
+        </div>
+
         {/* ── Hero Dashboard ── */}
         <HeroStats stats={globalStats} />
 

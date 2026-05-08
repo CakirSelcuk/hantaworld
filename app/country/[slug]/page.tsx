@@ -150,7 +150,14 @@ export default async function CountryDetailPage({ params }: { params: Promise<{ 
                       {ob.description}
                     </p>
 
-                    <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+                    {ob.verificationNotes && (
+                      <div style={{ background: 'rgba(59,130,246,0.1)', padding: '0.8rem 1rem', borderRadius: '8px', marginBottom: '1.5rem', border: '1px solid rgba(59,130,246,0.2)' }}>
+                        <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#93c5fd', marginBottom: '0.3rem', letterSpacing: '0.05em' }}>VERIFICATION NOTES</span>
+                        <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>{ob.verificationNotes}</p>
+                      </div>
+                    )}
+
+                    <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
                       <div>
                         <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.65rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Confirmed</span>
                         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.1rem', color: 'var(--text-primary)' }}>{formatNumber(ob.confirmedCases)}</div>
@@ -168,6 +175,15 @@ export default async function CountryDetailPage({ params }: { params: Promise<{ 
                         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.1rem', color: ob.growthRate > 0 ? '#ef4444' : '#22c55e' }}>{ob.growthRate > 0 ? '+' : ''}{ob.growthRate}%</div>
                       </div>
                     </div>
+
+                    {ob.sourceUrl && (
+                      <div style={{ borderTop: '1px solid var(--border-glass)', paddingTop: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--text-muted)' }}>Last Verified: {new Date(ob.lastVerifiedDate || ob.lastUpdated).toLocaleDateString()}</span>
+                        <a href={ob.sourceUrl} target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'var(--font-ui)', fontSize: '0.8rem', color: 'var(--color-brand)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                          View Official Source ↗
+                        </a>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

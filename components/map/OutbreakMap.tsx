@@ -141,15 +141,28 @@ export default function OutbreakMap({ outbreaks, height = '100%' }: Props) {
             ))}
           </div>
 
-          <p style={{ fontFamily:'var(--font-ui)', fontSize:'0.75rem', color:'var(--text-secondary)', lineHeight:1.6, marginBottom:'0.75rem' }}>
+          <p style={{ fontFamily:'var(--font-ui)', fontSize:'0.75rem', color:'var(--text-secondary)', lineHeight:1.6, marginBottom:'0.5rem' }}>
             {selected.description}
           </p>
 
-          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
-            <span style={{ fontFamily:'var(--font-mono)', fontSize:'0.6rem', color:'var(--text-muted)' }}>Updated {timeAgo(selected.lastUpdated)}</span>
+          {selected.verificationNotes && (
+            <div style={{ background: 'rgba(59,130,246,0.1)', padding: '0.6rem', borderRadius: '6px', marginBottom: '0.75rem', border: '1px solid rgba(59,130,246,0.2)' }}>
+              <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: '#93c5fd', marginBottom: '0.2rem' }}>VERIFICATION NOTES</span>
+              <p style={{ fontFamily: 'var(--font-ui)', fontSize: '0.7rem', color: 'var(--text-secondary)', lineHeight: 1.4, margin: 0 }}>{selected.verificationNotes}</p>
+            </div>
+          )}
+
+          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginTop: '0.5rem' }}>
             <span style={{ fontFamily:'var(--font-mono)', fontSize:'0.58rem', color:selected.verified ? '#86efac' : '#fdba74', padding:'0.12rem 0.4rem', borderRadius:'3px', background:selected.verified ? 'rgba(34,197,94,0.1)' : 'rgba(234,179,8,0.1)' }}>
               {selected.verified ? '✓ VERIFIED' : '⚠ UNVERIFIED'}
             </span>
+            {selected.sourceUrl ? (
+              <a href={selected.sourceUrl} target="_blank" rel="noopener noreferrer" style={{ fontFamily:'var(--font-ui)', fontSize:'0.65rem', color:'var(--color-brand)', textDecoration:'none' }}>
+                View Source ↗
+              </a>
+            ) : (
+              <span style={{ fontFamily:'var(--font-mono)', fontSize:'0.6rem', color:'var(--text-muted)' }}>Updated {timeAgo(selected.lastUpdated)}</span>
+            )}
           </div>
         </div>
       )}
