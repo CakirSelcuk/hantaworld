@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Shield, ExternalLink } from 'lucide-react';
 
 const FOOTER_LINKS = {
@@ -34,8 +35,8 @@ export default function Footer() {
           {/* Brand */}
           <div style={{ maxWidth: 320 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
-              <div style={{ width: 28, height: 28, borderRadius: '7px', background: 'linear-gradient(135deg, #ef4444, #b91c1c)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Shield size={14} color="#fff" />
+              <div style={{ width: 28, height: 28, borderRadius: '7px', background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                <Image src="/hantaWorldLogo.jpg" alt="HantaWorld Logo" width={28} height={28} style={{ objectFit: 'cover' }} />
               </div>
               <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1rem', color: 'var(--text-primary)' }}>
                 Hanta<span style={{ color: '#ef4444' }}>World</span>

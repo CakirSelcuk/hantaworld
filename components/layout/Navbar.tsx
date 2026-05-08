@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Activity, Globe, Newspaper, Bell, Search, Menu, X, Shield } from 'lucide-react';
 
@@ -40,11 +41,12 @@ export default function Navbar() {
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', textDecoration: 'none', flexShrink: 0 }}>
           <div style={{
             width: 32, height: 32, borderRadius: '8px',
-            background: 'linear-gradient(135deg, #ef4444 0%, #b91c1c 100%)',
+            background: 'var(--bg-secondary)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 0 16px rgba(239,68,68,0.35)',
+            boxShadow: '0 0 16px rgba(239,68,68,0.25)',
+            overflow: 'hidden'
           }}>
-            <Shield size={16} color="#fff" strokeWidth={2.5} />
+            <Image src="/hantaWorldLogo.jpg" alt="HantaWorld Logo" width={32} height={32} style={{ objectFit: 'cover' }} />
           </div>
           <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.05rem', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
             Hanta<span style={{ color: '#ef4444' }}>World</span>
