@@ -34,13 +34,14 @@ export default function Footer() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr repeat(3, auto)', gap: '3rem', flexWrap: 'wrap' }}>
           {/* Brand */}
           <div style={{ maxWidth: 320 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
-              <div style={{ width: 28, height: 28, borderRadius: '7px', background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                <Image src="/hantaWorldLogo.jpg" alt="HantaWorld Logo" width={28} height={28} style={{ objectFit: 'cover' }} />
-              </div>
-              <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1rem', color: 'var(--text-primary)' }}>
-                Hanta<span style={{ color: '#ef4444' }}>World</span>
-              </span>
+            <div style={{ marginBottom: '1rem' }}>
+              <Image
+                src="/hantaLogo.png"
+                alt="HantaWorld Logo"
+                width={160}
+                height={80}
+                style={{ objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 0.9 }}
+              />
             </div>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.82rem', lineHeight: 1.7, marginBottom: '1rem' }}>
               A real-time global hantavirus outbreak intelligence platform. All data is sourced exclusively from verified public health authorities and peer-reviewed research.

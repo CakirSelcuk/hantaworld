@@ -39,15 +39,13 @@ export default function Navbar() {
       <div className="container-main" style={{ display: 'flex', alignItems: 'center', height: 64, gap: '2rem' }}>
         {/* Logo */}
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', textDecoration: 'none', flexShrink: 0 }}>
-          <div style={{
-            width: 32, height: 32, borderRadius: '8px',
-            background: 'var(--bg-secondary)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 0 16px rgba(239,68,68,0.25)',
-            overflow: 'hidden'
-          }}>
-            <Image src="/hantaWorldLogo.jpg" alt="HantaWorld Logo" width={32} height={32} style={{ objectFit: 'cover' }} />
-          </div>
+          <Image
+            src="/hantaLogo.png"
+            alt="HantaWorld Logo"
+            width={36}
+            height={36}
+            style={{ objectFit: 'contain' }}
+          />
           <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.05rem', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
             Hanta<span style={{ color: '#ef4444' }}>World</span>
           </span>
