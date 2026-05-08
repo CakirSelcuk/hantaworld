@@ -97,7 +97,9 @@ export default function HeroStats({ stats }: { stats: any }) {
           {['WHO', 'CDC', 'ECDC', 'ProMED', 'HealthMap'].map((src) => (
             <span key={src} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--text-muted)', padding: '0.15rem 0.45rem', border: '1px solid var(--border-subtle)', borderRadius: '4px' }}>{src}</span>
           ))}
-          <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', marginLeft: 'auto' }}>Confidence: <span style={{ color: '#86efac' }}>High</span></span>
+          <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', marginLeft: 'auto' }}>
+            Data verified: <span style={{ color: '#86efac' }}>{new Date(stats.lastUpdated).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+          </span>
         </div>
       </div>
       <style>{`.stat-cell:hover { background: var(--bg-card-hover) !important; }`}</style>

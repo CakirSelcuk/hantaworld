@@ -73,10 +73,13 @@ export default async function HomePage() {
         {/* ── Country Watchlist ── */}
         <CountryWatchlist items={watchlist} />
 
-        <hr className="section-divider" style={{ margin: '0 1.5rem' }} />
-
-        {/* ── Social Intelligence ── */}
-        <SocialIntelligence posts={socialTrends} />
+        {/* ── Social Intelligence (shown only when verified data exists) ── */}
+        {socialTrends.length > 0 && (
+          <>
+            <hr className="section-divider" style={{ margin: '0 1.5rem' }} />
+            <SocialIntelligence posts={socialTrends} />
+          </>
+        )}
 
         <hr className="section-divider" style={{ margin: '0 1.5rem' }} />
 

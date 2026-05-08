@@ -9,21 +9,30 @@
     "isOfficial": true
   },
   {
+    "id": "s-who-update",
+    "name": "WHO Official Update",
+    "organization": "World Health Organization",
+    "url": "https://www.who.int",
+    "type": "who",
+    "reliabilityScore": 10,
+    "isOfficial": true
+  },
+  {
     "id": "s-cdc",
     "name": "CDC Health Alert Network",
-    "organization": "Centers for Disease Control",
+    "organization": "Centers for Disease Control and Prevention",
     "url": "https://www.cdc.gov/hantavirus",
     "type": "cdc",
     "reliabilityScore": 10,
     "isOfficial": true
   },
   {
-    "id": "s-promed",
-    "name": "ProMED Mail",
-    "organization": "International Society for Infectious Diseases",
-    "url": "https://promedmail.org",
-    "type": "promed",
-    "reliabilityScore": 9,
-    "isOfficial": false
+    "id": "s-ecdc",
+    "name": "ECDC Surveillance Atlas",
+    "organization": "European Centre for Disease Prevention and Control",
+    "url": "https://www.ecdc.europa.eu",
+    "type": "ecdc",
+    "reliabilityScore": 10,
+    "isOfficial": true
   }
 ]

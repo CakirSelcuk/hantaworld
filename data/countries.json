@@ -1,102 +1,13 @@
 [
   {
-    "id": "c-ar",
-    "isoCode": "ARG",
-    "name": "Argentina",
-    "slug": "argentina",
-    "continent": "South America",
-    "population": 45605826,
-    "flagEmoji": "🇦🇷",
-    "coordinates": { "lat": -34.6, "lng": -58.4 }
-  },
-  {
-    "id": "c-cl",
-    "isoCode": "CHL",
-    "name": "Chile",
-    "slug": "chile",
-    "continent": "South America",
-    "population": 19116201,
-    "flagEmoji": "🇨🇱",
-    "coordinates": { "lat": -33.4, "lng": -70.6 }
-  },
-  {
-    "id": "c-br",
-    "isoCode": "BRA",
-    "name": "Brazil",
-    "slug": "brazil",
-    "continent": "South America",
-    "population": 215313498,
-    "flagEmoji": "🇧🇷",
-    "coordinates": { "lat": -15.8, "lng": -47.9 }
-  },
-  {
-    "id": "c-us",
-    "isoCode": "USA",
-    "name": "United States",
-    "slug": "usa",
-    "continent": "North America",
-    "population": 331893745,
-    "flagEmoji": "🇺🇸",
-    "coordinates": { "lat": 37.8, "lng": -96.9 }
-  },
-  {
-    "id": "c-de",
-    "isoCode": "DEU",
-    "name": "Germany",
-    "slug": "germany",
-    "continent": "Europe",
-    "population": 83783942,
-    "flagEmoji": "🇩🇪",
-    "coordinates": { "lat": 51.2, "lng": 10.4 }
-  },
-  {
-    "id": "c-cn",
-    "isoCode": "CHN",
-    "name": "China",
-    "slug": "china",
-    "continent": "Asia",
-    "population": 1402112000,
-    "flagEmoji": "🇨🇳",
-    "coordinates": { "lat": 35.9, "lng": 104.2 }
-  },
-  {
-    "id": "c-kr",
-    "isoCode": "KOR",
-    "name": "South Korea",
-    "slug": "south-korea",
-    "continent": "Asia",
-    "population": 51780579,
-    "flagEmoji": "🇰🇷",
-    "coordinates": { "lat": 37.6, "lng": 127.0 }
-  },
-  {
-    "id": "c-ru",
-    "isoCode": "RUS",
-    "name": "Russia",
-    "slug": "russia",
-    "continent": "Europe/Asia",
-    "population": 145912025,
-    "flagEmoji": "🇷🇺",
-    "coordinates": { "lat": 61.5, "lng": 105.3 }
-  },
-  {
-    "id": "c-fi",
-    "isoCode": "FIN",
-    "name": "Finland",
-    "slug": "finland",
-    "continent": "Europe",
-    "population": 5540720,
-    "flagEmoji": "🇫🇮",
-    "coordinates": { "lat": 64.0, "lng": 26.0 }
-  },
-  {
-    "id": "c-pa",
-    "isoCode": "PAN",
-    "name": "Panama",
-    "slug": "panama",
-    "continent": "Central America",
-    "population": 4351267,
-    "flagEmoji": "🇵🇦",
-    "coordinates": { "lat": 8.5, "lng": -80.8 }
+    "id": "c-multi-hondius",
+    "isoCode": "MULTI",
+    "name": "Multi-Country (MV Hondius Cluster)",
+    "slug": "mv-hondius-cluster",
+    "continent": "Multi-Region",
+    "population": 0,
+    "flagEmoji": "🚢",
+    "coordinates": { "lat": -54.5, "lng": -36.5 },
+    "healthAuthorityUrl": "https://www.who.int/emergencies/disease-outbreak-news"
   }
 ]

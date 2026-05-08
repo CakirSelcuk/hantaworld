@@ -61,6 +61,12 @@ export interface Outbreak {
   verified: boolean;
   lastUpdated: string;
   description: string;
+  // Traceability fields
+  confidenceScore?: number;      // 0-100
+  verificationNotes?: string;    // e.g. "WHO updated figures on 7 May"
+  sourceUrl?: string;            // direct link to the authoritative source
+  publicationDate?: string;      // ISO date of the source publication
+  lastVerifiedDate?: string;     // ISO date when data was last verified
 }
 
 export interface OutbreakEvent {
@@ -104,6 +110,10 @@ export interface Article {
   readingTimeMin: number;
   coverImage?: string;
   citations: string[];
+  // Traceability fields
+  confidenceScore?: number;      // 0-100
+  sourceUrl?: string;            // direct link to the authoritative source
+  lastVerifiedDate?: string;     // ISO date when data was last verified
 }
 
 export interface SocialPost {
