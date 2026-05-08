@@ -1,65 +1,90 @@
-import Image from "next/image";
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
+import LiveTicker from '@/components/dashboard/LiveTicker';
+import HeroStats from '@/components/dashboard/HeroStats';
+import CountryWatchlist from '@/components/dashboard/CountryWatchlist';
+import LatestReports from '@/components/dashboard/LatestReports';
+import AlertSignup from '@/components/dashboard/AlertSignup';
+import SocialIntelligence from '@/components/dashboard/SocialIntelligence';
+import MapWrapper from '@/components/map/MapWrapper';
+import { getOutbreaks, getCountryWatchlist, getArticles, getSocialTrends, getGlobalStats, getTickerItems } from '@/lib/data';
+import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
-export default function Home() {
+export default async function HomePage() {
+  const outbreaks = await getOutbreaks();
+  const watchlist = await getCountryWatchlist();
+  const articles = await getArticles();
+  const socialTrends = await getSocialTrends();
+  const globalStats = await getGlobalStats();
+  const tickerItems = await getTickerItems();
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+    <>
+      <Navbar />
+      <LiveTicker items={tickerItems} />
+
+      <main style={{ paddingTop: 64 }}>
+        {/* ── Hero Dashboard ── */}
+        <HeroStats stats={globalStats} />
+
+        <hr className="section-divider" style={{ margin: '0 1.5rem' }} />
+
+        {/* ── Interactive Map Preview ── */}
+        <section style={{ padding: '3rem 0' }}>
+          <div className="container-main">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
+              <div className="section-header" style={{ margin: 0 }}>Global Outbreak Map</div>
+              <Link href="/map" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'var(--color-brand)', textDecoration: 'none' }}>
+                Full interactive map <ArrowRight size={13} />
+              </Link>
+            </div>
+
+            <div style={{ borderRadius: 'var(--radius-xl)', overflow: 'hidden', border: '1px solid var(--border-glass)', height: 480, position: 'relative' }}>
+              <MapWrapper outbreaks={outbreaks} height="480px" />
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginTop: '0.85rem', flexWrap: 'wrap' }}>
+              {[
+                { color: '#ef4444', label: 'Confirmed outbreak' },
+                { color: '#f97316', label: 'Suspected' },
+                { color: '#eab308', label: 'Under monitoring' },
+                { color: '#22c55e', label: 'Resolved' },
+              ].map(({ color, label }) => (
+                <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: color, flexShrink: 0 }} />
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--text-muted)' }}>{label}</span>
+                </div>
+              ))}
+              <span style={{ marginLeft: 'auto', fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--text-muted)' }}>
+                {outbreaks.length} active zones · Click marker for details
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <hr className="section-divider" style={{ margin: '0 1.5rem' }} />
+
+        {/* ── Latest Intelligence ── */}
+        <LatestReports articles={articles.slice(0, 3)} />
+
+        <hr className="section-divider" style={{ margin: '0 1.5rem' }} />
+
+        {/* ── Country Watchlist ── */}
+        <CountryWatchlist items={watchlist} />
+
+        <hr className="section-divider" style={{ margin: '0 1.5rem' }} />
+
+        {/* ── Social Intelligence ── */}
+        <SocialIntelligence posts={socialTrends} />
+
+        <hr className="section-divider" style={{ margin: '0 1.5rem' }} />
+
+        {/* ── Alert Signup ── */}
+        <AlertSignup />
       </main>
-    </div>
+
+      <Footer />
+    </>
   );
 }

@@ -1,0 +1,46 @@
+[
+  {
+    "id": "st-1",
+    "platform": "Twitter",
+    "content": "Local reports from Los Santos confirming hospitals are at capacity. Extremely concerning situation developing. #Hantavirus #Panama",
+    "author": "@HealthSecAlerts",
+    "timestamp": "2026-05-07T12:30:00Z",
+    "sentiment": "negative",
+    "verified": false,
+    "likes": 4200,
+    "shares": 1800
+  },
+  {
+    "id": "st-2",
+    "platform": "Reddit",
+    "content": "Can anyone confirm if the road closures in Neuquén province are related to the Andes virus cluster or just weather?",
+    "author": "u/PatagoniaTrekker",
+    "timestamp": "2026-05-07T11:45:00Z",
+    "sentiment": "neutral",
+    "verified": false,
+    "likes": 840,
+    "shares": 12
+  },
+  {
+    "id": "st-3",
+    "platform": "Twitter",
+    "content": "New ProMED mail alert just dropped regarding the suspected cases in Zhejiang. Awaiting CDC translation.",
+    "author": "@EpiTracker",
+    "timestamp": "2026-05-07T10:15:00Z",
+    "sentiment": "neutral",
+    "verified": true,
+    "likes": 1200,
+    "shares": 450
+  },
+  {
+    "id": "st-4",
+    "platform": "News",
+    "content": "Baden-Württemberg health minister urges citizens to wear FFP2 masks when cleaning dusty sheds or attics amid Puumala virus surge.",
+    "author": "Süddeutsche Zeitung",
+    "timestamp": "2026-05-07T09:00:00Z",
+    "sentiment": "neutral",
+    "verified": true,
+    "likes": 8500,
+    "shares": 3200
+  }
+]

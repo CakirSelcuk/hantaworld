@@ -1,0 +1,29 @@
+[
+  {
+    "id": "s-who",
+    "name": "WHO Disease Outbreak News",
+    "organization": "World Health Organization",
+    "url": "https://www.who.int/emergencies/disease-outbreak-news",
+    "type": "who",
+    "reliabilityScore": 10,
+    "isOfficial": true
+  },
+  {
+    "id": "s-cdc",
+    "name": "CDC Health Alert Network",
+    "organization": "Centers for Disease Control",
+    "url": "https://www.cdc.gov/hantavirus",
+    "type": "cdc",
+    "reliabilityScore": 10,
+    "isOfficial": true
+  },
+  {
+    "id": "s-promed",
+    "name": "ProMED Mail",
+    "organization": "International Society for Infectious Diseases",
+    "url": "https://promedmail.org",
+    "type": "promed",
+    "reliabilityScore": 9,
+    "isOfficial": false
+  }
+]
