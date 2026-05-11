@@ -1,5 +1,10 @@
 import { Article, ArticleCategory, Country, GlobalStats, Outbreak, OutbreakStatus, SeverityLevel, SocialPost, Source, SourceType, VerificationStatus } from './types';
 import { sanitizeText } from './utils';
+import fallbackOutbreaksData from '../data/outbreaks.json';
+import fallbackCountriesData from '../data/countries.json';
+import fallbackGlobalStatsData from '../data/global-stats.json';
+import fallbackNewsData from '../data/news.json';
+import fallbackSourcesData from '../data/sources.json';
 
 const API_BASE_URL =
   process.env.HANTAWORLD_API_BASE_URL ||
@@ -95,6 +100,26 @@ type ApiArticle = {
 type ApiGlobalStats = Partial<GlobalStats> & {
   lastUpdated?: string | null;
 };
+
+type FallbackOutbreak = Omit<Outbreak, 'country' | 'sources' | 'description' | 'verificationNotes'> & {
+  countryId: string;
+  sourceIds?: string[];
+  description: string;
+  verificationNotes?: string;
+};
+
+type FallbackArticle = Omit<Article, 'source' | 'title' | 'excerpt' | 'content'> & {
+  sourceIds?: string[];
+  title: string;
+  excerpt: string;
+  content?: string;
+};
+
+const fallbackOutbreakRows = fallbackOutbreaksData as FallbackOutbreak[];
+const fallbackCountryRows = fallbackCountriesData as Country[];
+const fallbackArticleRows = fallbackNewsData as FallbackArticle[];
+const fallbackSourceRows = fallbackSourcesData as Source[];
+const fallbackGlobalStats = fallbackGlobalStatsData as Partial<Pick<GlobalStats, 'totalDeaths' | 'lastUpdated'>>;
 
 async function fetchApi<T>(path: string): Promise<T | null> {
   const url = new URL(path, API_BASE_URL);
@@ -258,11 +283,90 @@ function mapArticle(article: ApiArticle): Article {
   };
 }
 
+function mapFallbackOutbreak(outbreak: FallbackOutbreak): Outbreak {
+  const country = fallbackCountryRows.find((entry) => entry.id === outbreak.countryId) ?? {
+    id: outbreak.countryId,
+    isoCode: 'UNK',
+    name: 'Unknown',
+    slug: 'unknown',
+    continent: 'Unknown',
+    population: 0,
+    flagEmoji: '🌐',
+    coordinates: { lat: 0, lng: 0 },
+  };
+  const sources = outbreak.sourceIds?.length
+    ? fallbackSourceRows.filter((entry) => outbreak.sourceIds?.includes(entry.id))
+    : [];
+
+  return {
+    ...outbreak,
+    description: sanitizeText(outbreak.description),
+    verificationNotes: sanitizeText(outbreak.verificationNotes),
+    country,
+    sources,
+  };
+}
+
+function getFallbackOutbreaks(): Outbreak[] {
+  return fallbackOutbreakRows.map(mapFallbackOutbreak);
+}
+
+function mapFallbackArticle(article: FallbackArticle): Article {
+  const sourceIds = article.sourceIds ?? [];
+  const source = sourceIds.length
+    ? fallbackSourceRows.find((entry) => entry.id === sourceIds[0])
+    : undefined;
+
+  return {
+    ...article,
+    title: sanitizeText(article.title),
+    excerpt: sanitizeText(article.excerpt),
+    content: sanitizeText(article.content),
+    source,
+  };
+}
+
+function getFallbackArticles(): Article[] {
+  return fallbackArticleRows.map(mapFallbackArticle);
+}
+
+function getFallbackGlobalStats(): GlobalStats {
+  const outbreaks = getFallbackOutbreaks();
+  const totalConfirmedCases = outbreaks.reduce((sum, outbreak) => sum + outbreak.confirmedCases, 0);
+  const totalSuspectedCases = outbreaks.reduce((sum, outbreak) => sum + outbreak.suspectedCases, 0);
+  const totalDeaths = outbreaks.reduce((sum, outbreak) => sum + outbreak.deaths, 0);
+  const totalRecovered = outbreaks.reduce((sum, outbreak) => sum + outbreak.recovered, 0);
+  const affectedCountries = new Set(outbreaks.map((outbreak) => outbreak.country.id)).size;
+  const activeOutbreaks = outbreaks.filter((outbreak) => outbreak.status !== 'resolved').length;
+  const growthRate7d = outbreaks.length > 0
+    ? Math.round((outbreaks.reduce((sum, outbreak) => sum + outbreak.growthRate, 0) / outbreaks.length) * 10) / 10
+    : 0;
+  const lastUpdated = outbreaks.length > 0
+    ? outbreaks.reduce(
+        (latest, outbreak) => (outbreak.lastUpdated > latest ? outbreak.lastUpdated : latest),
+        outbreaks[0].lastUpdated
+      )
+    : DEFAULT_LAST_UPDATED;
+
+  return {
+    totalConfirmedCases,
+    totalSuspectedCases,
+    totalDeaths: fallbackGlobalStats.totalDeaths ?? totalDeaths,
+    totalRecovered,
+    affectedCountries,
+    activeOutbreaks,
+    growthRate7d,
+    lastUpdated: fallbackGlobalStats.lastUpdated ?? lastUpdated,
+  };
+}
+
 export async function getOutbreaks(): Promise<Outbreak[]> {
   const outbreaks = await fetchApi<ApiOutbreak[]>('/api/outbreaks');
-  return (outbreaks ?? [])
+  const liveOutbreaks = (outbreaks ?? [])
     .filter((outbreak) => toVerificationStatus(outbreak.verificationStatus) === 'verified')
     .map(mapOutbreak);
+
+  return liveOutbreaks.length > 0 ? liveOutbreaks : getFallbackOutbreaks();
 }
 
 export async function getOutbreakById(id: string): Promise<Outbreak | undefined> {
@@ -272,7 +376,13 @@ export async function getOutbreakById(id: string): Promise<Outbreak | undefined>
 
 export async function getCountries(): Promise<Country[]> {
   const countries = await fetchApi<ApiCountry[]>('/api/countries');
-  return (countries ?? []).map(mapCountry);
+  const liveCountries = (countries ?? []).map(mapCountry);
+  const merged = new Map<string, Country>();
+
+  fallbackCountryRows.forEach((country) => merged.set(country.slug, country));
+  liveCountries.forEach((country) => merged.set(country.slug, country));
+
+  return [...merged.values()];
 }
 
 export async function getCountryBySlug(slug: string): Promise<Country | undefined> {
@@ -282,22 +392,27 @@ export async function getCountryBySlug(slug: string): Promise<Country | undefine
 
 export async function getArticles(): Promise<Article[]> {
   const articles = await fetchApi<ApiArticle[]>('/api/news');
-  return (articles ?? [])
+  const liveArticles = (articles ?? [])
     .filter((article) => toVerificationStatus(article.verificationStatus) === 'verified')
     .map(mapArticle);
+
+  return liveArticles.length > 0 ? liveArticles : getFallbackArticles();
 }
 
 export async function getArticleBySlug(slug: string): Promise<Article | undefined> {
   const articles = await fetchApi<ApiArticle[]>('/api/news?includeContent=true');
-  return (articles ?? [])
+  const liveArticle = (articles ?? [])
     .filter((article) => toVerificationStatus(article.verificationStatus) === 'verified')
     .map(mapArticle)
     .find((article) => article.slug === slug);
+
+  return liveArticle ?? getFallbackArticles().find((article) => article.slug === slug);
 }
 
 export async function getSources(): Promise<Source[]> {
   const sources = await fetchApi<ApiSource[]>('/api/sources');
-  return (sources ?? []).map(mapSource);
+  const liveSources = (sources ?? []).map(mapSource);
+  return liveSources.length > 0 ? liveSources : fallbackSourceRows;
 }
 
 export async function getSocialTrends(): Promise<SocialPost[]> {
@@ -357,6 +472,18 @@ export async function getCountryWatchlist() {
 
 export async function getGlobalStats(): Promise<GlobalStats> {
   const stats = await fetchApi<ApiGlobalStats>('/api/global-stats');
+  const hasLiveStats = Boolean(
+    stats &&
+    ((stats.totalConfirmedCases ?? 0) > 0 ||
+      (stats.totalSuspectedCases ?? 0) > 0 ||
+      (stats.totalDeaths ?? 0) > 0 ||
+      (stats.affectedCountries ?? 0) > 0 ||
+      (stats.activeOutbreaks ?? 0) > 0)
+  );
+
+  if (!hasLiveStats) {
+    return getFallbackGlobalStats();
+  }
 
   return {
     totalConfirmedCases: stats?.totalConfirmedCases ?? 0,
