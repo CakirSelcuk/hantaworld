@@ -27,7 +27,7 @@ export default function EditorialPolicyPage() {
 
             <h2 style={{ color: 'var(--text-primary)', marginTop: '2rem', marginBottom: '1rem' }}>2. Verification Standards</h2>
             <p style={{ marginBottom: '1.5rem' }}>
-              We utilize a strict verification badge system. Reports gathered from OSINT (Open Source Intelligence) or localized media are marked as <strong>UNVERIFIED</strong> or <strong>PENDING</strong> until corroborated by a primary health authority, at which point they are upgraded to <strong>VERIFIED</strong>.
+              We utilize a strict verification badge system. Reports are published only after corroboration from a primary health authority. Items without direct source confirmation are excluded from the live platform experience.
             </p>
 
             <h2 style={{ color: 'var(--text-primary)', marginTop: '2rem', marginBottom: '1rem' }}>3. Neutral Tone and Clarity</h2>
@@ -37,7 +37,7 @@ export default function EditorialPolicyPage() {
 
             <h2 style={{ color: 'var(--text-primary)', marginTop: '2rem', marginBottom: '1rem' }}>4. Corrections</h2>
             <p style={{ marginBottom: '1.5rem' }}>
-              If epidemiological data is revised by health authorities (e.g., a suspected case is reclassified as negative), our records are immediately updated to reflect the correction, and the "Last Updated" timestamp is refreshed.
+              If epidemiological data is revised by health authorities (e.g., a suspected case is reclassified as negative), our records are immediately updated to reflect the correction, and the &quot;Last Updated&quot; timestamp is refreshed.
             </p>
           </div>
         </div>

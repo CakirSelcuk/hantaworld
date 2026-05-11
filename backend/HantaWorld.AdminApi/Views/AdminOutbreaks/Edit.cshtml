@@ -1,0 +1,11 @@
+@model HantaWorld.AdminApi.Models.OutbreakFormViewModel
+@{
+    ViewData["Title"] = "Salgın Düzenle";
+}
+
+<h1 class="h3 mb-4">Salgın Düzenle</h1>
+<partial name="_OutbreakForm" model="Model" />
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

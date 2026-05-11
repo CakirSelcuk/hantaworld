@@ -9,6 +9,15 @@
     "isOfficial": true
   },
   {
+    "id": "s-who-don600",
+    "name": "Hantavirus cluster linked to cruise ship travel, Multi-country",
+    "organization": "World Health Organization",
+    "url": "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON600",
+    "type": "who",
+    "reliabilityScore": 10,
+    "isOfficial": true
+  },
+  {
     "id": "s-who-update",
     "name": "WHO Official Update",
     "organization": "World Health Organization",
@@ -19,7 +28,7 @@
   },
   {
     "id": "s-cdc",
-    "name": "CDC Health Alert Network",
+    "name": "CDC Hantavirus",
     "organization": "Centers for Disease Control and Prevention",
     "url": "https://www.cdc.gov/hantavirus",
     "type": "cdc",
@@ -32,6 +41,42 @@
     "organization": "European Centre for Disease Prevention and Control",
     "url": "https://www.ecdc.europa.eu",
     "type": "ecdc",
+    "reliabilityScore": 10,
+    "isOfficial": true
+  },
+  {
+    "id": "s-ecdc-andes",
+    "name": "Andes Hantavirus Outbreak in Cruise Ship",
+    "organization": "European Centre for Disease Prevention and Control",
+    "url": "https://www.ecdc.europa.eu/en/infectious-disease-topics/hantavirus-infection/surveillance-and-updates/andes-hantavirus-outbreak",
+    "type": "ecdc",
+    "reliabilityScore": 10,
+    "isOfficial": true
+  },
+  {
+    "id": "s-rivm",
+    "name": "Current information about hantavirus",
+    "organization": "RIVM",
+    "url": "https://www.rivm.nl/en/hantavirus",
+    "type": "official",
+    "reliabilityScore": 10,
+    "isOfficial": true
+  },
+  {
+    "id": "s-spain-health",
+    "name": "Ministerio de Sanidad",
+    "organization": "Spanish Ministry of Health",
+    "url": "https://www.sanidad.gob.es",
+    "type": "official",
+    "reliabilityScore": 10,
+    "isOfficial": true
+  },
+  {
+    "id": "s-ukhsa",
+    "name": "Hantavirus symptoms and transmission",
+    "organization": "UK Health Security Agency",
+    "url": "https://www.gov.uk/government/organisations/uk-health-security-agency",
+    "type": "official",
     "reliabilityScore": 10,
     "isOfficial": true
   }

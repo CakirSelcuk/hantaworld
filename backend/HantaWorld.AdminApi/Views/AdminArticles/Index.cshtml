@@ -1,0 +1,36 @@
+@model IEnumerable<HantaWorld.AdminApi.Domain.Article>
+@{
+    ViewData["Title"] = "Haberler";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">Haberler / Raporlar</h1>
+    <a class="btn btn-primary" href="/admin/articles/create">Yeni Haber</a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table mb-0 align-middle">
+            <thead><tr><th>Public ID</th><th>Başlık</th><th>Kategori</th><th>Durum</th><th>Yayın</th><th></th></tr></thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><code>@item.PublicId</code></td>
+                    <td>@item.Title</td>
+                    <td>@item.Category</td>
+                    <td>@item.VerificationStatus</td>
+                    <td>@item.PublicationStatus</td>
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-outline-primary" href="/admin/articles/@item.Id/edit">Düzenle</a>
+                        <form method="post" action="/admin/articles/@item.Id/delete" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Kayıt silinsin mi?');">Sil</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

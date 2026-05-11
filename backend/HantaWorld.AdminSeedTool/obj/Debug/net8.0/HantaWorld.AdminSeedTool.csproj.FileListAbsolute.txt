@@ -1,0 +1,15 @@
+C:\Users\Ceyda\.gemini\antigravity\scratch\hantaworld\backend\HantaWorld.AdminSeedTool\bin\Debug\net8.0\HantaWorld.AdminSeedTool.exe
+C:\Users\Ceyda\.gemini\antigravity\scratch\hantaworld\backend\HantaWorld.AdminSeedTool\bin\Debug\net8.0\HantaWorld.AdminSeedTool.deps.json
+C:\Users\Ceyda\.gemini\antigravity\scratch\hantaworld\backend\HantaWorld.AdminSeedTool\bin\Debug\net8.0\HantaWorld.AdminSeedTool.runtimeconfig.json
+C:\Users\Ceyda\.gemini\antigravity\scratch\hantaworld\backend\HantaWorld.AdminSeedTool\bin\Debug\net8.0\HantaWorld.AdminSeedTool.dll
+C:\Users\Ceyda\.gemini\antigravity\scratch\hantaworld\backend\HantaWorld.AdminSeedTool\bin\Debug\net8.0\HantaWorld.AdminSeedTool.pdb
+C:\Users\Ceyda\.gemini\antigravity\scratch\hantaworld\backend\HantaWorld.AdminSeedTool\obj\Debug\net8.0\HantaWorld.AdminSeedTool.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Ceyda\.gemini\antigravity\scratch\hantaworld\backend\HantaWorld.AdminSeedTool\obj\Debug\net8.0\HantaWorld.AdminSeedTool.AssemblyInfoInputs.cache
+C:\Users\Ceyda\.gemini\antigravity\scratch\hantaworld\backend\HantaWorld.AdminSeedTool\obj\Debug\net8.0\HantaWorld.AdminSeedTool.AssemblyInfo.cs
+C:\Users\Ceyda\.gemini\antigravity\scratch\hantaworld\backend\HantaWorld.AdminSeedTool\obj\Debug\net8.0\HantaWorld.AdminSeedTool.csproj.CoreCompileInputs.cache
+C:\Users\Ceyda\.gemini\antigravity\scratch\hantaworld\backend\HantaWorld.AdminSeedTool\obj\Debug\net8.0\HantaWorld.AdminSeedTool.sourcelink.json
+C:\Users\Ceyda\.gemini\antigravity\scratch\hantaworld\backend\HantaWorld.AdminSeedTool\obj\Debug\net8.0\HantaWorld.AdminSeedTool.dll
+C:\Users\Ceyda\.gemini\antigravity\scratch\hantaworld\backend\HantaWorld.AdminSeedTool\obj\Debug\net8.0\refint\HantaWorld.AdminSeedTool.dll
+C:\Users\Ceyda\.gemini\antigravity\scratch\hantaworld\backend\HantaWorld.AdminSeedTool\obj\Debug\net8.0\HantaWorld.AdminSeedTool.pdb
+C:\Users\Ceyda\.gemini\antigravity\scratch\hantaworld\backend\HantaWorld.AdminSeedTool\obj\Debug\net8.0\HantaWorld.AdminSeedTool.genruntimeconfig.cache
+C:\Users\Ceyda\.gemini\antigravity\scratch\hantaworld\backend\HantaWorld.AdminSeedTool\obj\Debug\net8.0\ref\HantaWorld.AdminSeedTool.dll

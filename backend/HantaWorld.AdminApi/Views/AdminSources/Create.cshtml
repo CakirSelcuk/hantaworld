@@ -1,0 +1,11 @@
+@model HantaWorld.AdminApi.Models.SourceFormViewModel
+@{
+    ViewData["Title"] = "Yeni Kaynak";
+}
+
+<h1 class="h3 mb-4">Yeni Kaynak</h1>
+<partial name="_SourceForm" model="Model" />
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

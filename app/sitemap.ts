@@ -1,22 +1,22 @@
 import { MetadataRoute } from 'next';
-import { getCountries, getArticles } from '@/lib/data';
+import { getArticles, getCountries, getSiteLastModified } from '@/lib/data';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://hantaworld.com';
-
+  const siteLastModified = await getSiteLastModified();
   const countries = await getCountries();
   const articles = await getArticles();
 
   const countryUrls = countries.map((country) => ({
     url: `${baseUrl}/country/${country.slug}`,
-    lastModified: new Date(),
+    lastModified: siteLastModified,
     changeFrequency: 'daily' as const,
     priority: 0.8,
   }));
 
   const articleUrls = articles.map((article) => ({
     url: `${baseUrl}/news/${article.slug}`,
-    lastModified: new Date(article.publishedAt),
+    lastModified: article.lastVerifiedDate || article.publishedAt,
     changeFrequency: 'never' as const,
     priority: 0.6,
   }));
@@ -24,37 +24,37 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     {
       url: baseUrl,
-      lastModified: new Date(),
+      lastModified: siteLastModified,
       changeFrequency: 'hourly',
       priority: 1.0,
     },
     {
       url: `${baseUrl}/map`,
-      lastModified: new Date(),
+      lastModified: siteLastModified,
       changeFrequency: 'hourly',
       priority: 0.9,
     },
     {
       url: `${baseUrl}/news`,
-      lastModified: new Date(),
+      lastModified: siteLastModified,
       changeFrequency: 'daily',
       priority: 0.8,
     },
     {
       url: `${baseUrl}/alerts`,
-      lastModified: new Date(),
+      lastModified: siteLastModified,
       changeFrequency: 'monthly',
       priority: 0.5,
     },
     {
       url: `${baseUrl}/about`,
-      lastModified: new Date(),
+      lastModified: siteLastModified,
       changeFrequency: 'monthly',
       priority: 0.4,
     },
     {
       url: `${baseUrl}/about/methodology`,
-      lastModified: new Date(),
+      lastModified: siteLastModified,
       changeFrequency: 'monthly',
       priority: 0.7,
     },

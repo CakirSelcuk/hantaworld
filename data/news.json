@@ -1,35 +1,56 @@
 [
   {
-    "id": "a-who-update-7may",
-    "title": "WHO Update: MV Hondius Hantavirus Cluster — 5 Confirmed Cases, 3 Deaths",
-    "slug": "who-update-mv-hondius-7-may-2026",
-    "excerpt": "The World Health Organization has updated its assessment of the hantavirus cluster linked to the MV Hondius expedition vessel. As of 7 May 2026, a total of 8 cases have been reported: 5 laboratory-confirmed and 3 suspected. Three deaths have been recorded among the confirmed cases.",
-    "content": "The World Health Organization (WHO) published an updated assessment on 7 May 2026 regarding the hantavirus cluster linked to the MV Hondius expedition vessel.\n\nKey figures (as of 7 May 2026):\n• Total reported cases: 8\n• Laboratory-confirmed hantavirus cases: 5\n• Suspected cases: 3\n• Deaths: 3\n\nThis represents an increase from the initial Disease Outbreak News report dated 4 May 2026, which reported 7 total cases (2 confirmed, 5 suspected, 3 deaths). The revision reflects the completion of laboratory testing that reclassified 3 previously suspected cases as confirmed.\n\nWHO continues to monitor the situation and coordinate with national health authorities of affected countries. Contact tracing of all passengers and crew aboard the MV Hondius is ongoing.\n\nNote: All data in this report is sourced directly from WHO official communications. HantaWorld does not independently verify case counts — all figures are attributed to their original source.",
+    "id": "a-andes-global-update-11may",
+    "title": "Andes Hantavirus Outbreak: Global Situation Update (May 2026)",
+    "slug": "andes-hantavirus-global-situation-update-may-2026",
+    "excerpt": "Health authorities are tracking an Andes virus cluster associated with the Dutch-flagged MV Hondius. As of 10 May 2026, the situation includes 8 reported cases, 6 confirmed and 2 probable, with 3 confirmed fatalities. WHO continues to assess the risk to the general public as low.",
+    "content": "Date: May 11, 2026\n\nStatus: Ongoing Investigation - Multi-Country Cluster\n\nCurrent Assessment: Risk to the general public remains low, according to the WHO.\n\nFollowing a cluster of severe respiratory illness aboard the Dutch-flagged cruise ship MV Hondius, health authorities worldwide are tracking cases of Andes virus (ANDV). This rare hantavirus strain is notable for its potential, though limited, person-to-person transmission through close contact.\n\nAs of May 10, 2026, there are 8 reported cases, including 6 confirmed and 2 probable cases, and 3 confirmed fatalities.\n\nNetherlands: Repatriation and Hospitalization:\n- Status: 1 confirmed case medically evacuated; 2 fatalities involving a Dutch couple.\n- Details: A Dutch patient was medically evacuated from the ship and is reported stable in isolation. Additionally, 29 passengers were flown to Eindhoven on May 10 and ordered into a mandatory 6-week home quarantine.\n\nSouth Africa: Critical Care and Early Detection:\n- Status: 1 patient in intensive care.\n- Details: One passenger was evacuated to a Johannesburg hospital in early May. The case supported laboratory confirmation and sequencing that identified the Andes strain.\n\nSwitzerland: Post-Travel Diagnosis:\n- Status: 1 confirmed case.\n- Details: One passenger was diagnosed after disembarking and returning to Switzerland. Swiss authorities are monitoring for potential secondary transmission; no secondary cases have been reported in the update used for this report.\n\nSpain: Evacuation and Testing:\n- Status: No confirmed active cases; 1 suspected case tested negative.\n- Details: The MV Hondius arrived at Granadilla, Tenerife, on May 10. Spanish authorities carried out a high-security evacuation and transferred passengers directly to repatriation flights.\n\nFrance and United Kingdom: Monitoring:\n- France: One passenger reportedly developed symptoms during a repatriation flight on May 10 and is currently in isolation.\n- United Kingdom: 22 returning passengers and crew members have been placed in hospital quarantine in Northwest England for 42 days of active monitoring.\n\nKey Resources for Web Publishers:\n- World Health Organization: Disease Outbreak News and global hantavirus updates.\n- European Centre for Disease Prevention and Control: Andes hantavirus surveillance and risk assessment.\n- CDC United States: Hantavirus clinical and public health guidance.\n\nPublisher Note: Signal maps on independent tracking sites may aggregate news mentions, monitored passengers, suspected cases, and confirmed clinical cases. HantaWorld separates confirmed cases from monitored or probable signals wherever the source material allows, to avoid unnecessary public alarm.",
     "category": "outbreak-report",
-    "tags": ["WHO", "MV Hondius", "Hantavirus", "Verified"],
-    "sourceIds": ["s-who-update"],
+    "tags": ["Andes virus", "MV Hondius", "WHO", "ECDC", "CDC", "May 2026"],
+    "sourceIds": ["s-who-don600", "s-ecdc-andes", "s-cdc", "s-rivm", "s-spain-health", "s-ukhsa"],
     "verificationStatus": "verified",
-    "publishedAt": "2026-05-07T00:00:00Z",
-    "lastVerifiedDate": "2026-05-07",
-    "readingTimeMin": 3,
+    "publishedAt": "2026-05-11T00:00:00Z",
+    "lastVerifiedDate": "2026-05-11",
+    "readingTimeMin": 5,
     "citations": [
-      "https://www.who.int/emergencies/disease-outbreak-news"
+      "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON600",
+      "https://www.ecdc.europa.eu/en/infectious-disease-topics/hantavirus-infection/surveillance-and-updates/andes-hantavirus-outbreak",
+      "https://www.cdc.gov/hantavirus"
     ],
     "confidenceScore": 95,
-    "sourceUrl": "https://www.who.int/emergencies/disease-outbreak-news"
+    "sourceUrl": "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON600"
+  },
+  {
+    "id": "a-who-update-8may",
+    "title": "WHO Update: MV Hondius Cluster Reaches 8 Reported Cases",
+    "slug": "who-update-mv-hondius-8-may-2026",
+    "excerpt": "WHO reported 8 total cases linked to the MV Hondius cluster as of 8 May 2026, including 6 laboratory-confirmed Andes virus infections, 2 probable cases, and 3 deaths.",
+    "content": "The World Health Organization published an updated Disease Outbreak News assessment on 8 May 2026 regarding the hantavirus cluster linked to the MV Hondius expedition vessel.\n\nKey figures as of 8 May 2026:\n- Total reported cases: 8\n- Laboratory-confirmed hantavirus cases: 6\n- Probable cases: 2\n- Deaths: 3\n\nWHO states that all six laboratory-confirmed cases were identified as Andes virus infections. The event remains under international investigation and contact tracing continues across several countries.\n\nThis update replaces the earlier 4 May and 7 May figures used in the initial HantaWorld feed. The public health risk to the global population is assessed by WHO as low, while the risk for passengers and crew on the ship is considered moderate.",
+    "category": "outbreak-report",
+    "tags": ["WHO", "MV Hondius", "Andes virus", "Verified"],
+    "sourceIds": ["s-who-don600"],
+    "verificationStatus": "verified",
+    "publishedAt": "2026-05-08T00:00:00Z",
+    "lastVerifiedDate": "2026-05-11",
+    "readingTimeMin": 3,
+    "citations": [
+      "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON600"
+    ],
+    "confidenceScore": 95,
+    "sourceUrl": "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON600"
   },
   {
     "id": "a-who-don-4may",
-    "title": "WHO Disease Outbreak News: Hantavirus — MV Hondius Multi-Country Cluster",
+    "title": "WHO Disease Outbreak News: Hantavirus - MV Hondius Multi-Country Cluster",
     "slug": "who-don-mv-hondius-4-may-2026",
-    "excerpt": "On 4 May 2026, WHO published a Disease Outbreak News (DON) report regarding a hantavirus cluster associated with the MV Hondius expedition vessel. At that time, 7 cases had been reported: 2 confirmed and 5 suspected, with 3 deaths recorded.",
-    "content": "The World Health Organization (WHO) issued a Disease Outbreak News (DON) on 4 May 2026 concerning a cluster of hantavirus cases linked to the MV Hondius, an expedition vessel.\n\nKey figures (as of 4 May 2026):\n• Total reported cases: 7\n• Laboratory-confirmed hantavirus cases: 2\n• Suspected cases: 5\n• Deaths: 3\n\nThe cases were reported across multiple nationalities, with initial exposure believed to be associated with the expedition's itinerary. National health authorities in affected countries were notified and contact tracing operations were initiated.\n\nNote: This is a historical timeline entry. Updated figures are available in the WHO update dated 7 May 2026, which reports 8 total cases (5 confirmed, 3 suspected, 3 deaths).\n\nAll data in this report is sourced directly from WHO Disease Outbreak News. HantaWorld does not independently verify case counts — all figures are attributed to their original source.",
+    "excerpt": "On 4 May 2026, WHO published an initial Disease Outbreak News report on a hantavirus cluster associated with the MV Hondius expedition vessel.",
+    "content": "The World Health Organization issued an initial Disease Outbreak News report on 4 May 2026 concerning a cluster of hantavirus cases linked to the MV Hondius, an expedition vessel.\n\nInitial figures as of 4 May 2026:\n- Total reported cases: 7\n- Laboratory-confirmed hantavirus cases: 2\n- Suspected cases: 5\n- Deaths: 3\n\nThis is now a historical timeline entry. Updated figures are available in the 8 May WHO Disease Outbreak News update, which reports 8 total cases, including 6 confirmed and 2 probable cases.\n\nAll data in this report is sourced from WHO Disease Outbreak News. HantaWorld attributes figures to their original public health source.",
     "category": "outbreak-report",
     "tags": ["WHO", "DON", "MV Hondius", "Hantavirus", "Historical"],
     "sourceIds": ["s-who"],
     "verificationStatus": "verified",
     "publishedAt": "2026-05-04T00:00:00Z",
-    "lastVerifiedDate": "2026-05-07",
+    "lastVerifiedDate": "2026-05-11",
     "readingTimeMin": 3,
     "citations": [
       "https://www.who.int/emergencies/disease-outbreak-news"

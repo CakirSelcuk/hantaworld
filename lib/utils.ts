@@ -18,6 +18,18 @@ export function formatDate(dateStr: string): string {
   });
 }
 
+export function sanitizeText(text?: string): string {
+  if (!text) return '';
+
+  return text
+    .replaceAll('â€”', '-')
+    .replaceAll('â€“', '-')
+    .replaceAll('â€¢', '-')
+    .replaceAll('â†’', '->')
+    .replaceAll('â†—', '->')
+    .replaceAll('Â·', '|');
+}
+
 export function timeAgo(dateStr: string): string {
   const now = Date.now();
   const then = new Date(dateStr).getTime();

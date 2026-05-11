@@ -1,0 +1,11 @@
+@model HantaWorld.AdminApi.Models.ArticleFormViewModel
+@{
+    ViewData["Title"] = "Haber Düzenle";
+}
+
+<h1 class="h3 mb-4">Haber Düzenle</h1>
+<partial name="_ArticleForm" model="Model" />
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

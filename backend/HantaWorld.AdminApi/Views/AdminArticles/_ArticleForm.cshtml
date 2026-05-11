@@ -1,0 +1,33 @@
+@model HantaWorld.AdminApi.Models.ArticleFormViewModel
+
+<form method="post" class="card shadow-sm">
+    <div class="card-body">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+        <div class="row g-3">
+            <div class="col-md-4"><label asp-for="PublicId" class="form-label"></label><input asp-for="PublicId" class="form-control" /></div>
+            <div class="col-md-4"><label asp-for="Slug" class="form-label"></label><input asp-for="Slug" class="form-control" /></div>
+            <div class="col-md-4"><label asp-for="Category" class="form-label"></label><input asp-for="Category" class="form-control" /></div>
+            <div class="col-md-6"><label asp-for="Title" class="form-label"></label><input asp-for="Title" class="form-control" /></div>
+            <div class="col-md-3"><label asp-for="VerificationStatus" class="form-label"></label><input asp-for="VerificationStatus" class="form-control" /></div>
+            <div class="col-md-3"><label asp-for="PublicationStatus" class="form-label"></label><input asp-for="PublicationStatus" class="form-control" /></div>
+            <div class="col-md-6"><label asp-for="CountryId" class="form-label">Ülke</label><select asp-for="CountryId" asp-items="Model.AvailableCountries" class="form-select"><option value="">Seçiniz</option></select></div>
+            <div class="col-md-6"><label asp-for="OutbreakId" class="form-label">Salgın</label><select asp-for="OutbreakId" asp-items="Model.AvailableOutbreaks" class="form-select"><option value="">Seçiniz</option></select></div>
+            <div class="col-md-4"><label asp-for="ReadingTimeMin" class="form-label"></label><input asp-for="ReadingTimeMin" class="form-control" /></div>
+            <div class="col-md-4"><label asp-for="ConfidenceScore" class="form-label"></label><input asp-for="ConfidenceScore" class="form-control" /></div>
+            <div class="col-md-4"><label asp-for="TagsCsv" class="form-label"></label><input asp-for="TagsCsv" class="form-control" /></div>
+            <div class="col-md-6"><label asp-for="PublicationDate" class="form-label"></label><input asp-for="PublicationDate" class="form-control" /></div>
+            <div class="col-md-6"><label asp-for="LastVerifiedDate" class="form-label"></label><input asp-for="LastVerifiedDate" class="form-control" /></div>
+            <div class="col-12"><label asp-for="Excerpt" class="form-label"></label><textarea asp-for="Excerpt" rows="3" class="form-control"></textarea></div>
+            <div class="col-12"><label asp-for="Content" class="form-label"></label><textarea asp-for="Content" rows="10" class="form-control"></textarea></div>
+            <div class="col-12"><label asp-for="PrimarySourceUrl" class="form-label"></label><input asp-for="PrimarySourceUrl" class="form-control" /></div>
+            <div class="col-12"><label asp-for="SelectedSourceIds" class="form-label">Kaynaklar</label><select asp-for="SelectedSourceIds" asp-items="Model.AvailableSources" class="form-select" multiple size="6"></select></div>
+            <div class="col-12"><label asp-for="CoverImageUrl" class="form-label"></label><input asp-for="CoverImageUrl" class="form-control" /></div>
+            <div class="col-12"><label asp-for="VerificationNotes" class="form-label"></label><textarea asp-for="VerificationNotes" rows="4" class="form-control"></textarea></div>
+        </div>
+    </div>
+    <div class="card-footer d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Kaydet</button>
+        <a class="btn btn-outline-secondary" href="/admin/articles">Geri</a>
+    </div>
+</form>

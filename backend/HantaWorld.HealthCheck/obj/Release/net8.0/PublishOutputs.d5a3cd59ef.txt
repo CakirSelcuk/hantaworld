@@ -1,0 +1,8 @@
+C:\Users\Ceyda\.gemini\antigravity\scratch\hantaworld\backend\publish\HantaWorld.HealthCheck\HantaWorld.HealthCheck.exe
+C:\Users\Ceyda\.gemini\antigravity\scratch\hantaworld\backend\publish\HantaWorld.HealthCheck\web.config
+C:\Users\Ceyda\.gemini\antigravity\scratch\hantaworld\backend\publish\HantaWorld.HealthCheck\appsettings.Development.json
+C:\Users\Ceyda\.gemini\antigravity\scratch\hantaworld\backend\publish\HantaWorld.HealthCheck\appsettings.json
+C:\Users\Ceyda\.gemini\antigravity\scratch\hantaworld\backend\publish\HantaWorld.HealthCheck\HantaWorld.HealthCheck.dll
+C:\Users\Ceyda\.gemini\antigravity\scratch\hantaworld\backend\publish\HantaWorld.HealthCheck\HantaWorld.HealthCheck.deps.json
+C:\Users\Ceyda\.gemini\antigravity\scratch\hantaworld\backend\publish\HantaWorld.HealthCheck\HantaWorld.HealthCheck.runtimeconfig.json
+C:\Users\Ceyda\.gemini\antigravity\scratch\hantaworld\backend\publish\HantaWorld.HealthCheck\HantaWorld.HealthCheck.pdb

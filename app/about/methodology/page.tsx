@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import { ShieldCheck, Scale, Search, Clock, FileText, AlertTriangle } from 'lucide-react';
+import { ShieldCheck, Scale, Search, Clock, AlertTriangle } from 'lucide-react';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
@@ -64,7 +64,7 @@ export default function MethodologyPage() {
               </h2>
               <div style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.7 }}>
                 <p style={{ marginBottom: '1rem' }}>
-                  Our strict "Zero-Fake-Data" policy dictates that no statistic, case count, or geographic marker is published on HantaWorld without verification from recognized public health institutions. We do not use predictive modeling to estimate case counts; we report exactly what authorities confirm.
+                  Our strict &quot;Zero-Fake-Data&quot; policy dictates that no statistic, case count, or geographic marker is published on HantaWorld without verification from recognized public health institutions. We do not use predictive modeling to estimate case counts; we report exactly what authorities confirm.
                 </p>
                 <p style={{ marginBottom: '1rem' }}>We solely rely on primary reports from:</p>
                 <ul style={{ paddingLeft: '1.5rem', marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>

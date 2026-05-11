@@ -1,0 +1,36 @@
+@model IEnumerable<HantaWorld.AdminApi.Domain.Country>
+@{
+    ViewData["Title"] = "Ülkeler";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">Ülkeler</h1>
+    <a class="btn btn-primary" href="/admin/countries/create">Yeni Ülke</a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table mb-0 align-middle">
+            <thead><tr><th>Ad</th><th>Slug</th><th>ISO</th><th>Kıta</th><th>Durum</th><th></th></tr></thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td><code>@item.Slug</code></td>
+                    <td>@item.IsoCode</td>
+                    <td>@item.Continent</td>
+                    <td>@(item.IsActive ? "Aktif" : "Pasif")</td>
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-outline-primary" href="/admin/countries/@item.Id/edit">Düzenle</a>
+                        <form method="post" action="/admin/countries/@item.Id/delete" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Kayıt silinsin mi?');">Sil</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

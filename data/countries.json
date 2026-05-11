@@ -1,13 +1,68 @@
 [
   {
-    "id": "c-multi-hondius",
-    "isoCode": "MULTI",
-    "name": "Multi-Country (MV Hondius Cluster)",
-    "slug": "mv-hondius-cluster",
-    "continent": "Multi-Region",
-    "population": 0,
-    "flagEmoji": "🚢",
-    "coordinates": { "lat": -54.5, "lng": -36.5 },
-    "healthAuthorityUrl": "https://www.who.int/emergencies/disease-outbreak-news"
+    "id": "c-france",
+    "isoCode": "FR",
+    "name": "France",
+    "slug": "france",
+    "continent": "Europe",
+    "population": 68170000,
+    "flagEmoji": "\uD83C\uDDEB\uD83C\uDDF7",
+    "coordinates": { "lat": 46.2276, "lng": 2.2137 },
+    "healthAuthorityUrl": "https://sante.gouv.fr"
+  },
+  {
+    "id": "c-spain",
+    "isoCode": "ES",
+    "name": "Spain",
+    "slug": "spain",
+    "continent": "Europe",
+    "population": 48600000,
+    "flagEmoji": "\uD83C\uDDEA\uD83C\uDDF8",
+    "coordinates": { "lat": 40.4637, "lng": -3.7492 },
+    "healthAuthorityUrl": "https://www.sanidad.gob.es"
+  },
+  {
+    "id": "c-israel",
+    "isoCode": "IL",
+    "name": "Israel",
+    "slug": "israel",
+    "continent": "Asia",
+    "population": 9800000,
+    "flagEmoji": "\uD83C\uDDEE\uD83C\uDDF1",
+    "coordinates": { "lat": 31.0461, "lng": 34.8516 },
+    "healthAuthorityUrl": "https://www.gov.il/en/departments/ministry_of_health"
+  },
+  {
+    "id": "c-united-states",
+    "isoCode": "US",
+    "name": "United States",
+    "slug": "united-states",
+    "continent": "North America",
+    "population": 334900000,
+    "flagEmoji": "\uD83C\uDDFA\uD83C\uDDF8",
+    "coordinates": { "lat": 39.8283, "lng": -98.5795 },
+    "healthAuthorityUrl": "https://www.cdc.gov/hantavirus"
+  },
+  {
+    "id": "c-argentina",
+    "isoCode": "AR",
+    "name": "Argentina",
+    "slug": "argentina",
+    "continent": "South America",
+    "population": 46230000,
+    "flagEmoji": "\uD83C\uDDE6\uD83C\uDDF7",
+    "coordinates": { "lat": -38.4161, "lng": -63.6167 },
+    "healthAuthorityUrl": "https://www.argentina.gob.ar/salud"
+  },
+  {
+    "id": "c-tristan-da-cunha",
+    "isoCode": "TA",
+    "name": "Tristan da Cunha",
+    "slug": "tristan-da-cunha",
+    "continent": "South Atlantic",
+    "population": 238,
+    "flagEmoji": "\uD83C\uDFF4",
+    "coordinates": { "lat": -37.1052, "lng": -12.2777 },
+    "healthAuthorityUrl": "https://www.tristandc.com"
   }
 ]

@@ -3,23 +3,34 @@ import './globals.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://hantaworld.com'),
-  title: { default: 'HantaWorld – Global Hantavirus Intelligence Platform', template: '%s | HantaWorld' },
-  description: 'Real-time global hantavirus outbreak tracking, verified intelligence feeds, interactive maps, and scientific data — trusted by researchers and public health professionals worldwide.',
-  keywords: ['hantavirus', 'outbreak tracking', 'global health intelligence', 'disease surveillance', 'public health', 'epidemiology'],
+  title: {
+    default: 'HantaWorld - Global Hantavirus Intelligence Platform',
+    template: '%s | HantaWorld',
+  },
+  description:
+    'Real-time global hantavirus outbreak tracking, verified intelligence feeds, interactive maps, and scientific data trusted by researchers and public health professionals worldwide.',
+  keywords: [
+    'hantavirus',
+    'outbreak tracking',
+    'global health intelligence',
+    'disease surveillance',
+    'public health',
+    'epidemiology',
+  ],
   authors: [{ name: 'HantaWorld Intelligence Team' }],
   robots: { index: true, follow: true },
   alternates: { canonical: '/' },
   openGraph: {
     type: 'website',
     siteName: 'HantaWorld',
-    title: 'HantaWorld – Global Hantavirus Intelligence Platform',
+    title: 'HantaWorld - Global Hantavirus Intelligence Platform',
     description: 'Real-time global hantavirus outbreak tracking and verified intelligence.',
     url: 'https://hantaworld.com',
-    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: '/hantaLogo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'HantaWorld – Global Hantavirus Intelligence',
+    title: 'HantaWorld - Global Hantavirus Intelligence',
     description: 'Real-time global hantavirus outbreak tracking.',
   },
 };
@@ -39,7 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               name: 'HantaWorld',
               url: 'https://hantaworld.com',
               description: 'Global hantavirus outbreak intelligence platform',
-              logo: 'https://hantaworld.com/logo.png',
+              logo: 'https://hantaworld.com/hantaLogo.png',
             }),
           }}
         />

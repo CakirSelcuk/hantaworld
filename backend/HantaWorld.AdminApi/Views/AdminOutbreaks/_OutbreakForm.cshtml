@@ -1,0 +1,39 @@
+@model HantaWorld.AdminApi.Models.OutbreakFormViewModel
+
+<form method="post" class="card shadow-sm">
+    <div class="card-body">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+        <div class="row g-3">
+            <div class="col-md-4"><label asp-for="PublicId" class="form-label"></label><input asp-for="PublicId" class="form-control" /></div>
+            <div class="col-md-4"><label asp-for="Slug" class="form-label"></label><input asp-for="Slug" class="form-control" /></div>
+            <div class="col-md-4"><label asp-for="CountryId" class="form-label">Ülke</label><select asp-for="CountryId" asp-items="Model.AvailableCountries" class="form-select"></select></div>
+            <div class="col-md-8"><label asp-for="Title" class="form-label"></label><input asp-for="Title" class="form-control" /></div>
+            <div class="col-md-4"><label asp-for="ConfidenceScore" class="form-label"></label><input asp-for="ConfidenceScore" class="form-control" /></div>
+            <div class="col-12"><label asp-for="Summary" class="form-label"></label><input asp-for="Summary" class="form-control" /></div>
+            <div class="col-12"><label asp-for="Description" class="form-label"></label><textarea asp-for="Description" rows="5" class="form-control"></textarea></div>
+            <div class="col-md-3"><label asp-for="Status" class="form-label"></label><input asp-for="Status" class="form-control" /></div>
+            <div class="col-md-3"><label asp-for="SeverityLevel" class="form-label"></label><input asp-for="SeverityLevel" class="form-control" /></div>
+            <div class="col-md-3"><label asp-for="VerificationStatus" class="form-label"></label><input asp-for="VerificationStatus" class="form-control" /></div>
+            <div class="col-md-3"><label asp-for="PublicationStatus" class="form-label"></label><input asp-for="PublicationStatus" class="form-control" /></div>
+            <div class="col-md-3"><label asp-for="ConfirmedCases" class="form-label"></label><input asp-for="ConfirmedCases" class="form-control" /></div>
+            <div class="col-md-3"><label asp-for="SuspectedCases" class="form-label"></label><input asp-for="SuspectedCases" class="form-control" /></div>
+            <div class="col-md-3"><label asp-for="Deaths" class="form-label"></label><input asp-for="Deaths" class="form-control" /></div>
+            <div class="col-md-3"><label asp-for="Recovered" class="form-label"></label><input asp-for="Recovered" class="form-control" /></div>
+            <div class="col-md-3"><label asp-for="GrowthRate" class="form-label"></label><input asp-for="GrowthRate" class="form-control" /></div>
+            <div class="col-md-3"><label asp-for="Latitude" class="form-label"></label><input asp-for="Latitude" class="form-control" /></div>
+            <div class="col-md-3"><label asp-for="Longitude" class="form-label"></label><input asp-for="Longitude" class="form-control" /></div>
+            <div class="col-md-3"><label asp-for="RadiusKm" class="form-label"></label><input asp-for="RadiusKm" class="form-control" /></div>
+            <div class="col-md-4"><label asp-for="StartedAt" class="form-label"></label><input asp-for="StartedAt" class="form-control" /></div>
+            <div class="col-md-4"><label asp-for="PublicationDate" class="form-label"></label><input asp-for="PublicationDate" class="form-control" /></div>
+            <div class="col-md-4"><label asp-for="LastVerifiedDate" class="form-label"></label><input asp-for="LastVerifiedDate" class="form-control" /></div>
+            <div class="col-12"><label asp-for="PrimarySourceUrl" class="form-label"></label><input asp-for="PrimarySourceUrl" class="form-control" /></div>
+            <div class="col-12"><label asp-for="SelectedSourceIds" class="form-label">Kaynaklar</label><select asp-for="SelectedSourceIds" asp-items="Model.AvailableSources" class="form-select" multiple size="6"></select></div>
+            <div class="col-12"><label asp-for="VerificationNotes" class="form-label"></label><textarea asp-for="VerificationNotes" rows="4" class="form-control"></textarea></div>
+        </div>
+    </div>
+    <div class="card-footer d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Kaydet</button>
+        <a class="btn btn-outline-secondary" href="/admin/outbreaks">Geri</a>
+    </div>
+</form>

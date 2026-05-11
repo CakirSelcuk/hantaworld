@@ -1,3 +1,5 @@
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import LiveTicker from '@/components/dashboard/LiveTicker';
@@ -7,9 +9,7 @@ import LatestReports from '@/components/dashboard/LatestReports';
 import AlertSignup from '@/components/dashboard/AlertSignup';
 import SocialIntelligence from '@/components/dashboard/SocialIntelligence';
 import MapWrapper from '@/components/map/MapWrapper';
-import { getOutbreaks, getCountryWatchlist, getArticles, getSocialTrends, getGlobalStats, getTickerItems } from '@/lib/data';
-import { ArrowRight } from 'lucide-react';
-import Link from 'next/link';
+import { getArticles, getCountryWatchlist, getGlobalStats, getOutbreaks, getSocialTrends, getTickerItems } from '@/lib/data';
 
 export default async function HomePage() {
   const outbreaks = await getOutbreaks();
@@ -25,7 +25,6 @@ export default async function HomePage() {
       <LiveTicker items={tickerItems} />
 
       <main style={{ paddingTop: 64 }}>
-        {/* ── Verified Data Banner ── */}
         <div style={{ background: 'rgba(34,197,94,0.05)', borderBottom: '1px solid rgba(34,197,94,0.15)', padding: '0.75rem 1.5rem', textAlign: 'center' }}>
           <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: '#86efac', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
             <span style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: '#22c55e' }} />
@@ -33,12 +32,10 @@ export default async function HomePage() {
           </span>
         </div>
 
-        {/* ── Hero Dashboard ── */}
         <HeroStats stats={globalStats} />
 
         <hr className="section-divider" style={{ margin: '0 1.5rem' }} />
 
-        {/* ── Interactive Map Preview ── */}
         <section style={{ padding: '3rem 0' }}>
           <div className="container-main">
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
@@ -65,7 +62,7 @@ export default async function HomePage() {
                 </div>
               ))}
               <span style={{ marginLeft: 'auto', fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--text-muted)' }}>
-                {outbreaks.length} active zones · Click marker for details
+                {outbreaks.length} active zones | Click marker for details
               </span>
             </div>
           </div>
@@ -73,15 +70,12 @@ export default async function HomePage() {
 
         <hr className="section-divider" style={{ margin: '0 1.5rem' }} />
 
-        {/* ── Latest Intelligence ── */}
         <LatestReports articles={articles.slice(0, 3)} />
 
         <hr className="section-divider" style={{ margin: '0 1.5rem' }} />
 
-        {/* ── Country Watchlist ── */}
         <CountryWatchlist items={watchlist} />
 
-        {/* ── Social Intelligence (shown only when verified data exists) ── */}
         {socialTrends.length > 0 && (
           <>
             <hr className="section-divider" style={{ margin: '0 1.5rem' }} />
@@ -91,7 +85,6 @@ export default async function HomePage() {
 
         <hr className="section-divider" style={{ margin: '0 1.5rem' }} />
 
-        {/* ── Alert Signup ── */}
         <AlertSignup />
       </main>
 

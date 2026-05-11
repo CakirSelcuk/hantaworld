@@ -1,0 +1,24 @@
+@model HantaWorld.AdminApi.Models.CountryFormViewModel
+
+<form method="post" class="card shadow-sm">
+    <div class="card-body">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+        <div class="row g-3">
+            <div class="col-md-6"><label asp-for="Name" class="form-label"></label><input asp-for="Name" class="form-control" /><span asp-validation-for="Name" class="text-danger"></span></div>
+            <div class="col-md-6"><label asp-for="Slug" class="form-label"></label><input asp-for="Slug" class="form-control" /><span asp-validation-for="Slug" class="text-danger"></span></div>
+            <div class="col-md-4"><label asp-for="IsoCode" class="form-label"></label><input asp-for="IsoCode" class="form-control" /><span asp-validation-for="IsoCode" class="text-danger"></span></div>
+            <div class="col-md-4"><label asp-for="Continent" class="form-label"></label><input asp-for="Continent" class="form-control" /><span asp-validation-for="Continent" class="text-danger"></span></div>
+            <div class="col-md-4"><label asp-for="FlagEmoji" class="form-label"></label><input asp-for="FlagEmoji" class="form-control" /><span asp-validation-for="FlagEmoji" class="text-danger"></span></div>
+            <div class="col-md-4"><label asp-for="Population" class="form-label"></label><input asp-for="Population" class="form-control" /></div>
+            <div class="col-md-4"><label asp-for="Latitude" class="form-label"></label><input asp-for="Latitude" class="form-control" /></div>
+            <div class="col-md-4"><label asp-for="Longitude" class="form-label"></label><input asp-for="Longitude" class="form-control" /></div>
+            <div class="col-12"><label asp-for="HealthAuthorityUrl" class="form-label"></label><input asp-for="HealthAuthorityUrl" class="form-control" /><span asp-validation-for="HealthAuthorityUrl" class="text-danger"></span></div>
+            <div class="col-12 form-check"><input asp-for="IsActive" class="form-check-input" /><label asp-for="IsActive" class="form-check-label"></label></div>
+        </div>
+    </div>
+    <div class="card-footer d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Kaydet</button>
+        <a class="btn btn-outline-secondary" href="/admin/countries">Geri</a>
+    </div>
+</form>
