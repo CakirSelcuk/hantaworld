@@ -8,6 +8,8 @@ import MapWrapper from '@/components/map/MapWrapper';
 import { getCountryWatchlist, getOutbreaks } from '@/lib/data';
 import { formatDate, formatNumber, getSeverityColor } from '@/lib/utils';
 
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const watchlist = await getCountryWatchlist();

@@ -18,6 +18,10 @@ export default function LiveTicker({ items }: { items: TickerItem[] }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const doubled = [...items, ...items];
 
+  if (items.length === 0) {
+    return null;
+  }
+
   return (
     <div
       style={{

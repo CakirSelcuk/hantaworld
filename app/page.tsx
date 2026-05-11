@@ -11,6 +11,8 @@ import SocialIntelligence from '@/components/dashboard/SocialIntelligence';
 import MapWrapper from '@/components/map/MapWrapper';
 import { getArticles, getCountryWatchlist, getGlobalStats, getOutbreaks, getSocialTrends, getTickerItems } from '@/lib/data';
 
+export const dynamic = 'force-dynamic';
+
 export default async function HomePage() {
   const outbreaks = await getOutbreaks();
   const watchlist = await getCountryWatchlist();

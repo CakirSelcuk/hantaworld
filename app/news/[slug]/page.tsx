@@ -7,6 +7,8 @@ import { getArticleBySlug } from '@/lib/data';
 import { formatDate } from '@/lib/utils';
 import { AlertCircle, ArrowLeft, BookOpen, Calendar, CheckCircle, Clock, ExternalLink } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 const CATEGORY_META: Record<string, { label: string; color: string }> = {
   'outbreak-report': { label: 'Outbreak Report', color: '#ef4444' },
   'scientific-research': { label: 'Research', color: '#3b82f6' },

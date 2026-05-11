@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   description: 'Real-time interactive map of hantavirus outbreaks worldwide. Track confirmed cases, suspected zones, and severity by country.',
 };
 
+export const dynamic = 'force-dynamic';
+
 const STATUS_COLORS: Record<string, string> = {
   confirmed: '#ef4444',
   suspected: '#f97316',

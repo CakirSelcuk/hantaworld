@@ -32,6 +32,11 @@ export default function CountryWatchlist({ items }: { items: CountryStats[] }) {
           </Link>
         </div>
 
+        {items.length === 0 ? (
+          <div className="glass-card" style={{ padding: '1.5rem', color: 'var(--text-muted)', fontFamily: 'var(--font-ui)', fontSize: '0.85rem' }}>
+            No verified active country risk records are available from the live API yet.
+          </div>
+        ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '0.75rem' }}>
           {items.map((item) => {
             const risk = RISK_CONFIG[item.riskLevel] ?? RISK_CONFIG.low;
@@ -85,6 +90,7 @@ export default function CountryWatchlist({ items }: { items: CountryStats[] }) {
             );
           })}
         </div>
+        )}
       </div>
     </section>
   );

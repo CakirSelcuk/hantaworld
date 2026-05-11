@@ -11,6 +11,8 @@ export const metadata: Metadata = {
   description: 'Verified hantavirus outbreak reports, scientific research, travel advisories, and public health updates from WHO, CDC, ECDC and peer-reviewed sources.',
 };
 
+export const dynamic = 'force-dynamic';
+
 const CATEGORY_META: Record<string, { label: string; color: string }> = {
   'outbreak-report': { label: 'Outbreak Report', color: '#ef4444' },
   'scientific-research': { label: 'Research', color: '#3b82f6' },
@@ -70,6 +72,11 @@ export default async function NewsPage() {
             </p>
           </div>
 
+          {articles.length === 0 ? (
+            <div className="glass-card" style={{ padding: '1.5rem', color: 'var(--text-muted)', fontFamily: 'var(--font-ui)', fontSize: '0.85rem' }}>
+              No verified published reports are available from the live API yet.
+            </div>
+          ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {articles.map((article, index) => {
               const category = CATEGORY_META[article.category];
@@ -124,6 +131,7 @@ export default async function NewsPage() {
               );
             })}
           </div>
+          )}
         </div>
       </main>
       <Footer />

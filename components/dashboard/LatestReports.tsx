@@ -31,6 +31,24 @@ function VerificationBadge({ status }: { status: string }) {
 export default function LatestReports({ articles }: { articles: Article[] }) {
   const [featured, ...rest] = articles;
 
+  if (articles.length === 0) {
+    return (
+      <section style={{ padding: '2rem 0' }}>
+        <div className="container-main">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
+            <div className="section-header" style={{ margin: 0 }}>Intelligence Feed</div>
+            <Link href="/news" style={{ fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'var(--color-brand)', textDecoration: 'none' }}>
+              All reports {'->'}
+            </Link>
+          </div>
+          <div className="glass-card" style={{ padding: '1.5rem', color: 'var(--text-muted)', fontFamily: 'var(--font-ui)', fontSize: '0.85rem' }}>
+            No verified published reports are available from the live API yet.
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section style={{ padding: '2rem 0' }}>
       <div className="container-main">

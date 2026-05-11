@@ -1,6 +1,8 @@
 import { MetadataRoute } from 'next';
 import { getArticles, getCountries, getSiteLastModified } from '@/lib/data';
 
+export const dynamic = 'force-dynamic';
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://hantaworld.com';
   const siteLastModified = await getSiteLastModified();
