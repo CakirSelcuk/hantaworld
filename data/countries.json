@@ -1,14 +1,69 @@
 [
   {
-    "id": "c-france",
-    "isoCode": "FR",
-    "name": "France",
-    "slug": "france",
+    "id": "c-argentina",
+    "isoCode": "AR",
+    "name": "Argentina",
+    "slug": "argentina",
+    "continent": "South America",
+    "population": 46230000,
+    "flagEmoji": "\uD83C\uDDE6\uD83C\uDDF7",
+    "coordinates": { "lat": -38.4161, "lng": -63.6167 },
+    "healthAuthorityUrl": "https://www.argentina.gob.ar/salud"
+  },
+  {
+    "id": "c-netherlands",
+    "isoCode": "NL",
+    "name": "Netherlands",
+    "slug": "netherlands",
     "continent": "Europe",
-    "population": 68170000,
-    "flagEmoji": "\uD83C\uDDEB\uD83C\uDDF7",
-    "coordinates": { "lat": 46.2276, "lng": 2.2137 },
-    "healthAuthorityUrl": "https://sante.gouv.fr"
+    "population": 17880000,
+    "flagEmoji": "\uD83C\uDDF3\uD83C\uDDF1",
+    "coordinates": { "lat": 52.1326, "lng": 5.2913 },
+    "healthAuthorityUrl": "https://www.rivm.nl"
+  },
+  {
+    "id": "c-germany",
+    "isoCode": "DE",
+    "name": "Germany",
+    "slug": "germany",
+    "continent": "Europe",
+    "population": 84480000,
+    "flagEmoji": "\uD83C\uDDE9\uD83C\uDDEA",
+    "coordinates": { "lat": 51.1657, "lng": 10.4515 },
+    "healthAuthorityUrl": "https://www.rki.de"
+  },
+  {
+    "id": "c-united-kingdom",
+    "isoCode": "GB",
+    "name": "United Kingdom",
+    "slug": "united-kingdom",
+    "continent": "Europe",
+    "population": 68120000,
+    "flagEmoji": "\uD83C\uDDEC\uD83C\uDDE7",
+    "coordinates": { "lat": 55.3781, "lng": -3.4360 },
+    "healthAuthorityUrl": "https://www.gov.uk/government/organisations/uk-health-security-agency"
+  },
+  {
+    "id": "c-south-africa",
+    "isoCode": "ZA",
+    "name": "South Africa",
+    "slug": "south-africa",
+    "continent": "Africa",
+    "population": 60410000,
+    "flagEmoji": "\uD83C\uDDFF\uD83C\uDDE6",
+    "coordinates": { "lat": -30.5595, "lng": 22.9375 },
+    "healthAuthorityUrl": "https://www.nicd.ac.za"
+  },
+  {
+    "id": "c-switzerland",
+    "isoCode": "CH",
+    "name": "Switzerland",
+    "slug": "switzerland",
+    "continent": "Europe",
+    "population": 8840000,
+    "flagEmoji": "\uD83C\uDDE8\uD83C\uDDED",
+    "coordinates": { "lat": 46.8182, "lng": 8.2275 },
+    "healthAuthorityUrl": "https://www.bag.admin.ch"
   },
   {
     "id": "c-spain",
@@ -22,15 +77,15 @@
     "healthAuthorityUrl": "https://www.sanidad.gob.es"
   },
   {
-    "id": "c-israel",
-    "isoCode": "IL",
-    "name": "Israel",
-    "slug": "israel",
-    "continent": "Asia",
-    "population": 9800000,
-    "flagEmoji": "\uD83C\uDDEE\uD83C\uDDF1",
-    "coordinates": { "lat": 31.0461, "lng": 34.8516 },
-    "healthAuthorityUrl": "https://www.gov.il/en/departments/ministry_of_health"
+    "id": "c-france",
+    "isoCode": "FR",
+    "name": "France",
+    "slug": "france",
+    "continent": "Europe",
+    "population": 68170000,
+    "flagEmoji": "\uD83C\uDDEB\uD83C\uDDF7",
+    "coordinates": { "lat": 46.2276, "lng": 2.2137 },
+    "healthAuthorityUrl": "https://sante.gouv.fr"
   },
   {
     "id": "c-united-states",
@@ -41,28 +96,6 @@
     "population": 334900000,
     "flagEmoji": "\uD83C\uDDFA\uD83C\uDDF8",
     "coordinates": { "lat": 39.8283, "lng": -98.5795 },
-    "healthAuthorityUrl": "https://www.cdc.gov/hantavirus"
-  },
-  {
-    "id": "c-argentina",
-    "isoCode": "AR",
-    "name": "Argentina",
-    "slug": "argentina",
-    "continent": "South America",
-    "population": 46230000,
-    "flagEmoji": "\uD83C\uDDE6\uD83C\uDDF7",
-    "coordinates": { "lat": -38.4161, "lng": -63.6167 },
-    "healthAuthorityUrl": "https://www.argentina.gob.ar/salud"
-  },
-  {
-    "id": "c-tristan-da-cunha",
-    "isoCode": "TA",
-    "name": "Tristan da Cunha",
-    "slug": "tristan-da-cunha",
-    "continent": "South Atlantic",
-    "population": 238,
-    "flagEmoji": "\uD83C\uDFF4",
-    "coordinates": { "lat": -37.1052, "lng": -12.2777 },
-    "healthAuthorityUrl": "https://www.tristandc.com"
+    "healthAuthorityUrl": "https://www.hhs.gov"
   }
 ]

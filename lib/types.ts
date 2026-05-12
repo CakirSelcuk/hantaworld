@@ -130,6 +130,13 @@ export interface SocialPost {
   outbreakId?: string;
 }
 
+export interface GlobalStatCard {
+  key: 'reportedCases' | 'totalDeaths' | 'affectedCountries' | 'activeOutbreaks';
+  label: string;
+  value: number;
+  displayOrder: number;
+}
+
 export interface GlobalStats {
   totalConfirmedCases: number;
   totalSuspectedCases: number;
@@ -139,6 +146,7 @@ export interface GlobalStats {
   activeOutbreaks: number;
   growthRate7d: number;        // %
   lastUpdated: string;
+  numericCards?: GlobalStatCard[];
 }
 
 export interface CountryStats {

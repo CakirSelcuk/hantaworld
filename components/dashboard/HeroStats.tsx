@@ -46,9 +46,11 @@ const STAT_META = {
 const HOME_STAT_VALUE_OVERRIDES = {
   reportedCases: 10,
   totalDeaths: 3,
-  affectedCountries: 6,
-  activeOutbreaks: 6,
+  affectedCountries: 9,
+  activeOutbreaks: 9,
 } satisfies Record<HomeStatKey, number>;
+
+const HOME_DATA_VERIFIED_DATE = '2026-05-12T00:00:00Z';
 
 function getStatCards(): HomeStatCard[] {
   return (Object.keys(STAT_META) as HomeStatKey[]).map((key, index) => ({
@@ -127,7 +129,7 @@ export default function HeroStats({ stats }: { stats: GlobalStats }) {
             <span key={source} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--text-muted)', padding: '0.15rem 0.45rem', border: '1px solid var(--border-subtle)', borderRadius: '4px' }}>{source}</span>
           ))}
           <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', marginLeft: 'auto' }}>
-            Data verified: <span style={{ color: '#86efac' }}>{formatDate(stats.lastUpdated)}</span>
+            Data verified: <span style={{ color: '#86efac' }}>{formatDate(HOME_DATA_VERIFIED_DATE)}</span>
           </span>
         </div>
       </div>
