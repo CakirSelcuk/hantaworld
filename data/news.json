@@ -1,5 +1,65 @@
 [
   {
+    "id": "a-hantavirus-daily-update-12may",
+    "title": "Hantavirus Daily Update - May 12, 2026",
+    "slug": "hantavirus-daily-update-may-12-2026",
+    "excerpt": "According to the latest reports from WHO and regional health authorities, the Andes virus cluster has risen to 9 total cases, including 7 confirmed and 2 probable cases. The death toll remains 3.",
+    "content": "According to the latest reports from the World Health Organization (WHO) and regional health authorities, the situation regarding the Andes virus (ANDV) cluster is evolving.\n\nCase Count: The total number of cases has risen to 9, including 7 confirmed and 2 probable cases.\n\nFatalities: The death toll remains at 3, involving citizens from the Netherlands and Germany.\n\nVirus Strain: The cluster has been confirmed as Andes virus (ANDV), a hantavirus strain known for its rare ability to spread through close human-to-human contact.\n\nGlobal Risk Assessment: WHO maintains the global risk level as low, though the risk remains moderate for individuals directly linked to the affected vessel.\n\nSummary: Health authorities continue to monitor exposed passengers and coordinate contact tracing across borders. HantaWorld will continue to separate confirmed clinical cases from probable cases and monitored contacts as source material allows.",
+    "category": "outbreak-report",
+    "tags": ["WHO", "Andes virus", "MV Hondius", "May 2026", "Daily Update"],
+    "sourceIds": ["s-who-don600", "s-ecdc-andes"],
+    "verificationStatus": "verified",
+    "publishedAt": "2026-05-12T00:00:00Z",
+    "lastVerifiedDate": "2026-05-12",
+    "readingTimeMin": 3,
+    "citations": [
+      "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON600",
+      "https://www.ecdc.europa.eu/en/infectious-disease-topics/hantavirus-infection/surveillance-and-updates/andes-hantavirus-outbreak"
+    ],
+    "confidenceScore": 95,
+    "sourceUrl": "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON600"
+  },
+  {
+    "id": "a-spain-france-new-cases-12may",
+    "title": "New Confirmed Cases Reported in Spain and France",
+    "slug": "new-confirmed-cases-spain-france-may-12-2026",
+    "excerpt": "A Spanish passenger under quarantine in Madrid tested positive by PCR today, and French health officials confirmed another traveler associated with the recent cruise has tested positive.",
+    "content": "Key Developments - May 12, 2026\n\nNew Confirmed Cases:\n\nSpain: A passenger currently under quarantine in Madrid tested positive for the virus by PCR today.\n\nFrance: Another traveler associated with the recent cruise has been confirmed positive by French health officials.\n\nMV Hondius Update: The evacuation of the vessel at Tenerife in the Canary Islands is now complete.\n\nThe ship is currently en route to Rotterdam, Netherlands, where it will undergo a comprehensive deep-cleaning and disinfection protocol.\n\nPublic health teams continue to track passengers and crew members who may have had close or prolonged exposure during the voyage.",
+    "category": "outbreak-report",
+    "tags": ["Spain", "France", "PCR", "MV Hondius", "Andes virus"],
+    "sourceIds": ["s-who-don600", "s-ecdc-andes", "s-spain-health"],
+    "verificationStatus": "verified",
+    "publishedAt": "2026-05-12T00:00:00Z",
+    "lastVerifiedDate": "2026-05-12",
+    "readingTimeMin": 3,
+    "citations": [
+      "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON600",
+      "https://www.sanidad.gob.es"
+    ],
+    "confidenceScore": 92,
+    "sourceUrl": "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON600"
+  },
+  {
+    "id": "a-mv-hondius-public-health-context-12may",
+    "title": "MV Hondius Public Health Context and Turkish Passenger Status",
+    "slug": "mv-hondius-public-health-context-turkish-passenger-status-may-12-2026",
+    "excerpt": "The Turkish Ministry of Health confirmed that 3 Turkish nationals from the vessel tested negative. They show no symptoms but remain under observation as a precaution.",
+    "content": "Status of Turkish Citizens:\n\nThe Turkish Ministry of Health confirmed that the 3 Turkish nationals who were on the vessel have tested negative.\n\nThey currently show no symptoms but remain under observation as a precaution.\n\nPublic Health Context:\n\nTransmission Mode: Health authorities reiterate that while hantaviruses are typically spread by rodents, the Andes strain is unusual because it can spread between humans through close, prolonged contact.\n\nInternational Coordination: WHO continues to work through International Health Regulations (IHR) to facilitate contact tracing across multiple borders and ensure potentially exposed passengers are monitored.\n\nThe situation is being monitored in real time. HantaWorld will update public figures when verified health authority records change.",
+    "category": "public-health",
+    "tags": ["Turkey", "Public health", "IHR", "Andes virus", "MV Hondius"],
+    "sourceIds": ["s-who-don600", "s-ecdc-andes"],
+    "verificationStatus": "verified",
+    "publishedAt": "2026-05-12T00:00:00Z",
+    "lastVerifiedDate": "2026-05-12",
+    "readingTimeMin": 3,
+    "citations": [
+      "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON600",
+      "https://www.ecdc.europa.eu/en/infectious-disease-topics/hantavirus-infection/surveillance-and-updates/andes-hantavirus-outbreak"
+    ],
+    "confidenceScore": 92,
+    "sourceUrl": "https://www.who.int/emergencies/disease-outbreak-news/item/2026-DON600"
+  },
+  {
     "id": "a-andes-global-update-11may",
     "title": "Andes Hantavirus Outbreak: Global Situation Update (May 2026)",
     "slug": "andes-hantavirus-global-situation-update-may-2026",
