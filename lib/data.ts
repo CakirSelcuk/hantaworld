@@ -395,22 +395,22 @@ export async function getCountryBySlug(slug: string): Promise<Country | undefine
 }
 
 export async function getArticles(): Promise<Article[]> {
-  return getFallbackArticles();
+  const articles = await fetchApi<ApiArticle[]>('/api/news');
+  const liveArticles = (articles ?? [])
+    .filter((article) => toVerificationStatus(article.verificationStatus) === 'verified')
+    .map(mapArticle);
+
+  return liveArticles.length > 0 ? liveArticles : getFallbackArticles();
 }
 
 export async function getArticleBySlug(slug: string): Promise<Article | undefined> {
-  const fallbackArticle = getFallbackArticles().find((article) => article.slug === slug);
-  if (fallbackArticle) {
-    return fallbackArticle;
-  }
-
   const articles = await fetchApi<ApiArticle[]>('/api/news?includeContent=true');
   const liveArticle = (articles ?? [])
     .filter((article) => toVerificationStatus(article.verificationStatus) === 'verified')
     .map(mapArticle)
     .find((article) => article.slug === slug);
 
-  return liveArticle;
+  return liveArticle ?? getFallbackArticles().find((article) => article.slug === slug);
 }
 
 export async function getSources(): Promise<Source[]> {

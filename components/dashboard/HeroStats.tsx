@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { Activity, AlertTriangle, Globe, TrendingDown, TrendingUp, Users } from 'lucide-react';
-import type { GlobalStats } from '@/lib/types';
+import type { GlobalStatCard, GlobalStats } from '@/lib/types';
 import { formatDate, formatNumber, timeAgo } from '@/lib/utils';
 
 function AnimatedNumber({ target, duration = 1800 }: { target: number; duration?: number }) {
@@ -27,43 +27,35 @@ function AnimatedNumber({ target, duration = 1800 }: { target: number; duration?
   return <>{formatNumber(current)}</>;
 }
 
-type HomeStatKey = 'reportedCases' | 'totalDeaths' | 'affectedCountries' | 'activeOutbreaks';
-
-type HomeStatCard = {
-  key: HomeStatKey;
-  label: string;
-  value: number;
-  displayOrder: number;
-};
-
 const STAT_META = {
   reportedCases: { label: 'Reported Cases', icon: Activity, color: '#ef4444', glow: 'rgba(239,68,68,0.15)' },
   totalDeaths: { label: 'Total Deaths', icon: AlertTriangle, color: '#f97316', glow: 'rgba(249,115,22,0.15)' },
   affectedCountries: { label: 'Affected Countries', icon: Globe, color: '#3b82f6', glow: 'rgba(59,130,246,0.15)' },
   activeOutbreaks: { label: 'Active Outbreaks', icon: Users, color: '#eab308', glow: 'rgba(234,179,8,0.15)' },
-} satisfies Record<HomeStatKey, { label: string; icon: typeof Activity; color: string; glow: string }>;
+} satisfies Record<GlobalStatCard['key'], { label: string; icon: typeof Activity; color: string; glow: string }>;
 
-const HOME_STAT_VALUE_OVERRIDES = {
-  reportedCases: 10,
-  totalDeaths: 3,
-  affectedCountries: 9,
-  activeOutbreaks: 9,
-} satisfies Record<HomeStatKey, number>;
+function getDefaultValue(stats: GlobalStats, key: GlobalStatCard['key']) {
+  if (key === 'reportedCases') return stats.totalConfirmedCases + stats.totalSuspectedCases;
+  return stats[key] as number;
+}
 
-const HOME_DATA_VERIFIED_DATE = '2026-05-12T00:00:00Z';
+function getStatCards(stats: GlobalStats): GlobalStatCard[] {
+  const configuredCards = stats.numericCards?.filter((card) => STAT_META[card.key]);
+  if (configuredCards && configuredCards.length > 0) {
+    return configuredCards;
+  }
 
-function getStatCards(): HomeStatCard[] {
-  return (Object.keys(STAT_META) as HomeStatKey[]).map((key, index) => ({
+  return (Object.keys(STAT_META) as GlobalStatCard['key'][]).map((key, index) => ({
     key,
     label: STAT_META[key].label,
-    value: HOME_STAT_VALUE_OVERRIDES[key],
+    value: getDefaultValue(stats, key),
     displayOrder: index + 1,
   }));
 }
 
 export default function HeroStats({ stats }: { stats: GlobalStats }) {
   const isRising = stats.growthRate7d > 0;
-  const statCards = getStatCards();
+  const statCards = getStatCards(stats);
 
   return (
     <section style={{ padding: '5rem 0 3rem' }}>
@@ -129,7 +121,7 @@ export default function HeroStats({ stats }: { stats: GlobalStats }) {
             <span key={source} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--text-muted)', padding: '0.15rem 0.45rem', border: '1px solid var(--border-subtle)', borderRadius: '4px' }}>{source}</span>
           ))}
           <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', marginLeft: 'auto' }}>
-            Data verified: <span style={{ color: '#86efac' }}>{formatDate(HOME_DATA_VERIFIED_DATE)}</span>
+            Data verified: <span style={{ color: '#86efac' }}>{formatDate(stats.lastUpdated)}</span>
           </span>
         </div>
       </div>
