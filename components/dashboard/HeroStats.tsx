@@ -53,9 +53,10 @@ function getStatCards(stats: GlobalStats): GlobalStatCard[] {
   }));
 }
 
-export default function HeroStats({ stats }: { stats: GlobalStats }) {
+export default function HeroStats({ stats, verifiedAt }: { stats: GlobalStats; verifiedAt?: string }) {
   const isRising = stats.growthRate7d > 0;
   const statCards = getStatCards(stats);
+  const autoVerifiedDate = verifiedAt ?? stats.lastUpdated;
 
   return (
     <section style={{ padding: '5rem 0 3rem' }}>
@@ -121,7 +122,7 @@ export default function HeroStats({ stats }: { stats: GlobalStats }) {
             <span key={source} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--text-muted)', padding: '0.15rem 0.45rem', border: '1px solid var(--border-subtle)', borderRadius: '4px' }}>{source}</span>
           ))}
           <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', marginLeft: 'auto' }}>
-            Data verified: <span style={{ color: '#86efac' }}>{formatDate(stats.lastUpdated)}</span>
+            Data verified: <span style={{ color: '#86efac' }}>{formatDate(autoVerifiedDate)}</span>
           </span>
         </div>
       </div>

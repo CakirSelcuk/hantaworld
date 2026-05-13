@@ -1,8 +1,9 @@
-import { Article, ArticleCategory, Country, GlobalStatCard, GlobalStats, Outbreak, OutbreakStatus, SeverityLevel, SocialPost, Source, SourceType, VerificationStatus } from './types';
+import { Article, ArticleCategory, Country, GlobalStatCard, GlobalStats, GlobalStatsTrendPoint, Outbreak, OutbreakStatus, SeverityLevel, SocialPost, Source, SourceType, VerificationStatus } from './types';
 import { sanitizeText } from './utils';
 import fallbackOutbreaksData from '../data/outbreaks.json';
 import fallbackCountriesData from '../data/countries.json';
 import fallbackGlobalStatsData from '../data/global-stats.json';
+import fallbackGlobalStatsTrendData from '../data/global-stats-trend.json';
 import fallbackNewsData from '../data/news.json';
 import fallbackSourcesData from '../data/sources.json';
 
@@ -102,6 +103,12 @@ type ApiGlobalStats = Partial<Omit<GlobalStats, 'numericCards'>> & {
   numericCards?: Partial<GlobalStatCard>[];
 };
 
+type ApiGlobalStatsTrendPoint = {
+  date?: string | null;
+  reportedCases?: number | string | null;
+  totalDeaths?: number | string | null;
+};
+
 type FallbackOutbreak = Omit<Outbreak, 'country' | 'sources' | 'description' | 'verificationNotes'> & {
   countryId: string;
   sourceIds?: string[];
@@ -121,6 +128,7 @@ const fallbackCountryRows = fallbackCountriesData as Country[];
 const fallbackArticleRows = fallbackNewsData as FallbackArticle[];
 const fallbackSourceRows = fallbackSourcesData as Source[];
 const fallbackGlobalStats = fallbackGlobalStatsData as Partial<Pick<GlobalStats, 'totalDeaths' | 'lastUpdated'>>;
+const fallbackGlobalStatsTrendRows = fallbackGlobalStatsTrendData as GlobalStatsTrendPoint[];
 
 async function fetchApi<T>(path: string): Promise<T | null> {
   const url = new URL(path, API_BASE_URL);
@@ -516,6 +524,28 @@ export async function getGlobalStats(): Promise<GlobalStats> {
     lastUpdated: dateToIso(stats?.lastUpdated || DEFAULT_LAST_UPDATED),
     numericCards,
   };
+}
+
+function mapGlobalStatsTrendPoint(point: ApiGlobalStatsTrendPoint): GlobalStatsTrendPoint | null {
+  if (!point.date) {
+    return null;
+  }
+
+  return {
+    date: point.date.includes('T') ? point.date.split('T')[0] : point.date,
+    reportedCases: toNumber(point.reportedCases),
+    totalDeaths: toNumber(point.totalDeaths),
+  };
+}
+
+export async function getGlobalStatsTrend(): Promise<GlobalStatsTrendPoint[]> {
+  const trend = await fetchApi<ApiGlobalStatsTrendPoint[]>('/api/global-stats/trend');
+  const liveTrend = (trend ?? [])
+    .map(mapGlobalStatsTrendPoint)
+    .filter((point): point is GlobalStatsTrendPoint => Boolean(point))
+    .sort((a, b) => a.date.localeCompare(b.date));
+
+  return liveTrend.length > 0 ? liveTrend : fallbackGlobalStatsTrendRows;
 }
 
 export async function getTickerItems() {

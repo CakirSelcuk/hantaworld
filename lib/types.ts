@@ -149,6 +149,12 @@ export interface GlobalStats {
   numericCards?: GlobalStatCard[];
 }
 
+export interface GlobalStatsTrendPoint {
+  date: string;
+  reportedCases: number;
+  totalDeaths: number;
+}
+
 export interface CountryStats {
   country: Country;
   activeOutbreaks: number;
