@@ -155,17 +155,6 @@ export interface GlobalStatsTrendPoint {
   totalDeaths: number;
 }
 
-export interface InstagramPost {
-  id: string;
-  title: string;
-  postUrl: string;
-  thumbnailImageUrl?: string;
-  description?: string;
-  sortOrder: number;
-  isFeatured: boolean;
-  updatedAt: string;
-}
-
 export interface CountryStats {
   country: Country;
   activeOutbreaks: number;

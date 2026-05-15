@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Activity, Bell, BookOpen, Globe, Menu, Newspaper, Shield, X } from 'lucide-react';
+import { Activity, Bell, BookOpen, Camera, Globe, Menu, Newspaper, Shield, X } from 'lucide-react';
 
 const NAV_LINKS = [
   { href: '/', label: 'Dashboard', icon: Activity },
@@ -74,6 +74,17 @@ export default function Navbar() {
             <span className="pulse-dot" style={{ width: 6, height: 6 }} />
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', fontWeight: 600, color: '#fca5a5', letterSpacing: '0.08em' }}>LIVE</span>
           </div>
+
+          <Link
+            href="https://www.instagram.com/hanta.world/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="HantaWorld Instagram"
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 36, height: 36, borderRadius: '8px', border: '1px solid rgba(244,114,182,0.24)', color: '#f472b6', transition: 'all 0.2s ease', textDecoration: 'none', background: 'rgba(244,114,182,0.08)' }}
+            className="btn-ghost"
+          >
+            <Camera size={15} />
+          </Link>
 
           <Link
             href="/about/methodology"
