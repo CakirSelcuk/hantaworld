@@ -1,9 +1,10 @@
-import { Article, ArticleCategory, Country, GlobalStatCard, GlobalStats, GlobalStatsTrendPoint, Outbreak, OutbreakStatus, SeverityLevel, SocialPost, Source, SourceType, VerificationStatus } from './types';
+import { Article, ArticleCategory, Country, GlobalStatCard, GlobalStats, GlobalStatsTrendPoint, InstagramPost, Outbreak, OutbreakStatus, SeverityLevel, SocialPost, Source, SourceType, VerificationStatus } from './types';
 import { sanitizeText } from './utils';
 import fallbackOutbreaksData from '../data/outbreaks.json';
 import fallbackCountriesData from '../data/countries.json';
 import fallbackGlobalStatsData from '../data/global-stats.json';
 import fallbackGlobalStatsTrendData from '../data/global-stats-trend.json';
+import fallbackInstagramPostsData from '../data/instagram-posts.json';
 import fallbackNewsData from '../data/news.json';
 import fallbackSourcesData from '../data/sources.json';
 
@@ -109,6 +110,16 @@ type ApiGlobalStatsTrendPoint = {
   totalDeaths?: number | string | null;
 };
 
+type ApiInstagramPost = {
+  id?: string;
+  title?: string;
+  postUrl?: string;
+  description?: string | null;
+  sortOrder?: number | string | null;
+  isFeatured?: boolean;
+  updatedAt?: string | null;
+};
+
 type FallbackOutbreak = Omit<Outbreak, 'country' | 'sources' | 'description' | 'verificationNotes'> & {
   countryId: string;
   sourceIds?: string[];
@@ -129,6 +140,7 @@ const fallbackArticleRows = fallbackNewsData as FallbackArticle[];
 const fallbackSourceRows = fallbackSourcesData as Source[];
 const fallbackGlobalStats = fallbackGlobalStatsData as Partial<Pick<GlobalStats, 'totalDeaths' | 'lastUpdated'>>;
 const fallbackGlobalStatsTrendRows = fallbackGlobalStatsTrendData as GlobalStatsTrendPoint[];
+const fallbackInstagramPostRows = fallbackInstagramPostsData as InstagramPost[];
 
 async function fetchApi<T>(path: string): Promise<T | null> {
   const url = new URL(path, API_BASE_URL);
@@ -538,6 +550,22 @@ function mapGlobalStatsTrendPoint(point: ApiGlobalStatsTrendPoint): GlobalStatsT
   };
 }
 
+function mapInstagramPost(post: ApiInstagramPost): InstagramPost | null {
+  if (!post.postUrl || !post.title) {
+    return null;
+  }
+
+  return {
+    id: post.id || post.postUrl,
+    title: sanitizeText(post.title),
+    postUrl: post.postUrl,
+    description: sanitizeText(post.description || undefined),
+    sortOrder: toNumber(post.sortOrder, 0),
+    isFeatured: post.isFeatured ?? false,
+    updatedAt: dateToIso(post.updatedAt),
+  };
+}
+
 export async function getGlobalStatsTrend(): Promise<GlobalStatsTrendPoint[]> {
   const trend = await fetchApi<ApiGlobalStatsTrendPoint[]>('/api/global-stats/trend');
   const liveTrend = (trend ?? [])
@@ -546,6 +574,16 @@ export async function getGlobalStatsTrend(): Promise<GlobalStatsTrendPoint[]> {
     .sort((a, b) => a.date.localeCompare(b.date));
 
   return liveTrend.length > 0 ? liveTrend : fallbackGlobalStatsTrendRows;
+}
+
+export async function getInstagramPosts(): Promise<InstagramPost[]> {
+  const posts = await fetchApi<ApiInstagramPost[]>('/api/instagram-posts');
+  const livePosts = (posts ?? [])
+    .map(mapInstagramPost)
+    .filter((post): post is InstagramPost => Boolean(post))
+    .sort((a, b) => Number(b.isFeatured) - Number(a.isFeatured) || a.sortOrder - b.sortOrder);
+
+  return livePosts.length > 0 ? livePosts : fallbackInstagramPostRows;
 }
 
 export async function getTickerItems() {

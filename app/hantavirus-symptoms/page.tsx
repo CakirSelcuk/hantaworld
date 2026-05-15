@@ -69,6 +69,14 @@ const faqJsonLd = {
         text: 'Severe illness may involve coughing, shortness of breath, chest tightness, fluid in the lungs, and respiratory distress that requires urgent medical care.',
       },
     },
+    {
+      '@type': 'Question',
+      name: 'How long after exposure can hantavirus symptoms appear?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Timing depends on the virus and exposure. CDC guidance for Andes virus lists signs and symptoms appearing 4 to 42 days after exposure; other hantavirus disease may also appear days to weeks after exposure.',
+      },
+    },
   ],
 };
 
@@ -103,9 +111,30 @@ export default function HantavirusSymptomsPage() {
           </div>
 
           <div className="glass-card" style={{ padding: '1.5rem' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.45rem', marginBottom: '0.75rem' }}>Timing after exposure</h2>
+            <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8 }}>
+              Symptom timing depends on the virus and exposure circumstances. CDC guidance for Andes virus lists a 4 to 42 day window after exposure. For broader hantavirus pulmonary syndrome, public health agencies emphasize that early symptoms may appear days to weeks after contact with infected rodents or contaminated environments.
+            </p>
+          </div>
+
+          <div className="glass-card" style={{ padding: '1.5rem' }}>
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.45rem', marginBottom: '0.75rem' }}>Respiratory warning signs</h2>
             <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8 }}>
               Severe disease can progress to cough, shortness of breath, chest discomfort and difficulty breathing. Anyone with possible exposure and respiratory symptoms should contact a healthcare professional or local public health authority.
+            </p>
+          </div>
+
+          <div className="glass-card" style={{ padding: '1.5rem' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.45rem', marginBottom: '0.75rem' }}>Symptoms that can overlap with other illnesses</h2>
+            <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8 }}>
+              Hantavirus can be difficult to identify early because fever, myalgia, chills, nausea, vomiting, diarrhea and abdominal pain may resemble influenza, COVID-19, leptospirosis, dengue, viral pneumonia or sepsis. A possible rodent exposure, travel history, or close contact with a confirmed Andes virus patient can be clinically important.
+            </p>
+          </div>
+
+          <div className="glass-card" style={{ padding: '1.5rem' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.45rem', marginBottom: '0.75rem' }}>When urgent care matters</h2>
+            <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8 }}>
+              Public health guidance stresses early medical care when hantavirus exposure is possible and symptoms develop. Severe cases may require hospital-based supportive care, respiratory monitoring and management of complications.
             </p>
           </div>
 
@@ -126,6 +155,10 @@ export default function HantavirusSymptomsPage() {
             <Link href="/news" style={{ color: 'var(--color-brand)', fontFamily: 'var(--font-ui)', fontWeight: 600, textDecoration: 'none' }}>
               Latest verified reports
             </Link>
+          </div>
+
+          <div style={{ color: 'var(--text-muted)', fontSize: '0.78rem', lineHeight: 1.7, borderTop: '1px solid var(--border-subtle)', paddingTop: '1.5rem' }}>
+            Sources: <a href="https://www.cdc.gov/hantavirus/about/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-secondary)' }}>CDC Hantavirus</a>, <a href="https://www.cdc.gov/hantavirus/about/andesvirus.html" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-secondary)' }}>CDC Andes Virus</a>, <a href="https://www.who.int/news-room/fact-sheets/detail/hantavirus" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-secondary)' }}>WHO Hantavirus Fact Sheet</a>.
           </div>
         </section>
       </main>

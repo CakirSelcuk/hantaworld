@@ -8,10 +8,11 @@ import HeroStats from '@/components/dashboard/HeroStats';
 import GlobalStatsTrendChart from '@/components/dashboard/GlobalStatsTrendChart';
 import CountryWatchlist from '@/components/dashboard/CountryWatchlist';
 import LatestReports from '@/components/dashboard/LatestReports';
+import InstagramUpdates from '@/components/dashboard/InstagramUpdates';
 import AlertSignup from '@/components/dashboard/AlertSignup';
 import SocialIntelligence from '@/components/dashboard/SocialIntelligence';
 import MapWrapper from '@/components/map/MapWrapper';
-import { getArticles, getCountryWatchlist, getGlobalStats, getGlobalStatsTrend, getOutbreaks, getSocialTrends, getTickerItems } from '@/lib/data';
+import { getArticles, getCountryWatchlist, getGlobalStats, getGlobalStatsTrend, getInstagramPosts, getOutbreaks, getSocialTrends, getTickerItems } from '@/lib/data';
 import type { GlobalStatsTrendPoint } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
@@ -57,6 +58,7 @@ export default async function HomePage() {
   const socialTrends = await getSocialTrends();
   const globalStats = await getGlobalStats();
   const globalStatsTrend = await getGlobalStatsTrend();
+  const instagramPosts = await getInstagramPosts();
   const displayStats = {
     ...globalStats,
     growthRate7d: calculateCaseChange7d(globalStatsTrend),
@@ -120,6 +122,13 @@ export default async function HomePage() {
         <hr className="section-divider" style={{ margin: '0 1.5rem' }} />
 
         <LatestReports articles={articles.slice(0, 3)} />
+
+        {instagramPosts.length > 0 && (
+          <>
+            <hr className="section-divider" style={{ margin: '0 1.5rem' }} />
+            <InstagramUpdates posts={instagramPosts} />
+          </>
+        )}
 
         <hr className="section-divider" style={{ margin: '0 1.5rem' }} />
 

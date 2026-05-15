@@ -3,12 +3,13 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Activity, Bell, Globe, Menu, Newspaper, Shield, X } from 'lucide-react';
+import { Activity, Bell, BookOpen, Globe, Menu, Newspaper, Shield, X } from 'lucide-react';
 
 const NAV_LINKS = [
   { href: '/', label: 'Dashboard', icon: Activity },
   { href: '/map', label: 'Live Map', icon: Globe },
   { href: '/news', label: 'Intelligence', icon: Newspaper },
+  { href: '/hantavirus', label: 'Hantavirus', icon: BookOpen },
   { href: '/alerts', label: 'Alerts', icon: Bell },
 ];
 
@@ -54,7 +55,7 @@ export default function Navbar() {
 
         <nav style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flex: 1 }} className="desktop-nav">
           {NAV_LINKS.map(({ href, label }) => {
-            const active = pathname === href;
+            const active = pathname === href || (href === '/hantavirus' && ['/hantavirus-symptoms', '/andes-virus'].includes(pathname));
             return (
               <Link
                 key={href}
@@ -100,16 +101,20 @@ export default function Navbar() {
 
       {menuOpen && (
         <div style={{ background: 'rgba(7,11,20,0.98)', borderTop: '1px solid var(--border-glass)', padding: '1rem 1.5rem 1.5rem' }}>
-          {NAV_LINKS.map(({ href, label, icon: Icon }) => (
-            <Link
-              key={href}
-              href={href}
-              onClick={() => setMenuOpen(false)}
-              style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem 0', borderBottom: '1px solid var(--border-subtle)', textDecoration: 'none', color: pathname === href ? 'var(--color-brand)' : 'var(--text-secondary)', fontFamily: 'var(--font-ui)', fontSize: '0.875rem' }}
-            >
-              <Icon size={16} /> {label}
-            </Link>
-          ))}
+          {NAV_LINKS.map(({ href, label, icon: Icon }) => {
+            const active = pathname === href || (href === '/hantavirus' && ['/hantavirus-symptoms', '/andes-virus'].includes(pathname));
+
+            return (
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setMenuOpen(false)}
+                style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem 0', borderBottom: '1px solid var(--border-subtle)', textDecoration: 'none', color: active ? 'var(--color-brand)' : 'var(--text-secondary)', fontFamily: 'var(--font-ui)', fontSize: '0.875rem' }}
+              >
+                <Icon size={16} /> {label}
+              </Link>
+            );
+          })}
         </div>
       )}
 

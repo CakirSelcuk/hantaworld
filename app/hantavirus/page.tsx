@@ -108,6 +108,16 @@ export default function HantavirusPage() {
           </div>
 
           <div className="glass-card" style={{ padding: '1.5rem' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', marginBottom: '0.75rem' }}>Disease patterns and geography</h2>
+            <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8, marginBottom: '1rem' }}>
+              Hantavirus disease is not one single clinical pattern. Public health agencies commonly distinguish between New World hantaviruses, which are associated with hantavirus pulmonary syndrome, and Old World hantaviruses, which are more often linked to hemorrhagic fever with renal syndrome.
+            </p>
+            <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8 }}>
+              The rodent host and virus type vary by region. HantaWorld separates confirmed cases, suspected cases, monitored contacts and country-level risk signals so that maps do not mix laboratory-confirmed disease with general exposure monitoring.
+            </p>
+          </div>
+
+          <div className="glass-card" style={{ padding: '1.5rem' }}>
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', marginBottom: '0.75rem' }}>How hantavirus spreads</h2>
             <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8 }}>
               Most human infections are linked to exposure to infected rodents or contaminated dust, surfaces, urine, droppings, or saliva. Andes virus, found in South America, is the main hantavirus known for documented limited person-to-person transmission through close contact.
@@ -118,6 +128,23 @@ export default function HantavirusPage() {
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', marginBottom: '0.75rem' }}>Symptoms and prevention</h2>
             <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8 }}>
               Early symptoms can include fever, muscle aches, fatigue, headache and gastrointestinal symptoms. Severe disease may progress to cough, shortness of breath and respiratory distress. Prevention focuses on reducing contact with rodents and safely cleaning areas where rodent contamination may be present.
+            </p>
+          </div>
+
+          <div className="glass-card" style={{ padding: '1.5rem' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', marginBottom: '0.75rem' }}>Prevention priorities</h2>
+            <ul style={{ color: 'var(--text-secondary)', lineHeight: 1.8, paddingLeft: '1.25rem' }}>
+              <li>Seal gaps and openings that allow rodents into homes, cabins, storage spaces or workplaces.</li>
+              <li>Store food and waste in rodent-resistant containers.</li>
+              <li>Ventilate enclosed spaces before cleaning areas with possible rodent contamination.</li>
+              <li>Avoid sweeping or vacuuming dry rodent droppings; follow public health guidance for wet cleaning and disinfection.</li>
+            </ul>
+          </div>
+
+          <div className="glass-card" style={{ padding: '1.5rem' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', marginBottom: '0.75rem' }}>Diagnosis and treatment context</h2>
+            <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8 }}>
+              Early diagnosis can be difficult because initial symptoms overlap with influenza, COVID-19, viral pneumonia, leptospirosis, dengue and other febrile illnesses. There is no specific antiviral cure for hantavirus disease; public health guidance emphasizes early recognition, supportive care and management of respiratory, cardiac or kidney complications.
             </p>
           </div>
 

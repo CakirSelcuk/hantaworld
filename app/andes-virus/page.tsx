@@ -42,12 +42,44 @@ const jsonLd = {
   ],
 };
 
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Can Andes virus spread from person to person?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. Andes virus is the hantavirus known for documented person-to-person transmission, usually among people with close or prolonged contact with a sick person.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How long should exposed people be monitored?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'CDC guidance for Andes virus uses a 4 to 42 day symptom window after exposure, and public health monitoring may cover that full incubation period.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is Andes virus the same as all hantavirus infections?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No. Andes virus is one hantavirus type. It is important because it can cause hantavirus pulmonary syndrome and has documented limited person-to-person spread, unlike most hantaviruses.',
+      },
+    },
+  ],
+};
+
 export default function AndesVirusPage() {
   return (
     <>
       <Navbar />
       <main style={{ paddingTop: 64, minHeight: '100vh' }}>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
 
         <section style={{ padding: '4rem 1.5rem 2rem', borderBottom: '1px solid var(--border-subtle)' }}>
           <div className="container-main" style={{ maxWidth: 900 }}>
@@ -79,9 +111,37 @@ export default function AndesVirusPage() {
           </div>
 
           <div className="glass-card" style={{ padding: '1.5rem' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.45rem', marginBottom: '0.75rem' }}>Incubation and monitoring window</h2>
+            <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8 }}>
+              CDC guidance lists signs and symptoms of HPS due to Andes virus as appearing 4 to 42 days after exposure. This long window is why public health teams may monitor exposed passengers, household contacts or close contacts for several weeks after the last possible exposure.
+            </p>
+          </div>
+
+          <div className="glass-card" style={{ padding: '1.5rem' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.45rem', marginBottom: '0.75rem' }}>How person-to-person spread is understood</h2>
+            <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8 }}>
+              Public health agencies describe Andes virus person-to-person transmission as limited and usually connected with close contact, prolonged time in shared enclosed spaces, direct physical contact, or exposure to body fluids from a symptomatic patient. It is not treated the same way as highly transmissible respiratory viruses.
+            </p>
+          </div>
+
+          <div className="glass-card" style={{ padding: '1.5rem' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.45rem', marginBottom: '0.75rem' }}>Public health response</h2>
+            <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8 }}>
+              Response work focuses on rapid case confirmation, isolation and care for symptomatic patients, contact tracing, exposure classification, and active monitoring of people who shared high-risk travel, cabin, household or care settings with confirmed or probable cases.
+            </p>
+          </div>
+
+          <div className="glass-card" style={{ padding: '1.5rem' }}>
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.45rem', marginBottom: '0.75rem' }}>Outbreak monitoring</h2>
             <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8 }}>
               HantaWorld tracks verified Andes virus reports alongside other hantavirus intelligence, separating confirmed cases from monitored contacts and suspected reports.
+            </p>
+          </div>
+
+          <div className="glass-card" style={{ padding: '1.5rem' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.45rem', marginBottom: '0.75rem' }}>How HantaWorld classifies Andes virus events</h2>
+            <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8 }}>
+              We separate laboratory-confirmed cases, probable cases, suspected cases, inconclusive findings, deaths, monitored contacts and repatriated passengers. This prevents maps and dashboards from counting every monitored person as an infection while still showing where public health follow-up is active.
             </p>
           </div>
 
