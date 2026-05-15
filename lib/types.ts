@@ -159,6 +159,7 @@ export interface InstagramPost {
   id: string;
   title: string;
   postUrl: string;
+  thumbnailImageUrl?: string;
   description?: string;
   sortOrder: number;
   isFeatured: boolean;

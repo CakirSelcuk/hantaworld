@@ -1,6 +1,7 @@
 'use client';
 
 import { Camera, ExternalLink, Play } from 'lucide-react';
+import { useState } from 'react';
 import type { InstagramPost } from '@/lib/types';
 
 type InstagramUpdatesProps = {
@@ -22,6 +23,31 @@ function getInstagramThumbnailUrl(postUrl: string) {
   } catch {
     return null;
   }
+}
+
+function InstagramThumbnail({ post }: { post: InstagramPost }) {
+  const [failed, setFailed] = useState(false);
+  const thumbnailUrl = post.thumbnailImageUrl || getInstagramThumbnailUrl(post.postUrl);
+
+  if (!thumbnailUrl || failed) {
+    return (
+      <div style={{ width: '100%', height: '100%', display: 'grid', placeItems: 'center', color: 'var(--text-secondary)', fontFamily: 'var(--font-ui)', fontSize: '0.85rem', textAlign: 'center', padding: '1rem' }}>
+        Open this update on Instagram
+      </div>
+    );
+  }
+
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={thumbnailUrl}
+      alt={post.title}
+      loading="lazy"
+      referrerPolicy="no-referrer"
+      onError={() => setFailed(true)}
+      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+    />
+  );
 }
 
 export default function InstagramUpdates({ posts }: InstagramUpdatesProps) {
@@ -46,8 +72,6 @@ export default function InstagramUpdates({ posts }: InstagramUpdatesProps) {
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', alignItems: 'start' }}>
           {visiblePosts.map((post) => {
-            const thumbnailUrl = getInstagramThumbnailUrl(post.postUrl);
-
             return (
               <article key={post.id} className="glass-card" style={{ padding: '1rem', minHeight: 220 }}>
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '0.75rem', marginBottom: '0.75rem' }}>
@@ -74,20 +98,7 @@ export default function InstagramUpdates({ posts }: InstagramUpdatesProps) {
                   rel="noopener noreferrer"
                   style={{ position: 'relative', display: 'block', overflow: 'hidden', borderRadius: 8, background: 'rgba(2,6,23,0.5)', border: '1px solid var(--border-subtle)', aspectRatio: '16 / 9', textDecoration: 'none' }}
                 >
-                  {thumbnailUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={thumbnailUrl}
-                      alt={post.title}
-                      loading="lazy"
-                      referrerPolicy="no-referrer"
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                    />
-                  ) : (
-                    <div style={{ width: '100%', height: '100%', display: 'grid', placeItems: 'center', color: 'var(--text-secondary)', fontFamily: 'var(--font-ui)', fontSize: '0.85rem' }}>
-                      View on Instagram
-                    </div>
-                  )}
+                  <InstagramThumbnail post={post} />
                   <div style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', background: 'linear-gradient(180deg, rgba(2,6,23,0.05), rgba(2,6,23,0.48))' }}>
                     <span style={{ width: 48, height: 48, borderRadius: '999px', display: 'grid', placeItems: 'center', background: 'rgba(15,23,42,0.78)', border: '1px solid rgba(255,255,255,0.22)', color: '#fff', boxShadow: '0 12px 32px rgba(0,0,0,0.28)' }}>
                       <Play size={19} fill="currentColor" />

@@ -114,6 +114,7 @@ type ApiInstagramPost = {
   id?: string;
   title?: string;
   postUrl?: string;
+  thumbnailImageUrl?: string | null;
   description?: string | null;
   sortOrder?: number | string | null;
   isFeatured?: boolean;
@@ -559,6 +560,7 @@ function mapInstagramPost(post: ApiInstagramPost): InstagramPost | null {
     id: post.id || post.postUrl,
     title: sanitizeText(post.title),
     postUrl: post.postUrl,
+    thumbnailImageUrl: post.thumbnailImageUrl || undefined,
     description: sanitizeText(post.description || undefined),
     sortOrder: toNumber(post.sortOrder, 0),
     isFeatured: post.isFeatured ?? false,
