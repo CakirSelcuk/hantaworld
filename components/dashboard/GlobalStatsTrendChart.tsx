@@ -51,7 +51,7 @@ export default function GlobalStatsTrendChart({ trend }: { trend: GlobalStatsTre
 
   const option: EChartsOption = {
     backgroundColor: 'transparent',
-    color: ['#ef4444', '#f97316'],
+    color: ['#ef4444', '#facc15'],
     grid: { left: 36, right: 18, top: 28, bottom: 36, containLabel: true },
     tooltip: {
       trigger: 'axis',
@@ -98,7 +98,8 @@ export default function GlobalStatsTrendChart({ trend }: { trend: GlobalStatsTre
         smooth: true,
         symbol: 'circle',
         symbolSize: 7,
-        lineStyle: { width: 3 },
+        itemStyle: { color: '#ef4444' },
+        lineStyle: { width: 3, color: '#ef4444' },
         areaStyle: { color: 'rgba(239,68,68,0.08)' },
         data: sortedTrend.map((point) => point.reportedCases),
       },
@@ -108,8 +109,9 @@ export default function GlobalStatsTrendChart({ trend }: { trend: GlobalStatsTre
         smooth: true,
         symbol: 'circle',
         symbolSize: 7,
-        lineStyle: { width: 3 },
-        areaStyle: { color: 'rgba(249,115,22,0.06)' },
+        itemStyle: { color: '#facc15' },
+        lineStyle: { width: 3, color: '#facc15' },
+        areaStyle: { color: 'rgba(250,204,21,0.06)' },
         data: sortedTrend.map((point) => point.totalDeaths),
       },
     ],
@@ -136,8 +138,8 @@ export default function GlobalStatsTrendChart({ trend }: { trend: GlobalStatsTre
                 <div style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '0.62rem' }}>{caseDelta >= 0 ? '+' : ''}{formatNumber(caseDelta)} since start</div>
               </div>
 
-              <div style={{ border: '1px solid rgba(249,115,22,0.22)', background: 'rgba(249,115,22,0.08)', borderRadius: 8, padding: '0.65rem 0.85rem', minWidth: 132 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#fdba74', fontFamily: 'var(--font-mono)', fontSize: '0.62rem', textTransform: 'uppercase', marginBottom: '0.25rem' }}>
+              <div style={{ border: '1px solid rgba(250,204,21,0.24)', background: 'rgba(250,204,21,0.08)', borderRadius: 8, padding: '0.65rem 0.85rem', minWidth: 132 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#fde047', fontFamily: 'var(--font-mono)', fontSize: '0.62rem', textTransform: 'uppercase', marginBottom: '0.25rem' }}>
                   <Skull size={13} /> Deaths
                 </div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.25rem', color: 'var(--text-primary)' }}>{formatNumber(latest.totalDeaths)}</div>

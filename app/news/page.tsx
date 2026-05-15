@@ -9,6 +9,13 @@ import { timeAgo } from '@/lib/utils';
 export const metadata: Metadata = {
   title: 'Intelligence Feed',
   description: 'Verified hantavirus outbreak reports, scientific research, travel advisories, and public health updates from WHO, CDC, ECDC and peer-reviewed sources.',
+  alternates: { canonical: 'https://www.hantaworld.com/news' },
+  openGraph: {
+    title: 'Hantavirus Intelligence Feed',
+    description: 'Verified hantavirus outbreak reports and public health updates from HantaWorld.',
+    url: 'https://www.hantaworld.com/news',
+    type: 'website',
+  },
 };
 
 export const dynamic = 'force-dynamic';

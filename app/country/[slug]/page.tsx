@@ -16,10 +16,18 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const stat = watchlist.find((entry) => entry.country.slug === slug);
 
   if (!stat) return { title: 'Not Found' };
+  const canonical = `https://www.hantaworld.com/country/${stat.country.slug}`;
 
   return {
-    title: `${stat.country.name} | Risk Profile & Outbreaks`,
-    description: `Real-time intelligence and outbreak data for ${stat.country.name}. Current risk level: ${stat.riskLevel}.`,
+    title: `${stat.country.name} Hantavirus Risk Profile & Outbreak Data`,
+    description: `Verified hantavirus outbreak intelligence for ${stat.country.name}. Current risk level: ${stat.riskLevel}, active outbreaks: ${stat.activeOutbreaks}.`,
+    alternates: { canonical },
+    openGraph: {
+      title: `${stat.country.name} Hantavirus Risk Profile`,
+      description: `Verified hantavirus outbreak intelligence and monitoring data for ${stat.country.name}.`,
+      url: canonical,
+      type: 'article',
+    },
   };
 }
 

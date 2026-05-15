@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
@@ -14,6 +15,19 @@ import { getArticles, getCountryWatchlist, getGlobalStats, getGlobalStatsTrend, 
 import type { GlobalStatsTrendPoint } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+  title: 'HantaWorld - Live Hantavirus Outbreak Map and Intelligence',
+  description:
+    'Live hantavirus outbreak map, verified case counts, death trends, country risk monitoring, and official public health source attribution.',
+  alternates: { canonical: 'https://www.hantaworld.com' },
+  openGraph: {
+    title: 'HantaWorld - Live Hantavirus Outbreak Map and Intelligence',
+    description: 'Verified global hantavirus outbreak intelligence, maps, case counts, and public health reports.',
+    url: 'https://www.hantaworld.com',
+    type: 'website',
+  },
+};
 
 function calculateCaseChange7d(trend: GlobalStatsTrendPoint[]) {
   const sortedTrend = [...trend].sort((a, b) => a.date.localeCompare(b.date));

@@ -10,6 +10,12 @@ const FOOTER_LINKS = {
     { label: 'Alert Subscriptions', href: '/alerts' },
     { label: 'About', href: '/about' },
   ],
+  'Hantavirus Guides': [
+    { label: 'What is Hantavirus?', href: '/hantavirus' },
+    { label: 'Hantavirus Symptoms', href: '/hantavirus-symptoms' },
+    { label: 'Andes Virus', href: '/andes-virus' },
+    { label: 'Live Outbreak Map', href: '/map' },
+  ],
   'Data & Sources': [
     { label: 'WHO Disease Outbreak News', href: 'https://www.who.int/emergencies/disease-outbreak-news', external: true },
     { label: 'CDC Hantavirus', href: 'https://www.cdc.gov/hantavirus', external: true },
@@ -28,7 +34,7 @@ export default function Footer() {
   return (
     <footer style={{ background: 'var(--bg-secondary)', borderTop: '1px solid var(--border-subtle)', marginTop: '5rem' }}>
       <div className="container-main" style={{ padding: '3rem 1.5rem' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr repeat(3, auto)', gap: '3rem', flexWrap: 'wrap' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '2.25rem', flexWrap: 'wrap' }}>
           <div style={{ maxWidth: 320 }}>
             <div style={{ marginBottom: '1rem' }}>
               <Image

@@ -4,10 +4,20 @@ import { getArticles, getCountries, getSiteLastModified } from '@/lib/data';
 export const dynamic = 'force-dynamic';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://hantaworld.com';
+  const baseUrl = 'https://www.hantaworld.com';
   const siteLastModified = await getSiteLastModified();
   const countries = await getCountries();
   const articles = await getArticles();
+  const seoPages = [
+    '/hantavirus',
+    '/hantavirus-symptoms',
+    '/andes-virus',
+  ].map((path) => ({
+    url: `${baseUrl}${path}`,
+    lastModified: siteLastModified,
+    changeFrequency: 'weekly' as const,
+    priority: 0.85,
+  }));
 
   const countryUrls = countries.map((country) => ({
     url: `${baseUrl}/country/${country.slug}`,
@@ -60,6 +70,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.7,
     },
+    ...seoPages,
     ...countryUrls,
     ...articleUrls,
   ];

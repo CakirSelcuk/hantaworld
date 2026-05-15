@@ -67,10 +67,20 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const article = await getArticleBySlug(slug);
   if (!article) return { title: 'Not Found' };
+  const canonical = `https://www.hantaworld.com/news/${article.slug}`;
 
   return {
     title: `${article.title} | Intelligence Feed`,
     description: article.excerpt,
+    alternates: { canonical },
+    openGraph: {
+      title: article.title,
+      description: article.excerpt,
+      url: canonical,
+      type: 'article',
+      publishedTime: article.publishedAt,
+      modifiedTime: article.lastVerifiedDate || article.publishedAt,
+    },
   };
 }
 
@@ -83,11 +93,38 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
   }
 
   const category = CATEGORY_META[article.category];
+  const articleJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'NewsArticle',
+    headline: article.title,
+    description: article.excerpt,
+    datePublished: article.publishedAt,
+    dateModified: article.lastVerifiedDate || article.publishedAt,
+    mainEntityOfPage: `https://www.hantaworld.com/news/${article.slug}`,
+    author: {
+      '@type': 'Organization',
+      name: 'HantaWorld Intelligence Team',
+      url: 'https://www.hantaworld.com',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'HantaWorld',
+      url: 'https://www.hantaworld.com',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://www.hantaworld.com/hantaLogo.png',
+      },
+    },
+    articleSection: category.label,
+    keywords: article.tags.join(', '),
+    citation: article.citations,
+  };
 
   return (
     <>
       <Navbar />
       <main style={{ paddingTop: 64, minHeight: '100vh', background: 'var(--bg-primary)' }}>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
         <div style={{ borderBottom: '1px solid var(--border-subtle)', background: 'var(--bg-secondary)', position: 'sticky', top: 64, zIndex: 10 }}>
           <div className="container-main" style={{ padding: '0.75rem 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <Link href="/news" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-muted)', fontFamily: 'var(--font-ui)', fontSize: '0.8rem', textDecoration: 'none', transition: 'color 0.2s' }}>

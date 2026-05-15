@@ -3,7 +3,7 @@ import Script from 'next/script';
 import './globals.css';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://hantaworld.com'),
+  metadataBase: new URL('https://www.hantaworld.com'),
   title: {
     default: 'HantaWorld - Global Hantavirus Intelligence Platform',
     template: '%s | HantaWorld',
@@ -20,13 +20,13 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'HantaWorld Intelligence Team' }],
   robots: { index: true, follow: true },
-  alternates: { canonical: '/' },
+  alternates: { canonical: 'https://www.hantaworld.com' },
   openGraph: {
     type: 'website',
     siteName: 'HantaWorld',
     title: 'HantaWorld - Global Hantavirus Intelligence Platform',
     description: 'Real-time global hantavirus outbreak tracking and verified intelligence.',
-    url: 'https://hantaworld.com',
+    url: 'https://www.hantaworld.com',
     images: [{ url: '/hantaLogo.png', width: 1200, height: 630 }],
   },
   twitter: {
