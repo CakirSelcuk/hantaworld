@@ -97,5 +97,16 @@
     "flagEmoji": "\uD83C\uDDFA\uD83C\uDDF8",
     "coordinates": { "lat": 39.8283, "lng": -98.5795 },
     "healthAuthorityUrl": "https://www.hhs.gov"
+  },
+  {
+    "id": "c-canada",
+    "isoCode": "CA",
+    "name": "Canada",
+    "slug": "canada",
+    "continent": "North America",
+    "population": 40000000,
+    "flagEmoji": "\uD83C\uDDE8\uD83C\uDDE6",
+    "coordinates": { "lat": 56.1304, "lng": -106.3468 },
+    "healthAuthorityUrl": "https://www.canada.ca/en/public-health.html"
   }
 ]
