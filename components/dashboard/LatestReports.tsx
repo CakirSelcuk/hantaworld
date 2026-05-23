@@ -22,6 +22,19 @@ const CATEGORY_COLORS: Record<string, string> = {
   analysis: '#06b6d4',
 };
 
+function getCategoryColor(category: string) {
+  return CATEGORY_COLORS[category] ?? '#94a3b8';
+}
+
+function getSourceAccent(article: Article) {
+  const source = `${article.source?.organization ?? ''} ${article.source?.name ?? ''}`.toLowerCase();
+  if (source.includes('who') || source.includes('world health')) return '#0ea5e9';
+  if (source.includes('cdc')) return '#ef4444';
+  if (source.includes('ecdc')) return '#6366f1';
+  if (source.includes('ministry') || source.includes('department') || source.includes('health')) return '#f59e0b';
+  return '#64748b';
+}
+
 function VerificationBadge({ status }: { status: string }) {
   if (status === 'verified') return <span className="badge-base badge-verified"><CheckCircle size={10} /> VERIFIED</span>;
   if (status === 'pending') return <span className="badge-base badge-monitoring"><Clock size={10} /> PENDING</span>;
@@ -59,16 +72,16 @@ export default function LatestReports({ articles }: { articles: Article[] }) {
           </Link>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))', gap: '1rem' }}>
           {featured && (
-            <div className="glass-card" style={{ padding: '1.75rem', gridRow: 'span 2' }}>
+            <div className="glass-card" style={{ padding: '1.75rem', gridRow: 'span 2', borderLeft: `3px solid ${getSourceAccent(featured)}` }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', fontWeight: 700, color: CATEGORY_COLORS[featured.category], background: `${CATEGORY_COLORS[featured.category]}15`, padding: '0.15rem 0.5rem', borderRadius: '4px', border: `1px solid ${CATEGORY_COLORS[featured.category]}28` }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', fontWeight: 700, color: getCategoryColor(featured.category), background: `${getCategoryColor(featured.category)}15`, padding: '0.15rem 0.5rem', borderRadius: '4px', border: `1px solid ${getCategoryColor(featured.category)}28` }}>
                   {CATEGORY_LABELS[featured.category]}
                 </span>
                 <VerificationBadge status={featured.verificationStatus} />
                 {featured.source && (
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--text-muted)' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: getSourceAccent(featured), padding: '0.15rem 0.45rem', border: `1px solid ${getSourceAccent(featured)}30`, borderRadius: 999 }}>
                     {featured.source.organization}
                   </span>
                 )}
@@ -104,9 +117,9 @@ export default function LatestReports({ articles }: { articles: Article[] }) {
 
           {rest.slice(0, 4).map((article) => (
             <Link key={article.id} href={`/news/${article.slug}`} style={{ textDecoration: 'none' }}>
-              <div className="glass-card" style={{ padding: '1.1rem 1.25rem', height: '100%' }}>
+              <div className="glass-card" style={{ padding: '1.1rem 1.25rem', height: '100%', borderLeft: `3px solid ${getSourceAccent(article)}` }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.6rem', flexWrap: 'wrap' }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', fontWeight: 700, color: CATEGORY_COLORS[article.category], background: `${CATEGORY_COLORS[article.category]}15`, padding: '0.12rem 0.4rem', borderRadius: '3px' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', fontWeight: 700, color: getCategoryColor(article.category), background: `${getCategoryColor(article.category)}15`, padding: '0.12rem 0.4rem', borderRadius: '3px' }}>
                     {CATEGORY_LABELS[article.category]}
                   </span>
                   <VerificationBadge status={article.verificationStatus} />
@@ -122,8 +135,8 @@ export default function LatestReports({ articles }: { articles: Article[] }) {
                     {timeAgo(article.publishedAt)}
                   </span>
                   {article.source && (
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--text-muted)', borderLeft: '1px solid var(--border-subtle)', paddingLeft: '0.5rem' }}>
-                      {article.source.name.split(' ')[0]}
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: getSourceAccent(article), borderLeft: '1px solid var(--border-subtle)', paddingLeft: '0.5rem' }}>
+                      {article.source.organization || article.source.name.split(' ')[0]}
                     </span>
                   )}
                 </div>

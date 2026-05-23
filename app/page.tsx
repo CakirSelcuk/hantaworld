@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Bell } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import LiveTicker from '@/components/dashboard/LiveTicker';
@@ -70,10 +70,10 @@ export default async function HomePage() {
       <LiveTicker items={tickerItems} />
 
       <main style={{ paddingTop: 64 }}>
-        <div style={{ background: 'rgba(34,197,94,0.05)', borderBottom: '1px solid rgba(34,197,94,0.15)', padding: '0.75rem 1.5rem', textAlign: 'center' }}>
-          <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: '#86efac', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
-            <span style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: '#22c55e' }} />
-            <strong>STRICT VERIFICATION ENFORCED:</strong> This platform only displays data officially confirmed by WHO, CDC, or ECDC. No estimated or unverified figures are included.
+        <div style={{ background: 'rgba(14,165,233,0.06)', borderBottom: '1px solid rgba(14,165,233,0.18)', padding: '0.75rem 1.5rem', textAlign: 'center' }}>
+          <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: '#bae6fd', display: 'inline-flex', alignItems: 'center', gap: '0.45rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <span style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: '#0ea5e9' }} />
+            <strong>Source-attributed data:</strong> HantaWorld displays published records from official global health sources and clearly attributed public health reports.
           </span>
         </div>
 
@@ -88,22 +88,27 @@ export default async function HomePage() {
         <section style={{ padding: '3rem 0' }}>
           <div className="container-main">
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
-              <div className="section-header" style={{ margin: 0 }}>Global Outbreak Map</div>
-              <Link href="/map" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'var(--color-brand)', textDecoration: 'none' }}>
-                Full interactive map <ArrowRight size={13} />
+              <div>
+                <div className="section-header" style={{ margin: 0 }}>Global Outbreak Map</div>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.82rem', marginTop: '0.5rem', maxWidth: 640 }}>
+                  Explore active country-level outbreak records and open a marker for source-attributed details.
+                </p>
+              </div>
+              <Link href="/map" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'var(--color-brand)', textDecoration: 'none', whiteSpace: 'nowrap' }}>
+                View fullscreen map <ArrowRight size={13} />
               </Link>
             </div>
 
-            <div style={{ borderRadius: 'var(--radius-xl)', overflow: 'hidden', border: '1px solid var(--border-glass)', height: 480, position: 'relative' }}>
-              <MapWrapper outbreaks={outbreaks} height="480px" />
+            <div className="homepage-map-shell" style={{ borderRadius: 'var(--radius-xl)', overflow: 'hidden', border: '1px solid var(--border-glass)', position: 'relative', boxShadow: '0 24px 80px rgba(0,0,0,0.32)' }}>
+              <MapWrapper outbreaks={outbreaks} height="100%" />
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginTop: '0.85rem', flexWrap: 'wrap' }}>
               {[
-                { color: '#ef4444', label: 'Confirmed outbreak' },
-                { color: '#f97316', label: 'Suspected' },
-                { color: '#eab308', label: 'Under monitoring' },
-                { color: '#22c55e', label: 'Resolved' },
+                { color: '#22c55e', label: 'Low / resolved' },
+                { color: '#f59e0b', label: 'Moderate monitoring' },
+                { color: '#f97316', label: 'High risk' },
+                { color: '#ef4444', label: 'Critical risk' },
               ].map(({ color, label }) => (
                 <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                   <div style={{ width: 8, height: 8, borderRadius: '50%', background: color, flexShrink: 0 }} />
@@ -111,8 +116,27 @@ export default async function HomePage() {
                 </div>
               ))}
               <span style={{ marginLeft: 'auto', fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--text-muted)' }}>
-                {outbreaks.length} active zones | Click marker for details
+                {outbreaks.length} mapped records | Click marker for details
               </span>
+            </div>
+          </div>
+        </section>
+
+        <section style={{ padding: '0 0 2rem' }}>
+          <div className="container-main">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap', padding: '1rem 1.1rem', borderRadius: 'var(--radius-xl)', border: '1px solid rgba(14,165,233,0.2)', background: 'linear-gradient(135deg, rgba(14,165,233,0.10), rgba(99,102,241,0.08))' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <div style={{ width: 38, height: 38, borderRadius: 10, background: 'rgba(14,165,233,0.14)', border: '1px solid rgba(14,165,233,0.28)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Bell size={17} color="#38bdf8" />
+                </div>
+                <div>
+                  <strong style={{ display: 'block', color: 'var(--text-primary)', fontFamily: 'var(--font-ui)', fontSize: '0.9rem' }}>Get Hantavirus Outbreak Alerts</strong>
+                  <span style={{ color: 'var(--text-secondary)', fontSize: '0.78rem' }}>Source-attributed updates and weekly intelligence briefings. No spam.</span>
+                </div>
+              </div>
+              <Link href="/alerts" className="btn btn-primary" style={{ padding: '0.62rem 0.9rem' }}>
+                Subscribe <ArrowRight size={14} />
+              </Link>
             </div>
           </div>
         </section>

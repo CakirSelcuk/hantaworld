@@ -32,7 +32,8 @@ const FOOTER_LINKS = {
 
 export default function Footer() {
   return (
-    <footer style={{ background: 'var(--bg-secondary)', borderTop: '1px solid var(--border-subtle)', marginTop: '5rem' }}>
+    <footer style={{ background: 'linear-gradient(180deg, rgba(10,15,30,0) 0%, rgba(13,20,36,0.96) 18%, var(--bg-secondary) 100%)', borderTop: '1px solid rgba(148,163,184,0.12)', marginTop: '5rem' }}>
+      <div style={{ height: 1, background: 'linear-gradient(90deg, transparent, rgba(14,165,233,0.45), rgba(99,102,241,0.28), transparent)' }} />
       <div className="container-main" style={{ padding: '3rem 1.5rem' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '2.25rem', flexWrap: 'wrap' }}>
           <div style={{ maxWidth: 320 }}>
@@ -42,17 +43,21 @@ export default function Footer() {
                 alt="HantaWorld Logo"
                 width={160}
                 height={80}
-                style={{ objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 0.9 }}
+                style={{ objectFit: 'contain', opacity: 0.95 }}
               />
             </div>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.82rem', lineHeight: 1.7, marginBottom: '1rem' }}>
-              A real-time global hantavirus outbreak intelligence platform. All published data is sourced from verified public health authorities and traceable primary reports.
+              Source-attributed public health intelligence for hantavirus outbreaks, country-level risk, and official health source updates.
             </p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 0.75rem', background: 'rgba(14,165,233,0.09)', border: '1px solid rgba(14,165,233,0.22)', borderRadius: '6px', width: 'fit-content', marginBottom: '0.65rem' }}>
+              <span style={{ width: 6, height: 6, borderRadius: 999, background: 'var(--color-brand)' }} />
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#bae6fd', letterSpacing: '0.08em' }}>SOURCE-ATTRIBUTED DATA</span>
+            </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 0.75rem', background: 'rgba(249,115,22,0.08)', border: '1px solid rgba(249,115,22,0.2)', borderRadius: '6px', width: 'fit-content' }}>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#fdba74', letterSpacing: '0.08em' }}>MEDICAL DISCLAIMER</span>
             </div>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.72rem', marginTop: '0.6rem', lineHeight: 1.6, borderLeft: '2px solid rgba(249,115,22,0.4)', paddingLeft: '0.6rem' }}>
-              This platform is for informational purposes only. Always consult licensed medical professionals for health decisions.
+              This platform is for informational purposes only and is not a medical diagnosis tool. Always consult licensed medical professionals for health decisions.
             </p>
           </div>
 
