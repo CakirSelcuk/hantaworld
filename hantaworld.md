@@ -2209,6 +2209,65 @@ Dikkat:
 
 - Bu faz backend, DB ve yeni mobil klasor degisiklikleri icerir.
 - GitHub push yapilmadi.
+
+## 2026-06-01 - Google AdSense Auto Ads entegrasyonu
+
+Kural hatirlatma:
+
+- Kullanici acikca `push et` demeden GitHub push yapilmayacak.
+- Bu islemde push yapilmadi.
+
+Kapsam:
+
+- Sadece web frontend tarafinda Google AdSense Auto Ads global script entegrasyonu yapildi.
+- Manuel reklam component'i veya sayfa ici reklam yerlesimi eklenmedi.
+- Harita, dashboard kartlari, feed ve veri tablolarinin icine reklam koyulmadi.
+
+Yapilanlar:
+
+- `.env.example` dosyasi eklendi:
+  - `NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT_ID=ca-pub-1333313233367768`
+- `app/layout.tsx` icinde AdSense client ID environment degiskeninden okunacak hale getirildi.
+- AdSense Auto Ads scripti yalnizca su kosullarda yuklenir:
+  - `NODE_ENV === "production"`
+  - `NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT_ID` doluysa.
+- Script global layout head tarafinda `next/script` ile eklendi:
+  - `async`
+  - `strategy="afterInteractive"`
+  - `crossOrigin="anonymous"`
+- Client ID yoksa site hata vermez ve script render edilmez.
+- Local/development ortaminda AdSense scripti yuklenmez.
+- Layout metadata icindeki `real-time` ifadeleri daha temkinli `source-attributed` diline cekildi.
+- Privacy Policy reklam bolumu guncellendi:
+  - Google AdSense Auto Ads
+  - Google AdMob
+  - cookies
+  - third-party advertising identifiers
+  - browser/mobile advertising preference controls
+- Disclaimer ve Methodology sayfalari kontrol edildi:
+  - Medical advice vermedigi acik.
+  - WHO, CDC, ECDC ve official health ministry kaynak atiflari korunuyor.
+
+Degisen dosyalar:
+
+- `.env.example`
+- `.gitignore`
+- `app/layout.tsx`
+- `app/legal/privacy/page.tsx`
+- `hantaworld.md`
+
+Kontrol:
+
+- `npx tsc --noEmit --incremental false` basarili.
+- `npm run lint` basarili; mevcut `lib/data.ts` icinde `mapOutbreak` unused warning devam ediyor.
+- `npm run build` basarili.
+
+Canli/Vercel notu:
+
+- Vercel production ortaminda `NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT_ID` environment variable olarak tanimli olmali.
+- Deger:
+  - `ca-pub-1333313233367768`
+- GitHub push yapilmadi.
 - Canliya alma icin backend publish alinip Plesk/FileZilla ile yuklenmeli, sonra setup endpoint calistirilmalidir.
 
 Kontrol kaydi:

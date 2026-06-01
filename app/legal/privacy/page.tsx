@@ -53,10 +53,12 @@ export function PrivacyPolicyContent() {
               your device settings. Push tokens are used only for app notifications and are not sold.
             </Section>
 
-            <Section title="3. Advertising">
-              The Android app may display ads through Google AdMob. Google and its partners may process device
-              identifiers, advertising identifiers, approximate location, diagnostics, and interaction data according to
-              Google policies. You can learn more at Google&apos;s privacy policy and Android advertising settings.
+            <Section title="3. Advertising and Cookies">
+              The website may use Google AdSense Auto Ads, and the Android app may display ads through Google AdMob.
+              Google and its partners may use cookies, advertising identifiers, device information, approximate
+              location, diagnostics, and interaction data to deliver, measure, and personalize ads according to Google
+              policies. You can manage browser cookies through your browser settings and mobile advertising preferences
+              through Android privacy settings.
             </Section>
 
             <Section title="4. Analytics">
