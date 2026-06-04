@@ -1,4 +1,4 @@
-import { Article, ArticleCategory, Country, GlobalStatCard, GlobalStats, GlobalStatsTrendPoint, Outbreak, OutbreakStatus, SeverityLevel, SocialPost, Source, SourceType, VerificationStatus } from './types';
+import { Article, ArticleCategory, Country, GlobalStatCard, GlobalStats, GlobalStatsTrendPoint, Outbreak, OutbreakStatus, Pathogen, PathogenStats, PathogenTrendPoint, SeverityLevel, SocialPost, Source, SourceType, VerificationStatus } from './types';
 import { sanitizeText } from './utils';
 import fallbackOutbreaksData from '../data/outbreaks.json';
 import fallbackCountriesData from '../data/countries.json';
@@ -48,6 +48,46 @@ type ApiSourceLink = {
   lastVerifiedDate?: string | null;
 };
 
+type ApiPathogenStats = {
+  reportedCases?: number | string | null;
+  totalDeaths?: number | string | null;
+  affectedCountries?: number | string | null;
+  activeOutbreaks?: number | string | null;
+  sourceInstitution?: string | null;
+  sourceUrl?: string | null;
+  officialPublishedAt?: string | null;
+  lastVerifiedAt?: string | null;
+  notes?: string | null;
+};
+
+type ApiPathogen = {
+  slug?: string;
+  name?: string;
+  displayName?: string;
+  shortDescription?: string | null;
+  color?: string;
+  sortOrder?: number;
+  isActive?: boolean;
+  stats?: ApiPathogenStats | null;
+};
+
+type ApiPathogenSummary = {
+  slug?: string;
+  displayName?: string;
+  color?: string;
+};
+
+type ApiPathogenTrendPoint = {
+  date?: string | null;
+  pathogenSlug?: string;
+  pathogenDisplayName?: string;
+  pathogenColor?: string;
+  reportedCases?: number | string | null;
+  totalDeaths?: number | string | null;
+  affectedCountries?: number | string | null;
+  activeOutbreaks?: number | string | null;
+};
+
 type ApiOutbreak = {
   id?: string;
   slug?: string;
@@ -75,6 +115,7 @@ type ApiOutbreak = {
     radiusKm?: number | string | null;
   };
   country?: ApiCountry | null;
+  pathogen?: ApiPathogenSummary | null;
   sources?: ApiSourceLink[];
 };
 
@@ -94,6 +135,7 @@ type ApiArticle = {
   lastVerifiedDate?: string | null;
   publishedAt?: string | null;
   country?: ApiCountry | null;
+  pathogen?: ApiPathogenSummary | null;
   tags?: string[];
   sources?: ApiSourceLink[];
 };
@@ -198,6 +240,66 @@ function dateToIso(value?: string | null): string {
   return `${value}T00:00:00Z`;
 }
 
+function optionalNumber(value: number | string | null | undefined): number | null {
+  if (value === null || value === undefined || value === '') return null;
+  if (typeof value === 'number' && Number.isFinite(value)) return value;
+  if (typeof value === 'string') {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+  return null;
+}
+
+function mapPathogenStats(stats?: ApiPathogenStats | null): PathogenStats | null {
+  if (!stats) return null;
+
+  return {
+    reportedCases: optionalNumber(stats.reportedCases),
+    totalDeaths: optionalNumber(stats.totalDeaths),
+    affectedCountries: optionalNumber(stats.affectedCountries),
+    activeOutbreaks: optionalNumber(stats.activeOutbreaks),
+    sourceInstitution: sanitizeText(stats.sourceInstitution || undefined) || undefined,
+    sourceUrl: stats.sourceUrl || undefined,
+    officialPublishedAt: stats.officialPublishedAt || undefined,
+    lastVerifiedAt: stats.lastVerifiedAt || undefined,
+    notes: sanitizeText(stats.notes || undefined) || undefined,
+  };
+}
+
+function mapPathogen(pathogen: ApiPathogen): Pathogen | null {
+  if (!pathogen.slug || !pathogen.displayName) {
+    return null;
+  }
+
+  return {
+    slug: pathogen.slug,
+    name: pathogen.name || pathogen.displayName,
+    displayName: pathogen.displayName,
+    shortDescription: sanitizeText(pathogen.shortDescription || undefined) || undefined,
+    color: pathogen.color || '#64748b',
+    sortOrder: pathogen.sortOrder ?? 100,
+    isActive: pathogen.isActive ?? true,
+    stats: mapPathogenStats(pathogen.stats),
+  };
+}
+
+function mapPathogenTrendPoint(point: ApiPathogenTrendPoint): PathogenTrendPoint | null {
+  if (!point.date || !point.pathogenSlug || !point.pathogenDisplayName) {
+    return null;
+  }
+
+  return {
+    date: point.date.includes('T') ? point.date.split('T')[0] : point.date,
+    pathogenSlug: point.pathogenSlug,
+    pathogenDisplayName: point.pathogenDisplayName,
+    pathogenColor: point.pathogenColor || '#64748b',
+    reportedCases: optionalNumber(point.reportedCases),
+    totalDeaths: optionalNumber(point.totalDeaths),
+    affectedCountries: optionalNumber(point.affectedCountries),
+    activeOutbreaks: optionalNumber(point.activeOutbreaks),
+  };
+}
+
 function mapCountry(country?: ApiCountry | null): Country {
   const slug = country?.slug || 'unknown';
 
@@ -286,6 +388,13 @@ function mapArticle(article: ApiArticle): Article {
     citations: sources
       .map((source) => source.citationUrl || source.url)
       .filter((url): url is string => Boolean(url)),
+    pathogen: article.pathogen?.slug && article.pathogen.displayName
+      ? {
+          slug: article.pathogen.slug,
+          displayName: article.pathogen.displayName,
+          color: article.pathogen.color || '#64748b',
+        }
+      : undefined,
     confidenceScore: article.confidenceScore,
     sourceUrl,
     lastVerifiedDate: article.lastVerifiedDate || undefined,
@@ -411,6 +520,13 @@ export async function getArticles(): Promise<Article[]> {
   return liveArticles.length > 0 ? liveArticles : getFallbackArticles();
 }
 
+export async function getArticlesByPathogen(pathogenSlug: string): Promise<Article[]> {
+  const articles = await fetchApi<ApiArticle[]>(`/api/news?pathogen=${encodeURIComponent(pathogenSlug)}`);
+  return (articles ?? [])
+    .filter((article) => toVerificationStatus(article.verificationStatus) === 'verified')
+    .map(mapArticle);
+}
+
 export async function getArticleBySlug(slug: string): Promise<Article | undefined> {
   const articles = await fetchApi<ApiArticle[]>('/api/news?includeContent=true');
   const liveArticle = (articles ?? [])
@@ -419,6 +535,28 @@ export async function getArticleBySlug(slug: string): Promise<Article | undefine
     .find((article) => article.slug === slug);
 
   return liveArticle ?? getFallbackArticles().find((article) => article.slug === slug);
+}
+
+export async function getPathogens(): Promise<Pathogen[]> {
+  const pathogens = await fetchApi<ApiPathogen[]>('/api/pathogens');
+  return (pathogens ?? [])
+    .map(mapPathogen)
+    .filter((pathogen): pathogen is Pathogen => Boolean(pathogen))
+    .filter((pathogen) => pathogen.isActive)
+    .sort((a, b) => a.sortOrder - b.sortOrder || a.displayName.localeCompare(b.displayName));
+}
+
+export async function getPathogenBySlug(slug: string): Promise<Pathogen | undefined> {
+  const pathogen = await fetchApi<ApiPathogen>(`/api/pathogens/${encodeURIComponent(slug)}`);
+  return mapPathogen(pathogen ?? {}) ?? undefined;
+}
+
+export async function getPathogenTrend(slug: string): Promise<PathogenTrendPoint[]> {
+  const trend = await fetchApi<ApiPathogenTrendPoint[]>(`/api/pathogens/${encodeURIComponent(slug)}/stats/trend`);
+  return (trend ?? [])
+    .map(mapPathogenTrendPoint)
+    .filter((point): point is PathogenTrendPoint => Boolean(point))
+    .sort((a, b) => a.date.localeCompare(b.date));
 }
 
 export async function getSources(): Promise<Source[]> {

@@ -44,6 +44,46 @@ export interface Source {
   logo?: string;
 }
 
+export interface PathogenStats {
+  reportedCases?: number | null;
+  totalDeaths?: number | null;
+  affectedCountries?: number | null;
+  activeOutbreaks?: number | null;
+  sourceInstitution?: string | null;
+  sourceUrl?: string | null;
+  officialPublishedAt?: string | null;
+  lastVerifiedAt?: string | null;
+  notes?: string | null;
+}
+
+export interface Pathogen {
+  slug: string;
+  name: string;
+  displayName: string;
+  shortDescription?: string;
+  color: string;
+  sortOrder: number;
+  isActive: boolean;
+  stats?: PathogenStats | null;
+}
+
+export interface PathogenSummary {
+  slug: string;
+  displayName: string;
+  color: string;
+}
+
+export interface PathogenTrendPoint {
+  date: string;
+  pathogenSlug: string;
+  pathogenDisplayName: string;
+  pathogenColor: string;
+  reportedCases?: number | null;
+  totalDeaths?: number | null;
+  affectedCountries?: number | null;
+  activeOutbreaks?: number | null;
+}
+
 export interface Outbreak {
   id: string;
   country: Country;
@@ -110,6 +150,7 @@ export interface Article {
   readingTimeMin: number;
   coverImage?: string;
   citations: string[];
+  pathogen?: PathogenSummary | null;
   // Traceability fields
   confidenceScore?: number;      // 0-100
   sourceUrl?: string;            // direct link to the authoritative source

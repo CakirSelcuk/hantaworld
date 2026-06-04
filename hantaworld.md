@@ -3512,3 +3512,43 @@ Notlar:
 
 - Canli DB'ye uygulanmasi icin backend deploy sonrasi mevcut setup endpoint akisiyle `apply-admin-panel-updates` calistirilmelidir.
 - API endpointleri runtime DB baglantisi olmadan bu turnde canli olarak cagrilmadi; derleme kontrolu basarili.
+
+## 2026-06-04 - Phase 1B-1 Multi-Pathogen Frontend Foundation
+
+Kurallar:
+
+- Push yapilmayacak.
+- Commit yapilmayacak.
+- Deploy yapilmayacak.
+- Setup endpoint calistirilmayacak.
+- Production env degistirilmeyecek.
+- Backend sadece zorunlu olmadikca degistirilmeyecek.
+- Fake production data eklenmeyecek.
+- Mevcut Hantavirus sayfalari ve davranisi korunacak.
+
+Yapilan frontend altyapi guncellemeleri:
+
+- Ana sayfa ust konumlandirmasi HantaWorld multi-pathogen platform yonune tasindi:
+  - `Global Outbreak & Virus Intelligence`
+  - Pathogen/category kartlari ana sayfanin ust bolumune eklendi.
+  - Eski Hantavirus numeric kartlari kaldirilmadi; `Hantavirus verified snapshot` olarak daha asagiya tasindi.
+- Yeni public route eklendi:
+  - `/pathogens`
+- Yeni public detay route eklendi:
+  - `/pathogens/[slug]`
+- Pathogen kartlari API'den gelen gercek kayitlari kullanir:
+  - `GET /api/pathogens`
+  - Stats yoksa fake `0` gosterilmez; bos durum gosterilir.
+- Pathogen detay sayfasi su API'leri kullanir:
+  - `GET /api/pathogens/{slug}`
+  - `GET /api/pathogens/{slug}/stats/trend`
+  - `GET /api/news?pathogen={slug}`
+- Haber sayfasi `?pathogen=` query parametresini geriye uyumlu sekilde destekler.
+- Sitemap'e `/pathogens` ve API'den gelen `/pathogens/{slug}` URL'leri eklendi.
+- Navbar'a `Pathogens` linki eklendi; `/hantavirus` rehber sayfasi korunur.
+
+Notlar:
+
+- Multi-line chart UI bu fazda eklenmedi.
+- Public `/hantavirus` guide sayfasi korunur; `/pathogens/hantavirus` outbreak intelligence profili olarak ayrilir.
+- Stats olmayan category-like kayitlarda (`official-updates`, `weekly-risk-brief`) sayfalar bos/opsiyonel stats durumunu guvenli gosterir.

@@ -3,10 +3,11 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Activity, Bell, BookOpen, Camera, Globe, Menu, Newspaper, Shield, X } from 'lucide-react';
+import { Activity, Bell, BookOpen, Camera, Globe, Menu, Newspaper, Shield, ShieldCheck, X } from 'lucide-react';
 
 const NAV_LINKS = [
   { href: '/', label: 'Dashboard', icon: Activity },
+  { href: '/pathogens', label: 'Pathogens', icon: ShieldCheck },
   { href: '/map', label: 'Live Map', icon: Globe },
   { href: '/news', label: 'Intelligence', icon: Newspaper },
   { href: '/hantavirus', label: 'Hantavirus', icon: BookOpen },

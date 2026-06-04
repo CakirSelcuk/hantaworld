@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-import { getArticles, getCountries, getSiteLastModified } from '@/lib/data';
+import { getArticles, getCountries, getPathogens, getSiteLastModified } from '@/lib/data';
 
 export const dynamic = 'force-dynamic';
 
@@ -8,6 +8,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteLastModified = await getSiteLastModified();
   const countries = await getCountries();
   const articles = await getArticles();
+  const pathogens = await getPathogens();
   const seoPages = [
     '/hantavirus',
     '/hantavirus-symptoms',
@@ -33,6 +34,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
+  const pathogenUrls = pathogens.map((pathogen) => ({
+    url: `${baseUrl}/pathogens/${pathogen.slug}`,
+    lastModified: pathogen.stats?.lastVerifiedAt || siteLastModified,
+    changeFrequency: 'daily' as const,
+    priority: pathogen.slug === 'hantavirus' ? 0.9 : 0.75,
+  }));
+
   return [
     {
       url: baseUrl,
@@ -53,6 +61,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
     {
+      url: `${baseUrl}/pathogens`,
+      lastModified: siteLastModified,
+      changeFrequency: 'daily',
+      priority: 0.85,
+    },
+    {
       url: `${baseUrl}/alerts`,
       lastModified: siteLastModified,
       changeFrequency: 'monthly',
@@ -71,6 +85,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     },
     ...seoPages,
+    ...pathogenUrls,
     ...countryUrls,
     ...articleUrls,
   ];

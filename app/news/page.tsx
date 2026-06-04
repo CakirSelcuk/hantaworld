@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { AlertCircle, CheckCircle, Clock, ExternalLink, Filter } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import { getArticles } from '@/lib/data';
+import { getArticles, getArticlesByPathogen } from '@/lib/data';
 import { timeAgo } from '@/lib/utils';
 
 export const metadata: Metadata = {
@@ -36,8 +36,10 @@ function VerificationBadge({ status }: { status: string }) {
   return <span className="badge-unverified" style={styles}><AlertCircle size={9} /> UNVERIFIED</span>;
 }
 
-export default async function NewsPage() {
-  const articles = await getArticles();
+export default async function NewsPage({ searchParams }: { searchParams?: Promise<{ pathogen?: string }> }) {
+  const resolvedSearchParams = searchParams ? await searchParams : {};
+  const pathogenFilter = typeof resolvedSearchParams.pathogen === 'string' ? resolvedSearchParams.pathogen : undefined;
+  const articles = pathogenFilter ? await getArticlesByPathogen(pathogenFilter) : await getArticles();
 
   return (
     <>
@@ -58,6 +60,11 @@ export default async function NewsPage() {
               Curated, verified reports from WHO, CDC, ECDC, and primary public health publications.
               Every article includes source attribution, verification status, and confidence level.
             </p>
+            {pathogenFilter && (
+              <p style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '0.68rem', marginTop: '0.75rem' }}>
+                Filtered by pathogen/category: {pathogenFilter}
+              </p>
+            )}
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '2rem', flexWrap: 'wrap' }}>

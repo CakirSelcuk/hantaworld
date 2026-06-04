@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, Bell } from 'lucide-react';
+import { ArrowRight, Bell, ShieldCheck } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import LiveTicker from '@/components/dashboard/LiveTicker';
@@ -11,19 +11,20 @@ import LatestReports from '@/components/dashboard/LatestReports';
 import AlertSignup from '@/components/dashboard/AlertSignup';
 import SocialIntelligence from '@/components/dashboard/SocialIntelligence';
 import MapWrapper from '@/components/map/MapWrapper';
-import { getArticles, getCountryWatchlist, getGlobalStats, getGlobalStatsTrend, getOutbreaks, getSocialTrends, getTickerItems } from '@/lib/data';
+import PathogenCard from '@/components/pathogens/PathogenCard';
+import { getArticles, getCountryWatchlist, getGlobalStats, getGlobalStatsTrend, getOutbreaks, getPathogens, getSocialTrends, getTickerItems } from '@/lib/data';
 import type { GlobalStatsTrendPoint } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'HantaWorld - Live Hantavirus Outbreak Map and Intelligence',
+  title: 'HantaWorld - Global Outbreak and Virus Intelligence',
   description:
-    'Live hantavirus outbreak map, verified case counts, death trends, country risk monitoring, and official public health source attribution.',
+    'Verified outbreak updates, pathogen profiles, public health signals, and official source-attributed intelligence.',
   alternates: { canonical: 'https://www.hantaworld.com' },
   openGraph: {
-    title: 'HantaWorld - Live Hantavirus Outbreak Map and Intelligence',
-    description: 'Verified global hantavirus outbreak intelligence, maps, case counts, and public health reports.',
+    title: 'HantaWorld - Global Outbreak and Virus Intelligence',
+    description: 'Verified outbreak updates, pathogen profiles, and public health signals from HantaWorld.',
     url: 'https://www.hantaworld.com',
     type: 'website',
   },
@@ -57,6 +58,7 @@ export default async function HomePage() {
   const socialTrends = await getSocialTrends();
   const globalStats = await getGlobalStats();
   const globalStatsTrend = await getGlobalStatsTrend();
+  const pathogens = await getPathogens();
   const displayStats = {
     ...globalStats,
     growthRate7d: calculateCaseChange7d(globalStatsTrend),
@@ -76,6 +78,72 @@ export default async function HomePage() {
             <strong>Source-attributed data:</strong> HantaWorld displays published records from official global health sources and clearly attributed public health reports.
           </span>
         </div>
+
+        <section style={{ padding: '5.5rem 0 3rem' }}>
+          <div className="container-main">
+            <div style={{ maxWidth: 920, marginBottom: '2rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.9rem' }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.15em', color: 'var(--color-brand)', textTransform: 'uppercase' }}>
+                  HantaWorld - Global Outbreak & Virus Intelligence
+                </span>
+                <div style={{ height: '1px', flex: 1, background: 'linear-gradient(90deg, rgba(59,130,246,0.4), transparent)' }} />
+              </div>
+
+              <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.35rem, 6vw, 4.8rem)', fontWeight: 750, letterSpacing: '-0.035em', lineHeight: 1.02, marginBottom: '1rem' }}>
+                Global Outbreak & <span className="gradient-text-red">Virus Intelligence</span>
+              </h1>
+
+              <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', maxWidth: 760, lineHeight: 1.75, marginBottom: '1.35rem' }}>
+                Verified outbreak updates, pathogen profiles, and public health signals from official and trusted sources.
+              </p>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '1.15rem' }}>
+                <Link href="/pathogens" className="btn btn-primary" style={{ padding: '0.72rem 1rem' }}>
+                  Explore Pathogens <ArrowRight size={14} />
+                </Link>
+                <Link href="/map" className="btn btn-ghost" style={{ padding: '0.72rem 1rem' }}>
+                  View Live Map
+                </Link>
+                <Link href="/news" className="btn btn-ghost" style={{ padding: '0.72rem 1rem' }}>
+                  Read Intelligence Feed
+                </Link>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.6rem', padding: '0.8rem 0.95rem', border: '1px solid rgba(14,165,233,0.18)', borderRadius: 'var(--radius-lg)', background: 'rgba(14,165,233,0.06)', maxWidth: 850 }}>
+                <ShieldCheck size={16} color="#38bdf8" style={{ flexShrink: 0, marginTop: 2 }} />
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.78rem', lineHeight: 1.6 }}>
+                  Source-attributed intelligence from WHO, CDC, ECDC, Africa CDC, PAHO, and national health authorities.
+                </p>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
+              <div>
+                <div className="section-header" style={{ margin: 0 }}>Pathogen Watch</div>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginTop: '0.45rem', maxWidth: 620 }}>
+                  Active public profiles for pathogens and category-like intelligence feeds tracked by HantaWorld.
+                </p>
+              </div>
+              <Link href="/pathogens" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontFamily: 'var(--font-ui)', fontSize: '0.75rem', color: 'var(--color-brand)', textDecoration: 'none' }}>
+                View all <ArrowRight size={13} />
+              </Link>
+            </div>
+
+            {pathogens.length > 0 ? (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))', gap: '0.9rem' }}>
+                {pathogens.slice(0, 8).map((pathogen) => (
+                  <PathogenCard key={pathogen.slug} pathogen={pathogen} featured={pathogen.slug === 'hantavirus'} />
+                ))}
+              </div>
+            ) : (
+              <div className="glass-card" style={{ padding: '1.25rem', color: 'var(--text-muted)', fontFamily: 'var(--font-ui)', fontSize: '0.85rem' }}>
+                No active pathogen profiles are available from the live API yet.
+              </div>
+            )}
+          </div>
+        </section>
+
+        <hr className="section-divider" style={{ margin: '0 1.5rem' }} />
 
         <HeroStats stats={displayStats} verifiedAt={verifiedAt} />
 

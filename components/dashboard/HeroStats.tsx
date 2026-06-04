@@ -40,12 +40,12 @@ export default function HeroStats({ stats, verifiedAt }: { stats: GlobalStats; v
   const autoVerifiedDate = verifiedAt ?? stats.lastUpdated;
 
   return (
-    <section style={{ padding: '5.5rem 0 3rem' }}>
+    <section style={{ padding: '3rem 0' }}>
       <div className="container-main">
-        <div style={{ marginBottom: '2.5rem' }}>
+        <div style={{ marginBottom: '2rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.9rem' }}>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.15em', color: 'var(--color-brand)', textTransform: 'uppercase' }}>
-              Source-attributed public health intelligence
+              Hantavirus verified snapshot
             </span>
             <div style={{ height: '1px', flex: 1, background: 'linear-gradient(90deg, rgba(59,130,246,0.4), transparent)' }} />
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', color: 'var(--text-muted)' }}>
@@ -53,12 +53,12 @@ export default function HeroStats({ stats, verifiedAt }: { stats: GlobalStats; v
             </span>
           </div>
 
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.35rem, 6vw, 4.8rem)', fontWeight: 750, letterSpacing: '-0.035em', lineHeight: 1.02, marginBottom: '1rem', maxWidth: 900 }}>
-            Global Hantavirus <span className="gradient-text-red">Intelligence</span>
-          </h1>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.65rem, 4vw, 2.6rem)', fontWeight: 750, letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: '1rem', maxWidth: 900 }}>
+            Hantavirus Outbreak <span className="gradient-text-red">Intelligence</span>
+          </h2>
 
           <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', maxWidth: 720, lineHeight: 1.75, marginBottom: '1.35rem' }}>
-            Track hantavirus outbreaks, country-level risk, and source-attributed public health updates from official global health sources.
+            The existing Hantavirus dashboard remains available as a source-attributed snapshot while HantaWorld expands into a multi-pathogen intelligence platform.
           </p>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '1.2rem' }}>
@@ -67,6 +67,9 @@ export default function HeroStats({ stats, verifiedAt }: { stats: GlobalStats; v
             </Link>
             <Link href="/news" className="btn btn-ghost" style={{ padding: '0.72rem 1rem' }}>
               <Newspaper size={16} /> Read Intelligence Feed
+            </Link>
+            <Link href="/pathogens/hantavirus" className="btn btn-ghost" style={{ padding: '0.72rem 1rem' }}>
+              <Activity size={16} /> Open Hantavirus Profile
             </Link>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 0.85rem', borderRadius: '999px', background: 'rgba(14,165,233,0.08)', border: '1px solid rgba(14,165,233,0.22)' }}>
               <CheckCircle size={13} color="#38bdf8" />
