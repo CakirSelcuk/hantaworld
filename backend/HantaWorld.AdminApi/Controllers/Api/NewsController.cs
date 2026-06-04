@@ -10,15 +10,27 @@ namespace HantaWorld.AdminApi.Controllers.Api;
 public class NewsController(ApplicationDbContext dbContext) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ArticleApiDto>>> Get([FromQuery] bool includeContent = false)
+    public async Task<ActionResult<IEnumerable<ArticleApiDto>>> Get(
+        [FromQuery] bool includeContent = false,
+        [FromQuery] string? pathogen = null)
     {
-        var items = await dbContext.Articles
+        var query = dbContext.Articles
             .AsNoTracking()
             .Include(x => x.Country)
+            .Include(x => x.Pathogen)
             .Include(x => x.Tags)
             .Include(x => x.ArticleSources)
                 .ThenInclude(x => x.Source)
             .Where(x => x.PublicationStatus == "published" && x.VerificationStatus == "verified")
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(pathogen))
+        {
+            var pathogenSlug = pathogen.Trim().ToLowerInvariant();
+            query = query.Where(x => x.Pathogen != null && x.Pathogen.Slug == pathogenSlug);
+        }
+
+        var items = await query
             .OrderByDescending(x => x.PublishedAt)
             .ToListAsync();
 
@@ -49,6 +61,12 @@ public class NewsController(ApplicationDbContext dbContext) : ControllerBase
                 Latitude = x.Country.Latitude,
                 Longitude = x.Country.Longitude,
                 HealthAuthorityUrl = x.Country.HealthAuthorityUrl
+            },
+            Pathogen = x.Pathogen is null ? null : new PathogenSummaryApiDto
+            {
+                Slug = x.Pathogen.Slug,
+                DisplayName = x.Pathogen.DisplayName,
+                Color = x.Pathogen.Color
             },
             Tags = x.Tags.Select(t => t.Tag).ToList(),
             Sources = x.ArticleSources

@@ -1,0 +1,101 @@
+@model HantaWorld.AdminApi.Models.PathogenStatsFormViewModel
+@{
+    ViewData["Title"] = "Pathogen Stats";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 mb-1">Pathogen Stats</h1>
+        <div class="text-muted small">Multi-pathogen numeric foundation. Stats are optional for category-like entries.</div>
+    </div>
+    <a class="btn btn-outline-secondary" href="/admin/articles">Back to Intelligence Feed</a>
+</div>
+
+@if (TempData["StatusMessage"] is string statusMessage)
+{
+    <div class="alert alert-success">@statusMessage</div>
+}
+
+<div class="alert alert-info small">
+    Hantavirus existing numeric data remains in Data Source Numeric. This screen writes the new multi-pathogen current and history tables.
+</div>
+
+<form method="get" action="/admin/pathogen-stats" class="card shadow-sm mb-4">
+    <div class="card-body">
+        <label class="form-label" for="pathogenSlug">Pathogen / Category</label>
+        <div class="d-flex gap-2">
+            <select id="pathogenSlug" name="pathogenSlug" class="form-select" asp-items="Model.AvailablePathogens"></select>
+            <button type="submit" class="btn btn-outline-primary">Load</button>
+        </div>
+    </div>
+</form>
+
+<form method="post" class="card shadow-sm">
+    <div class="card-body">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <input type="hidden" asp-for="PathogenId" />
+        <input type="hidden" asp-for="PathogenSlug" />
+
+        <div class="mb-3">
+            <div class="text-muted small">Editing</div>
+            <div class="h5 mb-0">@(Model.PathogenDisplayName ?? "No active pathogen/category found")</div>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-md-3">
+                <label asp-for="ReportedCases" class="form-label">Reported Cases</label>
+                <input asp-for="ReportedCases" class="form-control" type="number" min="0" />
+                <span asp-validation-for="ReportedCases" class="text-danger small"></span>
+            </div>
+            <div class="col-md-3">
+                <label asp-for="TotalDeaths" class="form-label">Total Deaths</label>
+                <input asp-for="TotalDeaths" class="form-control" type="number" min="0" />
+                <span asp-validation-for="TotalDeaths" class="text-danger small"></span>
+            </div>
+            <div class="col-md-3">
+                <label asp-for="AffectedCountries" class="form-label">Affected Countries</label>
+                <input asp-for="AffectedCountries" class="form-control" type="number" min="0" />
+                <span asp-validation-for="AffectedCountries" class="text-danger small"></span>
+            </div>
+            <div class="col-md-3">
+                <label asp-for="ActiveOutbreaks" class="form-label">Active Outbreaks</label>
+                <input asp-for="ActiveOutbreaks" class="form-control" type="number" min="0" />
+                <span asp-validation-for="ActiveOutbreaks" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="SourceInstitution" class="form-label">Source Institution</label>
+                <input asp-for="SourceInstitution" class="form-control" placeholder="WHO, CDC, ECDC, ministry, etc." />
+                <span asp-validation-for="SourceInstitution" class="text-danger small"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="SourceUrl" class="form-label">Source URL</label>
+                <input asp-for="SourceUrl" class="form-control" />
+                <span asp-validation-for="SourceUrl" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="OfficialPublishedAt" class="form-label">Official Published Date</label>
+                <input asp-for="OfficialPublishedAt" class="form-control" />
+                <span asp-validation-for="OfficialPublishedAt" class="text-danger small"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="LastVerifiedAt" class="form-label">Last Verified Date</label>
+                <input asp-for="LastVerifiedAt" class="form-control" />
+                <div class="form-text">Used as the history snapshot date. If empty, UTC today is used.</div>
+                <span asp-validation-for="LastVerifiedAt" class="text-danger small"></span>
+            </div>
+
+            <div class="col-12">
+                <label asp-for="Notes" class="form-label">Notes</label>
+                <textarea asp-for="Notes" rows="4" class="form-control"></textarea>
+                <span asp-validation-for="Notes" class="text-danger small"></span>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <button type="submit" class="btn btn-primary" @(Model.PathogenId == Guid.Empty ? "disabled" : "")>Save stats</button>
+    </div>
+</form>

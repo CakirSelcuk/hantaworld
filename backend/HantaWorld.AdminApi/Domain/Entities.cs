@@ -44,6 +44,22 @@ public class Source : AuditableEntity
     public ICollection<ArticleSource> ArticleSources { get; set; } = new List<ArticleSource>();
 }
 
+public class Pathogen : AuditableEntity
+{
+    [MaxLength(80)] public string Slug { get; set; } = string.Empty;
+    [MaxLength(160)] public string Name { get; set; } = string.Empty;
+    [MaxLength(160)] public string DisplayName { get; set; } = string.Empty;
+    [MaxLength(500)] public string? ShortDescription { get; set; }
+    [MaxLength(32)] public string Color { get; set; } = "#64748b";
+    public int SortOrder { get; set; }
+    public bool IsActive { get; set; } = true;
+
+    public PathogenStats? Stats { get; set; }
+    public ICollection<PathogenStatHistory> StatHistory { get; set; } = new List<PathogenStatHistory>();
+    public ICollection<Outbreak> Outbreaks { get; set; } = new List<Outbreak>();
+    public ICollection<Article> Articles { get; set; } = new List<Article>();
+}
+
 public class AdminUser : AuditableEntity
 {
     [MaxLength(320)] public string Email { get; set; } = string.Empty;
@@ -62,6 +78,7 @@ public class Outbreak : AuditableEntity
     [MaxLength(80)] public string PublicId { get; set; } = string.Empty;
     [MaxLength(160)] public string Slug { get; set; } = string.Empty;
     public Guid CountryId { get; set; }
+    public Guid? PathogenId { get; set; }
     [MaxLength(250)] public string Title { get; set; } = string.Empty;
     [MaxLength(1000)] public string? Summary { get; set; }
     public string Description { get; set; } = string.Empty;
@@ -85,8 +102,11 @@ public class Outbreak : AuditableEntity
     public decimal Longitude { get; set; }
     public decimal? RadiusKm { get; set; }
     public DateTime? PublishedAt { get; set; }
+    public bool ShowOnWebsite { get; set; } = true;
+    public bool ShowOnMobile { get; set; } = true;
 
     public Country? Country { get; set; }
+    public Pathogen? Pathogen { get; set; }
     public ICollection<OutbreakSource> OutbreakSources { get; set; } = new List<OutbreakSource>();
     public ICollection<Article> Articles { get; set; } = new List<Article>();
 }
@@ -97,6 +117,7 @@ public class Article : AuditableEntity
     [MaxLength(180)] public string Slug { get; set; } = string.Empty;
     public Guid? OutbreakId { get; set; }
     public Guid? CountryId { get; set; }
+    public Guid? PathogenId { get; set; }
     [MaxLength(300)] public string Title { get; set; } = string.Empty;
     [MaxLength(1200)] public string Excerpt { get; set; } = string.Empty;
     public string Content { get; set; } = string.Empty;
@@ -111,11 +132,18 @@ public class Article : AuditableEntity
     public DateOnly? LastVerifiedDate { get; set; }
     public DateTime? PublishedAt { get; set; }
     [MaxLength(2048)] public string? CoverImageUrl { get; set; }
+    public bool SendPushOnPublish { get; set; }
+    public DateTime? NotificationSentAt { get; set; }
+    public Guid? NotificationSentBy { get; set; }
+    public int NotificationSendCount { get; set; }
+    public DateTime? LastNotificationSentAt { get; set; }
 
     public Outbreak? Outbreak { get; set; }
     public Country? Country { get; set; }
+    public Pathogen? Pathogen { get; set; }
     public ICollection<ArticleSource> ArticleSources { get; set; } = new List<ArticleSource>();
     public ICollection<ArticleTag> Tags { get; set; } = new List<ArticleTag>();
+    public ICollection<MobileNotification> MobileNotifications { get; set; } = new List<MobileNotification>();
 }
 
 public class OutbreakSource
@@ -156,6 +184,117 @@ public class ArticleTag
     [MaxLength(80)] public string Tag { get; set; } = string.Empty;
 
     public Article? Article { get; set; }
+}
+
+public class DataSourceNumeric : AuditableEntity
+{
+    [MaxLength(80)] public string CardKey { get; set; } = string.Empty;
+    [MaxLength(120)] public string Label { get; set; } = string.Empty;
+    public int NumericValue { get; set; }
+    public int DisplayOrder { get; set; }
+    public bool IsActive { get; set; } = true;
+}
+
+public class DataSourceNumericHistory
+{
+    public Guid Id { get; set; }
+    public DateOnly SnapshotDate { get; set; }
+    public int ReportedCases { get; set; }
+    public int TotalDeaths { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
+    public Guid? CreatedBy { get; set; }
+    public Guid? UpdatedBy { get; set; }
+}
+
+public class PathogenStats : AuditableEntity
+{
+    public Guid PathogenId { get; set; }
+    public int? ReportedCases { get; set; }
+    public int? TotalDeaths { get; set; }
+    public int? AffectedCountries { get; set; }
+    public int? ActiveOutbreaks { get; set; }
+    [MaxLength(200)] public string? SourceInstitution { get; set; }
+    [MaxLength(2048)] public string? SourceUrl { get; set; }
+    public DateOnly? OfficialPublishedAt { get; set; }
+    public DateOnly? LastVerifiedAt { get; set; }
+    [MaxLength(4000)] public string? Notes { get; set; }
+
+    public Pathogen? Pathogen { get; set; }
+}
+
+public class PathogenStatHistory
+{
+    public Guid Id { get; set; }
+    public Guid PathogenId { get; set; }
+    public DateOnly SnapshotDate { get; set; }
+    public int? ReportedCases { get; set; }
+    public int? TotalDeaths { get; set; }
+    public int? AffectedCountries { get; set; }
+    public int? ActiveOutbreaks { get; set; }
+    [MaxLength(200)] public string? SourceInstitution { get; set; }
+    [MaxLength(2048)] public string? SourceUrl { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
+    public Guid? CreatedBy { get; set; }
+    public Guid? UpdatedBy { get; set; }
+
+    public Pathogen? Pathogen { get; set; }
+}
+
+public class InstagramPost : AuditableEntity
+{
+    [MaxLength(180)] public string Title { get; set; } = string.Empty;
+    [MaxLength(2048)] public string PostUrl { get; set; } = string.Empty;
+    [MaxLength(2048)] public string? ThumbnailImageUrl { get; set; }
+    [MaxLength(500)] public string? Description { get; set; }
+    public int SortOrder { get; set; }
+    public bool IsFeatured { get; set; }
+    public bool IsPublished { get; set; } = true;
+}
+
+public class MobileDevice : AuditableEntity
+{
+    [MaxLength(300)] public string ExpoPushToken { get; set; } = string.Empty;
+    [MaxLength(40)] public string Platform { get; set; } = "android";
+    [MaxLength(200)] public string? DeviceId { get; set; }
+    [MaxLength(40)] public string? AppVersion { get; set; }
+    [MaxLength(20)] public string? Locale { get; set; }
+    public bool IsActive { get; set; } = true;
+    public DateTime? LastSeenAt { get; set; }
+
+    public ICollection<MobileNotificationDelivery> Deliveries { get; set; } = new List<MobileNotificationDelivery>();
+}
+
+public class MobileNotification
+{
+    public Guid Id { get; set; }
+    public Guid? NewsId { get; set; }
+    [MaxLength(160)] public string Title { get; set; } = string.Empty;
+    [MaxLength(500)] public string Body { get; set; } = string.Empty;
+    public string? DataJson { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? SentAt { get; set; }
+    public Guid? CreatedBy { get; set; }
+
+    public Article? News { get; set; }
+    public AdminUser? CreatedByUser { get; set; }
+    public ICollection<MobileNotificationDelivery> Deliveries { get; set; } = new List<MobileNotificationDelivery>();
+}
+
+public class MobileNotificationDelivery
+{
+    public Guid Id { get; set; }
+    public Guid NotificationId { get; set; }
+    public Guid MobileDeviceId { get; set; }
+    [MaxLength(300)] public string ExpoPushToken { get; set; } = string.Empty;
+    [MaxLength(40)] public string Status { get; set; } = "pending";
+    [MaxLength(1000)] public string? ErrorMessage { get; set; }
+    public DateTime? SentAt { get; set; }
+    public DateTime? ReadAt { get; set; }
+
+    public MobileNotification? Notification { get; set; }
+    public MobileDevice? MobileDevice { get; set; }
 }
 
 public class AuditLog

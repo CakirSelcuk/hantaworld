@@ -1,31 +1,93 @@
 @model IEnumerable<HantaWorld.AdminApi.Domain.Article>
 @{
-    ViewData["Title"] = "Haberler";
+    ViewData["Title"] = "Intelligence Feed";
 }
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="h3 mb-0">Haberler / Raporlar</h1>
-    <a class="btn btn-primary" href="/admin/articles/create">Yeni Haber</a>
+    <div>
+        <h1 class="h3 mb-1">Intelligence Feed</h1>
+        <div class="text-muted small">Ana sayfadaki feed ve /news rapor kartlari.</div>
+    </div>
+    <a class="btn btn-primary" href="/admin/articles/create">Yeni Rapor</a>
 </div>
+
+@if (TempData["StatusMessage"] is string statusMessage)
+{
+    <div class="alert alert-success">@statusMessage</div>
+}
+@if (TempData["ErrorMessage"] is string errorMessage)
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
 
 <div class="card shadow-sm">
     <div class="table-responsive">
         <table class="table mb-0 align-middle">
-            <thead><tr><th>Public ID</th><th>Başlık</th><th>Kategori</th><th>Durum</th><th>Yayın</th><th></th></tr></thead>
+            <thead>
+                <tr>
+                    <th>Rapor</th>
+                    <th>Kategori</th>
+                    <th>Pathogen</th>
+                    <th>Gorunum</th>
+                    <th>Push</th>
+                    <th>Tarih</th>
+                    <th></th>
+                </tr>
+            </thead>
             <tbody>
             @foreach (var item in Model)
             {
                 <tr>
-                    <td><code>@item.PublicId</code></td>
-                    <td>@item.Title</td>
-                    <td>@item.Category</td>
-                    <td>@item.VerificationStatus</td>
-                    <td>@item.PublicationStatus</td>
+                    <td>
+                        <div class="fw-semibold">@item.Title</div>
+                        <div class="text-muted small">@item.Excerpt</div>
+                    </td>
+                    <td><span class="badge text-bg-secondary">@item.Category</span></td>
+                    <td>
+                        @if (item.Pathogen is not null)
+                        {
+                            <span class="badge text-bg-info">@item.Pathogen.DisplayName</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted small">-</span>
+                        }
+                    </td>
+                    <td>
+                        <span class="badge text-bg-light">@item.VerificationStatus</span>
+                        <span class="badge text-bg-light">@item.PublicationStatus</span>
+                    </td>
+                    <td>
+                        <div class="small text-muted">
+                            Sent: @item.NotificationSendCount
+                        </div>
+                        @if (item.LastNotificationSentAt.HasValue)
+                        {
+                            <div class="small text-muted">@item.LastNotificationSentAt.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</div>
+                        }
+                    </td>
+                    <td>
+                        <div>@item.PublishedAt?.ToLocalTime().ToString("yyyy-MM-dd")</div>
+                        <div class="text-muted small">@item.ReadingTimeMin min read</div>
+                    </td>
                     <td class="text-end">
-                        <a class="btn btn-sm btn-outline-primary" href="/admin/articles/@item.Id/edit">Düzenle</a>
+                        <a class="btn btn-sm btn-outline-primary" href="/admin/articles/@item.Id/edit">Duzenle</a>
+                        @if (item.PublicationStatus == "published" && item.VerificationStatus == "verified")
+                        {
+                            <form method="post" action="/admin/articles/@item.Id/send-push" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="confirmResend" value="@(item.NotificationSendCount > 0 ? "true" : "false")" />
+                                <button
+                                    type="submit"
+                                    class="btn btn-sm btn-outline-success"
+                                    onclick="@(item.NotificationSendCount > 0 ? "return confirm('Notification was already sent. Send again?');" : "return confirm('Send push notification for this report?');")">
+                                    Send Push
+                                </button>
+                            </form>
+                        }
                         <form method="post" action="/admin/articles/@item.Id/delete" class="d-inline">
                             @Html.AntiForgeryToken()
-                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Kayıt silinsin mi?');">Sil</button>
+                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Rapor silinsin mi?');">Sil</button>
                         </form>
                     </td>
                 </tr>

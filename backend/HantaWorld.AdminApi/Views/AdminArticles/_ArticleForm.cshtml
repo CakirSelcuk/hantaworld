@@ -4,26 +4,127 @@
     <div class="card-body">
         @Html.AntiForgeryToken()
         <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <input type="hidden" asp-for="OutbreakId" />
+        <input type="hidden" asp-for="CountryId" />
+        <input type="hidden" asp-for="ConfidenceScore" />
+        <input type="hidden" asp-for="CoverImageUrl" />
+        <input type="hidden" asp-for="VerificationNotes" />
+
+        <div class="alert alert-info small">
+            Bu ekran ana sayfadaki Intelligence Feed kartlarini ve /news raporlarini yonetir. Public sitede gorunmesi icin kayit `verified` ve `published` olmalidir.
+        </div>
+
         <div class="row g-3">
-            <div class="col-md-4"><label asp-for="PublicId" class="form-label"></label><input asp-for="PublicId" class="form-control" /></div>
-            <div class="col-md-4"><label asp-for="Slug" class="form-label"></label><input asp-for="Slug" class="form-control" /></div>
-            <div class="col-md-4"><label asp-for="Category" class="form-label"></label><input asp-for="Category" class="form-control" /></div>
-            <div class="col-md-6"><label asp-for="Title" class="form-label"></label><input asp-for="Title" class="form-control" /></div>
-            <div class="col-md-3"><label asp-for="VerificationStatus" class="form-label"></label><input asp-for="VerificationStatus" class="form-control" /></div>
-            <div class="col-md-3"><label asp-for="PublicationStatus" class="form-label"></label><input asp-for="PublicationStatus" class="form-control" /></div>
-            <div class="col-md-6"><label asp-for="CountryId" class="form-label">Ülke</label><select asp-for="CountryId" asp-items="Model.AvailableCountries" class="form-select"><option value="">Seçiniz</option></select></div>
-            <div class="col-md-6"><label asp-for="OutbreakId" class="form-label">Salgın</label><select asp-for="OutbreakId" asp-items="Model.AvailableOutbreaks" class="form-select"><option value="">Seçiniz</option></select></div>
-            <div class="col-md-4"><label asp-for="ReadingTimeMin" class="form-label"></label><input asp-for="ReadingTimeMin" class="form-control" /></div>
-            <div class="col-md-4"><label asp-for="ConfidenceScore" class="form-label"></label><input asp-for="ConfidenceScore" class="form-control" /></div>
-            <div class="col-md-4"><label asp-for="TagsCsv" class="form-label"></label><input asp-for="TagsCsv" class="form-control" /></div>
-            <div class="col-md-6"><label asp-for="PublicationDate" class="form-label"></label><input asp-for="PublicationDate" class="form-control" /></div>
-            <div class="col-md-6"><label asp-for="LastVerifiedDate" class="form-label"></label><input asp-for="LastVerifiedDate" class="form-control" /></div>
-            <div class="col-12"><label asp-for="Excerpt" class="form-label"></label><textarea asp-for="Excerpt" rows="3" class="form-control"></textarea></div>
-            <div class="col-12"><label asp-for="Content" class="form-label"></label><textarea asp-for="Content" rows="10" class="form-control"></textarea></div>
-            <div class="col-12"><label asp-for="PrimarySourceUrl" class="form-label"></label><input asp-for="PrimarySourceUrl" class="form-control" /></div>
-            <div class="col-12"><label asp-for="SelectedSourceIds" class="form-label">Kaynaklar</label><select asp-for="SelectedSourceIds" asp-items="Model.AvailableSources" class="form-select" multiple size="6"></select></div>
-            <div class="col-12"><label asp-for="CoverImageUrl" class="form-label"></label><input asp-for="CoverImageUrl" class="form-control" /></div>
-            <div class="col-12"><label asp-for="VerificationNotes" class="form-label"></label><textarea asp-for="VerificationNotes" rows="4" class="form-control"></textarea></div>
+            <div class="col-md-6">
+                <label asp-for="Title" class="form-label">Rapor basligi</label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger small"></span>
+            </div>
+            <div class="col-md-3">
+                <label asp-for="PublicId" class="form-label">Rapor ID</label>
+                <input asp-for="PublicId" class="form-control" />
+                <span asp-validation-for="PublicId" class="text-danger small"></span>
+            </div>
+            <div class="col-md-3">
+                <label asp-for="Slug" class="form-label">URL slug</label>
+                <input asp-for="Slug" class="form-control" />
+                <span asp-validation-for="Slug" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="Category" class="form-label">Kart kategorisi</label>
+                <select asp-for="Category" class="form-select">
+                    <option value="outbreak-report">Outbreak Report</option>
+                    <option value="scientific-research">Research</option>
+                    <option value="public-health">Public Health</option>
+                    <option value="travel-advisory">Travel Advisory</option>
+                    <option value="prevention">Prevention</option>
+                    <option value="analysis">Analysis</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="PathogenId" class="form-label">Pathogen / Category</label>
+                <select asp-for="PathogenId" asp-items="Model.AvailablePathogens" class="form-select"></select>
+                <div class="form-text">Defaults to Hantavirus when no selection exists.</div>
+            </div>
+            <div class="col-md-3">
+                <label asp-for="VerificationStatus" class="form-label">Dogrulama</label>
+                <select asp-for="VerificationStatus" class="form-select">
+                    <option value="verified">verified</option>
+                    <option value="pending">pending</option>
+                    <option value="unverified">unverified</option>
+                    <option value="rejected">rejected</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label asp-for="PublicationStatus" class="form-label">Yayin</label>
+                <select asp-for="PublicationStatus" class="form-select">
+                    <option value="draft">draft</option>
+                    <option value="published">published</option>
+                    <option value="archived">archived</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label asp-for="ReadingTimeMin" class="form-label">Okuma</label>
+                <input asp-for="ReadingTimeMin" class="form-control" type="number" min="1" max="120" />
+            </div>
+
+            <div class="col-12">
+                <div class="form-check">
+                    <input asp-for="SendPushOnPublish" class="form-check-input" />
+                    <label asp-for="SendPushOnPublish" class="form-check-label">Send push notification when published</label>
+                </div>
+                <div class="form-text">Default is off. Push is sent only when this is checked and the report is verified + published.</div>
+            </div>
+
+            @if (Model.NotificationSendCount > 0)
+            {
+                <div class="col-12">
+                    <div class="alert alert-warning small mb-0">
+                        Push notification was already sent @Model.NotificationSendCount time(s).
+                        Last sent: @(Model.LastNotificationSentAt?.ToLocalTime().ToString("yyyy-MM-dd HH:mm") ?? "unknown").
+                    </div>
+                </div>
+            }
+
+            <div class="col-12">
+                <label asp-for="Excerpt" class="form-label">Kart ozeti</label>
+                <textarea asp-for="Excerpt" rows="3" class="form-control"></textarea>
+                <span asp-validation-for="Excerpt" class="text-danger small"></span>
+            </div>
+
+            <div class="col-12">
+                <label asp-for="Content" class="form-label">Rapor detayi</label>
+                <textarea asp-for="Content" rows="12" class="form-control"></textarea>
+                <span asp-validation-for="Content" class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="PublicationDate" class="form-label">Yayin tarihi</label>
+                <input asp-for="PublicationDate" class="form-control" />
+            </div>
+            <div class="col-md-6">
+                <label asp-for="LastVerifiedDate" class="form-label">Son dogrulama</label>
+                <input asp-for="LastVerifiedDate" class="form-control" />
+            </div>
+
+            <div class="col-12">
+                <label asp-for="PrimarySourceUrl" class="form-label">Ana kaynak URL</label>
+                <input asp-for="PrimarySourceUrl" class="form-control" />
+            </div>
+
+            <div class="col-12">
+                <label asp-for="SelectedSourceIds" class="form-label">Kaynak rozetleri</label>
+                <select asp-for="SelectedSourceIds" asp-items="Model.AvailableSources" class="form-select" multiple size="5"></select>
+                <div class="form-text">Ilk secilen kaynak kartta gorunur; digerleri detay sayfasinda citation olarak kullanilir.</div>
+            </div>
+
+            <div class="col-12">
+                <label asp-for="TagsCsv" class="form-label">Etiketler</label>
+                <input asp-for="TagsCsv" class="form-control" placeholder="Andes virus, MV Hondius, WHO" />
+                <div class="form-text">Virgulle ayir. Kart altinda hashtag olarak gorunur.</div>
+            </div>
         </div>
     </div>
     <div class="card-footer d-flex gap-2">

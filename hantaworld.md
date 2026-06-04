@@ -3415,3 +3415,100 @@ Canliya alma:
 
 - GitHub push yapilmadi.
 - Kullanici acikca `push et` demeden push yapilmayacak.
+
+## 2026-06-04 - Phase 1A Multi-Pathogen Foundation
+
+Kurallar:
+
+- Push yapilmadi.
+- Commit yapilmadi.
+- Deploy yapilmadi.
+- Production environment degiskenleri degistirilmedi.
+- Eski Hantavirus fonksiyonlari, tablolar ve API akislari silinmedi.
+- `data_source_numeric` ve `data_source_numeric_history` compatibility/fallback olarak korunuyor.
+
+Kapsam:
+
+- HantaWorld coklu patojen outbreak intelligence altyapisina hazirlandi.
+- Homepage redesign, public pathogen sayfalari, multi-line chart UI, scraping veya otomatik veri cekme bu fazda yapilmadi.
+- `official-updates` ve `weekly-risk-brief` Phase 1A icin taxonomy icinde category-like kayitlar olarak tutuldu; bunlara fake vaka/vefat sayisi uretilmedi.
+
+Backend/API:
+
+- Yeni EF entity ve mapping eklendi:
+  - `Pathogen`
+  - `PathogenStats`
+  - `PathogenStatHistory`
+- `Article` ve `Outbreak` entitylerine nullable `PathogenId` ve navigation eklendi.
+- Yeni API endpointleri eklendi:
+  - `GET /api/pathogens`
+  - `GET /api/pathogens/{slug}`
+  - `GET /api/pathogens/{slug}/stats/trend`
+  - `GET /api/pathogen-stats/trend`
+- `/api/news` geriye uyumlu sekilde genisletildi:
+  - Mevcut alanlar korunuyor.
+  - Optional nested `pathogen` bilgisi donuyor: slug, displayName, color.
+  - Optional filtre eklendi: `/api/news?pathogen=hantavirus`.
+
+Admin panel:
+
+- Yeni admin route eklendi: `/admin/pathogen-stats`.
+- Admin bu ekranda aktif pathogen/category secip su alanlari kaydedebilir:
+  - Reported Cases
+  - Total Deaths
+  - Affected Countries
+  - Active Outbreaks
+  - Source Institution
+  - Source URL
+  - Official Published Date
+  - Last Verified Date
+  - Notes
+- Kaydetme davranisi:
+  - `pathogen_stats` current row upsert edilir.
+  - `pathogen_stat_history` ayni gun/snapshot row upsert edilir.
+  - Snapshot date `last_verified_at` varsa onun tarihi, yoksa UTC today olur.
+  - Unique `(pathogen_id, snapshot_date)` duplicate history satirlarini engeller.
+- Intelligence Feed create/edit formuna `Pathogen / Category` dropdown eklendi.
+- Yeni veya bos kayitlarda default Hantavirus secilir; edit mevcut secimi korur.
+- Intelligence Feed listesinde pathogen badge gosterilir.
+
+Database:
+
+- Yeni idempotent setup script eklendi:
+  - `database/09_pathogen_taxonomy_and_stats.sql`
+- Yeni tablolar:
+  - `pathogens`
+  - `pathogen_stats`
+  - `pathogen_stat_history`
+- Mevcut tablolara nullable kolonlar:
+  - `articles.pathogen_id`
+  - `outbreaks.pathogen_id`
+- Seed taxonomy:
+  - `hantavirus`
+  - `ebola-marburg`
+  - `mpox`
+  - `dengue`
+  - `measles`
+  - `avian-influenza`
+  - `covid-respiratory-viruses`
+  - `unknown-emerging-outbreaks`
+  - `official-updates`
+  - `weekly-risk-brief`
+- Backfill:
+  - `articles.pathogen_id IS NULL` kayitlari Hantavirus'a baglanir.
+  - `outbreaks.pathogen_id IS NULL` kayitlari Hantavirus'a baglanir.
+  - Dolu `pathogen_id` alanlari asla overwrite edilmez.
+  - Mevcut `data_source_numeric` Hantavirus current stats icin yeni `pathogen_stats` tablosuna sadece eksik alanlarda backfill edilir.
+  - Mevcut `data_source_numeric_history` Hantavirus trend icin yeni `pathogen_stat_history` tablosuna sadece eksik alanlarda backfill edilir.
+- `SetupController.ApplyAdminPanelUpdates` artik `09_pathogen_taxonomy_and_stats.sql` scriptini de calistirir.
+- Fresh install icin `database/01_mssql_schema.sql` yeni tablo/kolon/seed yapisiyla guncellendi.
+
+Test:
+
+- `dotnet build backend/HantaWorld.AdminApi/HantaWorld.AdminApi.csproj` basarili.
+- Build sonucu: 0 warning, 0 error.
+
+Notlar:
+
+- Canli DB'ye uygulanmasi icin backend deploy sonrasi mevcut setup endpoint akisiyle `apply-admin-panel-updates` calistirilmelidir.
+- API endpointleri runtime DB baglantisi olmadan bu turnde canli olarak cagrilmadi; derleme kontrolu basarili.

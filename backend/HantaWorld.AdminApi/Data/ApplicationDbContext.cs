@@ -7,12 +7,21 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 {
     public DbSet<Country> Countries => Set<Country>();
     public DbSet<Source> Sources => Set<Source>();
+    public DbSet<Pathogen> Pathogens => Set<Pathogen>();
+    public DbSet<PathogenStats> PathogenStats => Set<PathogenStats>();
+    public DbSet<PathogenStatHistory> PathogenStatHistory => Set<PathogenStatHistory>();
     public DbSet<AdminUser> AdminUsers => Set<AdminUser>();
     public DbSet<Outbreak> Outbreaks => Set<Outbreak>();
     public DbSet<Article> Articles => Set<Article>();
     public DbSet<OutbreakSource> OutbreakSources => Set<OutbreakSource>();
     public DbSet<ArticleSource> ArticleSources => Set<ArticleSource>();
     public DbSet<ArticleTag> ArticleTags => Set<ArticleTag>();
+    public DbSet<DataSourceNumeric> DataSourceNumerics => Set<DataSourceNumeric>();
+    public DbSet<DataSourceNumericHistory> DataSourceNumericHistory => Set<DataSourceNumericHistory>();
+    public DbSet<InstagramPost> InstagramPosts => Set<InstagramPost>();
+    public DbSet<MobileDevice> MobileDevices => Set<MobileDevice>();
+    public DbSet<MobileNotification> MobileNotifications => Set<MobileNotification>();
+    public DbSet<MobileNotificationDelivery> MobileNotificationDeliveries => Set<MobileNotificationDelivery>();
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -58,6 +67,25 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity.Property(x => x.UpdatedBy).HasColumnName("updated_by");
         });
 
+        modelBuilder.Entity<Pathogen>(entity =>
+        {
+            entity.ToTable("pathogens");
+            entity.Property(x => x.Id).HasColumnName("id");
+            entity.Property(x => x.Slug).HasColumnName("slug");
+            entity.Property(x => x.Name).HasColumnName("name");
+            entity.Property(x => x.DisplayName).HasColumnName("display_name");
+            entity.Property(x => x.ShortDescription).HasColumnName("short_description");
+            entity.Property(x => x.Color).HasColumnName("color");
+            entity.Property(x => x.SortOrder).HasColumnName("sort_order");
+            entity.Property(x => x.IsActive).HasColumnName("is_active");
+            entity.Property(x => x.CreatedAt).HasColumnName("created_at");
+            entity.Property(x => x.UpdatedAt).HasColumnName("updated_at");
+            entity.Property(x => x.CreatedBy).HasColumnName("created_by");
+            entity.Property(x => x.UpdatedBy).HasColumnName("updated_by");
+
+            entity.HasIndex(x => x.Slug).IsUnique();
+        });
+
         modelBuilder.Entity<AdminUser>(entity =>
         {
             entity.ToTable("admin_users");
@@ -84,6 +112,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity.Property(x => x.PublicId).HasColumnName("public_id");
             entity.Property(x => x.Slug).HasColumnName("slug");
             entity.Property(x => x.CountryId).HasColumnName("country_id");
+            entity.Property(x => x.PathogenId).HasColumnName("pathogen_id");
             entity.Property(x => x.Title).HasColumnName("title");
             entity.Property(x => x.Summary).HasColumnName("summary");
             entity.Property(x => x.Description).HasColumnName("description");
@@ -107,6 +136,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity.Property(x => x.Longitude).HasColumnName("longitude").HasColumnType("decimal(9,6)");
             entity.Property(x => x.RadiusKm).HasColumnName("radius_km").HasColumnType("decimal(9,2)");
             entity.Property(x => x.PublishedAt).HasColumnName("published_at");
+            entity.Property(x => x.ShowOnWebsite).HasColumnName("show_on_website");
+            entity.Property(x => x.ShowOnMobile).HasColumnName("show_on_mobile");
             entity.Property(x => x.CreatedAt).HasColumnName("created_at");
             entity.Property(x => x.UpdatedAt).HasColumnName("updated_at");
             entity.Property(x => x.CreatedBy).HasColumnName("created_by");
@@ -116,6 +147,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .WithMany(x => x.Outbreaks)
                 .HasForeignKey(x => x.CountryId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(x => x.Pathogen)
+                .WithMany(x => x.Outbreaks)
+                .HasForeignKey(x => x.PathogenId)
+                .OnDelete(DeleteBehavior.SetNull);
         });
 
         modelBuilder.Entity<Article>(entity =>
@@ -126,6 +162,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity.Property(x => x.Slug).HasColumnName("slug");
             entity.Property(x => x.OutbreakId).HasColumnName("outbreak_id");
             entity.Property(x => x.CountryId).HasColumnName("country_id");
+            entity.Property(x => x.PathogenId).HasColumnName("pathogen_id");
             entity.Property(x => x.Title).HasColumnName("title");
             entity.Property(x => x.Excerpt).HasColumnName("excerpt");
             entity.Property(x => x.Content).HasColumnName("content");
@@ -140,6 +177,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity.Property(x => x.LastVerifiedDate).HasColumnName("last_verified_date");
             entity.Property(x => x.PublishedAt).HasColumnName("published_at");
             entity.Property(x => x.CoverImageUrl).HasColumnName("cover_image_url");
+            entity.Property(x => x.SendPushOnPublish).HasColumnName("send_push_on_publish");
+            entity.Property(x => x.NotificationSentAt).HasColumnName("notification_sent_at");
+            entity.Property(x => x.NotificationSentBy).HasColumnName("notification_sent_by");
+            entity.Property(x => x.NotificationSendCount).HasColumnName("notification_send_count");
+            entity.Property(x => x.LastNotificationSentAt).HasColumnName("last_notification_sent_at");
             entity.Property(x => x.CreatedAt).HasColumnName("created_at");
             entity.Property(x => x.UpdatedAt).HasColumnName("updated_at");
             entity.Property(x => x.CreatedBy).HasColumnName("created_by");
@@ -154,6 +196,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .WithMany(x => x.Articles)
                 .HasForeignKey(x => x.CountryId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(x => x.Pathogen)
+                .WithMany(x => x.Articles)
+                .HasForeignKey(x => x.PathogenId)
+                .OnDelete(DeleteBehavior.SetNull);
         });
 
         modelBuilder.Entity<OutbreakSource>(entity =>
@@ -211,6 +258,170 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity.HasOne(x => x.Article)
                 .WithMany(x => x.Tags)
                 .HasForeignKey(x => x.ArticleId);
+        });
+
+        modelBuilder.Entity<DataSourceNumeric>(entity =>
+        {
+            entity.ToTable("data_source_numeric");
+            entity.Property(x => x.Id).HasColumnName("id");
+            entity.Property(x => x.CardKey).HasColumnName("card_key");
+            entity.Property(x => x.Label).HasColumnName("label");
+            entity.Property(x => x.NumericValue).HasColumnName("numeric_value");
+            entity.Property(x => x.DisplayOrder).HasColumnName("display_order");
+            entity.Property(x => x.IsActive).HasColumnName("is_active");
+            entity.Property(x => x.CreatedAt).HasColumnName("created_at");
+            entity.Property(x => x.UpdatedAt).HasColumnName("updated_at");
+            entity.Property(x => x.CreatedBy).HasColumnName("created_by");
+            entity.Property(x => x.UpdatedBy).HasColumnName("updated_by");
+
+            entity.HasIndex(x => x.CardKey).IsUnique();
+        });
+
+        modelBuilder.Entity<DataSourceNumericHistory>(entity =>
+        {
+            entity.ToTable("data_source_numeric_history");
+            entity.Property(x => x.Id).HasColumnName("id");
+            entity.Property(x => x.SnapshotDate).HasColumnName("snapshot_date");
+            entity.Property(x => x.ReportedCases).HasColumnName("reported_cases");
+            entity.Property(x => x.TotalDeaths).HasColumnName("total_deaths");
+            entity.Property(x => x.CreatedAt).HasColumnName("created_at");
+            entity.Property(x => x.UpdatedAt).HasColumnName("updated_at");
+            entity.Property(x => x.CreatedBy).HasColumnName("created_by");
+            entity.Property(x => x.UpdatedBy).HasColumnName("updated_by");
+
+            entity.HasIndex(x => x.SnapshotDate).IsUnique();
+        });
+
+        modelBuilder.Entity<PathogenStats>(entity =>
+        {
+            entity.ToTable("pathogen_stats");
+            entity.Property(x => x.Id).HasColumnName("id");
+            entity.Property(x => x.PathogenId).HasColumnName("pathogen_id");
+            entity.Property(x => x.ReportedCases).HasColumnName("reported_cases");
+            entity.Property(x => x.TotalDeaths).HasColumnName("total_deaths");
+            entity.Property(x => x.AffectedCountries).HasColumnName("affected_countries");
+            entity.Property(x => x.ActiveOutbreaks).HasColumnName("active_outbreaks");
+            entity.Property(x => x.SourceInstitution).HasColumnName("source_institution");
+            entity.Property(x => x.SourceUrl).HasColumnName("source_url");
+            entity.Property(x => x.OfficialPublishedAt).HasColumnName("official_published_at");
+            entity.Property(x => x.LastVerifiedAt).HasColumnName("last_verified_at");
+            entity.Property(x => x.Notes).HasColumnName("notes");
+            entity.Property(x => x.CreatedAt).HasColumnName("created_at");
+            entity.Property(x => x.UpdatedAt).HasColumnName("updated_at");
+            entity.Property(x => x.CreatedBy).HasColumnName("created_by");
+            entity.Property(x => x.UpdatedBy).HasColumnName("updated_by");
+
+            entity.HasIndex(x => x.PathogenId).IsUnique();
+            entity.HasOne(x => x.Pathogen)
+                .WithOne(x => x.Stats)
+                .HasForeignKey<PathogenStats>(x => x.PathogenId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<PathogenStatHistory>(entity =>
+        {
+            entity.ToTable("pathogen_stat_history");
+            entity.Property(x => x.Id).HasColumnName("id");
+            entity.Property(x => x.PathogenId).HasColumnName("pathogen_id");
+            entity.Property(x => x.SnapshotDate).HasColumnName("snapshot_date");
+            entity.Property(x => x.ReportedCases).HasColumnName("reported_cases");
+            entity.Property(x => x.TotalDeaths).HasColumnName("total_deaths");
+            entity.Property(x => x.AffectedCountries).HasColumnName("affected_countries");
+            entity.Property(x => x.ActiveOutbreaks).HasColumnName("active_outbreaks");
+            entity.Property(x => x.SourceInstitution).HasColumnName("source_institution");
+            entity.Property(x => x.SourceUrl).HasColumnName("source_url");
+            entity.Property(x => x.CreatedAt).HasColumnName("created_at");
+            entity.Property(x => x.UpdatedAt).HasColumnName("updated_at");
+            entity.Property(x => x.CreatedBy).HasColumnName("created_by");
+            entity.Property(x => x.UpdatedBy).HasColumnName("updated_by");
+
+            entity.HasIndex(x => new { x.PathogenId, x.SnapshotDate }).IsUnique();
+            entity.HasOne(x => x.Pathogen)
+                .WithMany(x => x.StatHistory)
+                .HasForeignKey(x => x.PathogenId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<InstagramPost>(entity =>
+        {
+            entity.ToTable("instagram_posts");
+            entity.Property(x => x.Id).HasColumnName("id");
+            entity.Property(x => x.Title).HasColumnName("title");
+            entity.Property(x => x.PostUrl).HasColumnName("post_url");
+            entity.Property(x => x.ThumbnailImageUrl).HasColumnName("thumbnail_image_url");
+            entity.Property(x => x.Description).HasColumnName("description");
+            entity.Property(x => x.SortOrder).HasColumnName("sort_order");
+            entity.Property(x => x.IsFeatured).HasColumnName("is_featured");
+            entity.Property(x => x.IsPublished).HasColumnName("is_published");
+            entity.Property(x => x.CreatedAt).HasColumnName("created_at");
+            entity.Property(x => x.UpdatedAt).HasColumnName("updated_at");
+            entity.Property(x => x.CreatedBy).HasColumnName("created_by");
+            entity.Property(x => x.UpdatedBy).HasColumnName("updated_by");
+        });
+
+        modelBuilder.Entity<MobileDevice>(entity =>
+        {
+            entity.ToTable("mobile_devices");
+            entity.Property(x => x.Id).HasColumnName("id");
+            entity.Property(x => x.ExpoPushToken).HasColumnName("expo_push_token");
+            entity.Property(x => x.Platform).HasColumnName("platform");
+            entity.Property(x => x.DeviceId).HasColumnName("device_id");
+            entity.Property(x => x.AppVersion).HasColumnName("app_version");
+            entity.Property(x => x.Locale).HasColumnName("locale");
+            entity.Property(x => x.IsActive).HasColumnName("is_active");
+            entity.Property(x => x.LastSeenAt).HasColumnName("last_seen_at");
+            entity.Property(x => x.CreatedAt).HasColumnName("created_at");
+            entity.Property(x => x.UpdatedAt).HasColumnName("updated_at");
+            entity.Property(x => x.CreatedBy).HasColumnName("created_by");
+            entity.Property(x => x.UpdatedBy).HasColumnName("updated_by");
+
+            entity.HasIndex(x => x.ExpoPushToken).IsUnique();
+        });
+
+        modelBuilder.Entity<MobileNotification>(entity =>
+        {
+            entity.ToTable("mobile_notifications");
+            entity.Property(x => x.Id).HasColumnName("id");
+            entity.Property(x => x.NewsId).HasColumnName("news_id");
+            entity.Property(x => x.Title).HasColumnName("title");
+            entity.Property(x => x.Body).HasColumnName("body");
+            entity.Property(x => x.DataJson).HasColumnName("data_json");
+            entity.Property(x => x.CreatedAt).HasColumnName("created_at");
+            entity.Property(x => x.SentAt).HasColumnName("sent_at");
+            entity.Property(x => x.CreatedBy).HasColumnName("created_by");
+
+            entity.HasOne(x => x.News)
+                .WithMany(x => x.MobileNotifications)
+                .HasForeignKey(x => x.NewsId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            entity.HasOne(x => x.CreatedByUser)
+                .WithMany()
+                .HasForeignKey(x => x.CreatedBy)
+                .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        modelBuilder.Entity<MobileNotificationDelivery>(entity =>
+        {
+            entity.ToTable("mobile_notification_deliveries");
+            entity.Property(x => x.Id).HasColumnName("id");
+            entity.Property(x => x.NotificationId).HasColumnName("notification_id");
+            entity.Property(x => x.MobileDeviceId).HasColumnName("mobile_device_id");
+            entity.Property(x => x.ExpoPushToken).HasColumnName("expo_push_token");
+            entity.Property(x => x.Status).HasColumnName("status");
+            entity.Property(x => x.ErrorMessage).HasColumnName("error_message");
+            entity.Property(x => x.SentAt).HasColumnName("sent_at");
+            entity.Property(x => x.ReadAt).HasColumnName("read_at");
+
+            entity.HasOne(x => x.Notification)
+                .WithMany(x => x.Deliveries)
+                .HasForeignKey(x => x.NotificationId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(x => x.MobileDevice)
+                .WithMany(x => x.Deliveries)
+                .HasForeignKey(x => x.MobileDeviceId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<AuditLog>(entity =>

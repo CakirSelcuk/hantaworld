@@ -13,7 +13,8 @@ namespace HantaWorld.AdminApi.Controllers;
 public class AdminArticlesController(
     ApplicationDbContext dbContext,
     AuditLogService auditLogService,
-    AdminAuthService adminAuthService) : Controller
+    AdminAuthService adminAuthService,
+    MobileNotificationService mobileNotificationService) : Controller
 {
     [HttpGet("/admin/articles")]
     public async Task<IActionResult> Index()
@@ -21,6 +22,7 @@ public class AdminArticlesController(
         var items = await dbContext.Articles
             .Include(x => x.Country)
             .Include(x => x.Outbreak)
+            .Include(x => x.Pathogen)
             .OrderByDescending(x => x.UpdatedAt)
             .ToListAsync();
         return View(items);
@@ -29,7 +31,19 @@ public class AdminArticlesController(
     [HttpGet("/admin/articles/create")]
     public async Task<IActionResult> Create()
     {
-        var model = new ArticleFormViewModel();
+        var stamp = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
+        var model = new ArticleFormViewModel
+        {
+            PublicId = $"NEWS-{stamp}",
+            Slug = $"intelligence-report-{stamp}",
+            Category = "outbreak-report",
+            VerificationStatus = "verified",
+            PublicationStatus = "draft",
+            ReadingTimeMin = 3,
+            ConfidenceScore = 100,
+            PublicationDate = DateOnly.FromDateTime(DateTime.UtcNow),
+            LastVerifiedDate = DateOnly.FromDateTime(DateTime.UtcNow)
+        };
         await PopulateSelections(model);
         return View(model);
     }
@@ -41,6 +55,11 @@ public class AdminArticlesController(
         if (await dbContext.Articles.AnyAsync(x => x.PublicId == model.PublicId || x.Slug == model.Slug))
         {
             ModelState.AddModelError(nameof(model.PublicId), "Public ID veya slug zaten kullanılıyor.");
+        }
+
+        if (model.PathogenId.HasValue && !await dbContext.Pathogens.AnyAsync(x => x.Id == model.PathogenId.Value && x.IsActive))
+        {
+            ModelState.AddModelError(nameof(model.PathogenId), "Secilen pathogen/category aktif degil.");
         }
 
         if (!ModelState.IsValid)
@@ -57,6 +76,7 @@ public class AdminArticlesController(
             Slug = model.Slug.Trim(),
             OutbreakId = model.OutbreakId,
             CountryId = model.CountryId,
+            PathogenId = model.PathogenId,
             Title = model.Title.Trim(),
             Excerpt = model.Excerpt.Trim(),
             Content = model.Content.Trim(),
@@ -70,6 +90,7 @@ public class AdminArticlesController(
             PublicationDate = model.PublicationDate,
             LastVerifiedDate = model.LastVerifiedDate,
             CoverImageUrl = model.CoverImageUrl?.Trim(),
+            SendPushOnPublish = model.SendPushOnPublish,
             PublishedAt = model.PublicationStatus == "published" ? DateTime.UtcNow : null,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
@@ -82,6 +103,7 @@ public class AdminArticlesController(
         ApplyTags(entity, model.TagsCsv);
         await dbContext.SaveChangesAsync();
         await auditLogService.LogAsync(HttpContext, "create", "article", entity.Id, entity.PublicId, null, entity);
+        await TrySendAutomaticPushAsync(entity, actorId);
 
         return RedirectToAction(nameof(Index));
     }
@@ -102,6 +124,7 @@ public class AdminArticlesController(
             Slug = entity.Slug,
             OutbreakId = entity.OutbreakId,
             CountryId = entity.CountryId,
+            PathogenId = entity.PathogenId,
             Title = entity.Title,
             Excerpt = entity.Excerpt,
             Content = entity.Content,
@@ -115,6 +138,11 @@ public class AdminArticlesController(
             PublicationDate = entity.PublicationDate,
             LastVerifiedDate = entity.LastVerifiedDate,
             CoverImageUrl = entity.CoverImageUrl,
+            SendPushOnPublish = entity.SendPushOnPublish,
+            NotificationSentAt = entity.NotificationSentAt,
+            NotificationSentBy = entity.NotificationSentBy,
+            NotificationSendCount = entity.NotificationSendCount,
+            LastNotificationSentAt = entity.LastNotificationSentAt,
             TagsCsv = string.Join(", ", entity.Tags.Select(x => x.Tag)),
             SelectedSourceIds = entity.ArticleSources.Select(x => x.SourceId).ToList()
         };
@@ -138,18 +166,25 @@ public class AdminArticlesController(
             ModelState.AddModelError(nameof(model.PublicId), "Public ID veya slug zaten kullanılıyor.");
         }
 
+        if (model.PathogenId.HasValue && !await dbContext.Pathogens.AnyAsync(x => x.Id == model.PathogenId.Value && x.IsActive))
+        {
+            ModelState.AddModelError(nameof(model.PathogenId), "Secilen pathogen/category aktif degil.");
+        }
+
         if (!ModelState.IsValid)
         {
             await PopulateSelections(model);
             return View(model);
         }
 
-        var oldValues = new { entity.PublicId, entity.Slug, entity.Title, entity.VerificationStatus, entity.PublicationStatus };
+        var oldValues = new { entity.PublicId, entity.Slug, entity.Title, entity.VerificationStatus, entity.PublicationStatus, entity.SendPushOnPublish, entity.NotificationSentAt };
+        var actorId = adminAuthService.GetCurrentUserId(User);
 
         entity.PublicId = model.PublicId.Trim();
         entity.Slug = model.Slug.Trim();
         entity.OutbreakId = model.OutbreakId;
         entity.CountryId = model.CountryId;
+        entity.PathogenId = model.PathogenId;
         entity.Title = model.Title.Trim();
         entity.Excerpt = model.Excerpt.Trim();
         entity.Content = model.Content.Trim();
@@ -163,9 +198,10 @@ public class AdminArticlesController(
         entity.PublicationDate = model.PublicationDate;
         entity.LastVerifiedDate = model.LastVerifiedDate;
         entity.CoverImageUrl = model.CoverImageUrl?.Trim();
+        entity.SendPushOnPublish = model.SendPushOnPublish;
         entity.PublishedAt = model.PublicationStatus == "published" ? entity.PublishedAt ?? DateTime.UtcNow : null;
         entity.UpdatedAt = DateTime.UtcNow;
-        entity.UpdatedBy = adminAuthService.GetCurrentUserId(User);
+        entity.UpdatedBy = actorId;
 
         entity.ArticleSources.Clear();
         entity.Tags.Clear();
@@ -173,7 +209,41 @@ public class AdminArticlesController(
         ApplyTags(entity, model.TagsCsv);
         await dbContext.SaveChangesAsync();
         await auditLogService.LogAsync(HttpContext, "update", "article", entity.Id, entity.PublicId, oldValues, entity);
+        await TrySendAutomaticPushAsync(entity, actorId);
 
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost("/admin/articles/{id:guid}/send-push")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> SendPush(Guid id, [FromForm] bool confirmResend = false)
+    {
+        var entity = await dbContext.Articles.FirstOrDefaultAsync(x => x.Id == id);
+        if (entity is null) return NotFound();
+
+        if (entity.PublicationStatus != "published" || entity.VerificationStatus != "verified")
+        {
+            TempData["ErrorMessage"] = "Push notification sadece verified + published haberler icin gonderilebilir.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        if (entity.NotificationSendCount > 0 && !confirmResend)
+        {
+            TempData["ErrorMessage"] = "Notification was already sent. Send again?";
+            return RedirectToAction(nameof(Index));
+        }
+
+        var actorId = adminAuthService.GetCurrentUserId(User);
+        await mobileNotificationService.SendArticleNotificationAsync(entity, actorId);
+        await auditLogService.LogAsync(HttpContext, "send_push", "article", entity.Id, entity.PublicId, null, new
+        {
+            entity.PublicId,
+            entity.Title,
+            entity.NotificationSendCount,
+            entity.LastNotificationSentAt
+        });
+
+        TempData["StatusMessage"] = "Push notification sent.";
         return RedirectToAction(nameof(Index));
     }
 
@@ -211,6 +281,21 @@ public class AdminArticlesController(
             .ThenBy(x => x.Name)
             .Select(x => new SelectListItem($"{x.Organization} - {x.Name}", x.Id.ToString()))
             .ToListAsync();
+
+        model.AvailablePathogens = await dbContext.Pathogens
+            .Where(x => x.IsActive)
+            .OrderBy(x => x.SortOrder)
+            .ThenBy(x => x.DisplayName)
+            .Select(x => new SelectListItem(x.DisplayName, x.Id.ToString()))
+            .ToListAsync();
+
+        if (model.PathogenId is null)
+        {
+            model.PathogenId = await dbContext.Pathogens
+                .Where(x => x.IsActive && x.Slug == "hantavirus")
+                .Select(x => (Guid?)x.Id)
+                .FirstOrDefaultAsync();
+        }
     }
 
     private async Task ApplyArticleSourcesAsync(Article article, IEnumerable<Guid> selectedSourceIds)
@@ -227,9 +312,9 @@ public class AdminArticlesController(
         }).ToList();
     }
 
-    private static void ApplyTags(Article article, string tagsCsv)
+    private static void ApplyTags(Article article, string? tagsCsv)
     {
-        var tags = tagsCsv.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
+        var tags = (tagsCsv ?? string.Empty).Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
             .Distinct(StringComparer.OrdinalIgnoreCase);
 
         article.Tags = tags.Select(tag => new ArticleTag
@@ -237,5 +322,19 @@ public class AdminArticlesController(
             ArticleId = article.Id,
             Tag = tag
         }).ToList();
+    }
+
+    private async Task TrySendAutomaticPushAsync(Article article, Guid? actorId)
+    {
+        if (!article.SendPushOnPublish ||
+            article.NotificationSentAt.HasValue ||
+            article.PublicationStatus != "published" ||
+            article.VerificationStatus != "verified")
+        {
+            return;
+        }
+
+        await mobileNotificationService.SendArticleNotificationAsync(article, actorId);
+        TempData["StatusMessage"] = "Article saved and push notification sent.";
     }
 }
