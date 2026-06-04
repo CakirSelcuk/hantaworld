@@ -5,14 +5,14 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import LiveTicker from '@/components/dashboard/LiveTicker';
 import HeroStats from '@/components/dashboard/HeroStats';
-import GlobalStatsTrendChart from '@/components/dashboard/GlobalStatsTrendChart';
 import CountryWatchlist from '@/components/dashboard/CountryWatchlist';
 import LatestReports from '@/components/dashboard/LatestReports';
 import AlertSignup from '@/components/dashboard/AlertSignup';
 import SocialIntelligence from '@/components/dashboard/SocialIntelligence';
 import MapWrapper from '@/components/map/MapWrapper';
+import MultiPathogenCaseTrendChart from '@/components/pathogens/MultiPathogenCaseTrendChart';
 import PathogenCard from '@/components/pathogens/PathogenCard';
-import { getArticles, getCountryWatchlist, getGlobalStats, getGlobalStatsTrend, getOutbreaks, getPathogens, getSocialTrends, getTickerItems } from '@/lib/data';
+import { getArticles, getCountryWatchlist, getGlobalStats, getGlobalStatsTrend, getOutbreaks, getPathogens, getPathogenStatsTrend, getSocialTrends, getTickerItems } from '@/lib/data';
 import type { GlobalStatsTrendPoint } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
@@ -59,6 +59,7 @@ export default async function HomePage() {
   const globalStats = await getGlobalStats();
   const globalStatsTrend = await getGlobalStatsTrend();
   const pathogens = await getPathogens();
+  const pathogenStatsTrend = await getPathogenStatsTrend();
   const displayStats = {
     ...globalStats,
     growthRate7d: calculateCaseChange7d(globalStatsTrend),
@@ -149,7 +150,7 @@ export default async function HomePage() {
 
         <hr className="section-divider" style={{ margin: '0 1.5rem' }} />
 
-        <GlobalStatsTrendChart trend={globalStatsTrend} />
+        <MultiPathogenCaseTrendChart trend={pathogenStatsTrend} />
 
         <hr className="section-divider" style={{ margin: '0 1.5rem' }} />
 

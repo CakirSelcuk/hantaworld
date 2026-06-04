@@ -3,16 +3,17 @@ import Link from 'next/link';
 import { AlertCircle, CheckCircle, Clock, ExternalLink, Filter } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import { getArticles, getArticlesByPathogen } from '@/lib/data';
+import { getArticles, getArticlesByPathogen, getPathogens } from '@/lib/data';
+import type { Article } from '@/lib/types';
 import { timeAgo } from '@/lib/utils';
 
 export const metadata: Metadata = {
   title: 'Intelligence Feed',
-  description: 'Verified hantavirus outbreak reports, scientific research, travel advisories, and public health updates from WHO, CDC, ECDC and peer-reviewed sources.',
+  description: 'Verified outbreak reports, pathogen updates, scientific research, travel advisories, and public health intelligence from source-attributed records.',
   alternates: { canonical: 'https://www.hantaworld.com/news' },
   openGraph: {
-    title: 'Hantavirus Intelligence Feed',
-    description: 'Verified hantavirus outbreak reports and public health updates from HantaWorld.',
+    title: 'HantaWorld Intelligence Feed',
+    description: 'Verified outbreak reports and source-attributed public health updates from HantaWorld.',
     url: 'https://www.hantaworld.com/news',
     type: 'website',
   },
@@ -36,10 +37,37 @@ function VerificationBadge({ status }: { status: string }) {
   return <span className="badge-unverified" style={styles}><AlertCircle size={9} /> UNVERIFIED</span>;
 }
 
+function PathogenBadge({ article }: { article: Article }) {
+  if (!article.pathogen) return null;
+
+  return (
+    <Link
+      href={`/news?pathogen=${article.pathogen.slug}`}
+      style={{
+        fontFamily: 'var(--font-mono)',
+        fontSize: '0.58rem',
+        fontWeight: 700,
+        color: article.pathogen.color,
+        background: `${article.pathogen.color}14`,
+        padding: '0.13rem 0.45rem',
+        borderRadius: 999,
+        border: `1px solid ${article.pathogen.color}34`,
+        textDecoration: 'none',
+      }}
+    >
+      {article.pathogen.displayName}
+    </Link>
+  );
+}
+
 export default async function NewsPage({ searchParams }: { searchParams?: Promise<{ pathogen?: string }> }) {
   const resolvedSearchParams = searchParams ? await searchParams : {};
   const pathogenFilter = typeof resolvedSearchParams.pathogen === 'string' ? resolvedSearchParams.pathogen : undefined;
-  const articles = pathogenFilter ? await getArticlesByPathogen(pathogenFilter) : await getArticles();
+  const [pathogens, articles] = await Promise.all([
+    getPathogens(),
+    pathogenFilter ? getArticlesByPathogen(pathogenFilter) : getArticles(),
+  ]);
+  const selectedPathogen = pathogenFilter ? pathogens.find((pathogen) => pathogen.slug === pathogenFilter) : undefined;
 
   return (
     <>
@@ -62,7 +90,7 @@ export default async function NewsPage({ searchParams }: { searchParams?: Promis
             </p>
             {pathogenFilter && (
               <p style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '0.68rem', marginTop: '0.75rem' }}>
-                Filtered by pathogen/category: {pathogenFilter}
+                Filtered by pathogen/category: {selectedPathogen?.displayName || pathogenFilter}
               </p>
             )}
           </div>
@@ -70,13 +98,33 @@ export default async function NewsPage({ searchParams }: { searchParams?: Promis
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '2rem', flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--text-muted)', marginRight: '0.5rem' }}>
               <Filter size={13} />
-              <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem' }}>Filter:</span>
+              <span style={{ fontFamily: 'var(--font-ui)', fontSize: '0.72rem' }}>Pathogen filter:</span>
             </div>
-            {['All', ...Object.values(CATEGORY_META).map((meta) => meta.label)].map((label) => (
-              <button key={label} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', padding: '0.3rem 0.75rem', borderRadius: '5px', border: label === 'All' ? '1px solid rgba(59,130,246,0.4)' : '1px solid var(--border-glass)', background: label === 'All' ? 'rgba(59,130,246,0.12)' : 'transparent', color: label === 'All' ? '#93c5fd' : 'var(--text-muted)', cursor: 'pointer' }}>
-                {label}
-              </button>
-            ))}
+            <Link href="/news" style={{ fontFamily: 'var(--font-mono)', fontSize: '0.62rem', padding: '0.3rem 0.75rem', borderRadius: '999px', border: !pathogenFilter ? '1px solid rgba(59,130,246,0.44)' : '1px solid var(--border-glass)', background: !pathogenFilter ? 'rgba(59,130,246,0.12)' : 'transparent', color: !pathogenFilter ? '#93c5fd' : 'var(--text-muted)', textDecoration: 'none' }}>
+              All
+            </Link>
+            {pathogens.map((pathogen) => {
+              const active = pathogen.slug === pathogenFilter;
+
+              return (
+                <Link
+                  key={pathogen.slug}
+                  href={`/news?pathogen=${pathogen.slug}`}
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.62rem',
+                    padding: '0.3rem 0.75rem',
+                    borderRadius: '999px',
+                    border: active ? `1px solid ${pathogen.color}70` : `1px solid ${pathogen.color}28`,
+                    background: active ? `${pathogen.color}18` : 'transparent',
+                    color: active ? pathogen.color : 'var(--text-muted)',
+                    textDecoration: 'none',
+                  }}
+                >
+                  {pathogen.displayName}
+                </Link>
+              );
+            })}
           </div>
 
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', padding: '0.9rem 1.1rem', background: 'rgba(59,130,246,0.05)', border: '1px solid rgba(59,130,246,0.12)', borderRadius: '10px', marginBottom: '2rem' }}>
@@ -103,6 +151,7 @@ export default async function NewsPage({ searchParams }: { searchParams?: Promis
                         {category.label}
                       </span>
                       <VerificationBadge status={article.verificationStatus} />
+                      <PathogenBadge article={article} />
                       {article.source && (
                         <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: 'var(--text-muted)', borderLeft: '1px solid var(--border-subtle)', paddingLeft: '0.5rem' }}>
                           {article.source.organization}

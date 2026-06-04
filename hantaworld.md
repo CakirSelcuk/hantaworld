@@ -3552,3 +3552,40 @@ Notlar:
 - Multi-line chart UI bu fazda eklenmedi.
 - Public `/hantavirus` guide sayfasi korunur; `/pathogens/hantavirus` outbreak intelligence profili olarak ayrilir.
 - Stats olmayan category-like kayitlarda (`official-updates`, `weekly-risk-brief`) sayfalar bos/opsiyonel stats durumunu guvenli gosterir.
+
+## 2026-06-04 - Phase 1B-2 Multi-Pathogen Trend and News Filters
+
+Kurallar:
+
+- Push yapilmayacak.
+- Commit yapilmayacak.
+- Deploy yapilmayacak.
+- Setup endpoint calistirilmayacak.
+- Production env degistirilmeyecek.
+- Backend degistirilmeyecek.
+- Fake production chart/data eklenmeyecek.
+
+Yapilan frontend guncellemeleri:
+
+- Ana sayfaya multi-pathogen reported cases trend chart eklendi.
+  - API: `GET /api/pathogen-stats/trend`
+  - Her pathogen icin API rengini kullanan ayri cizgi olusturur.
+  - Bu fazda sadece reported cases gosterilir; deaths ana sayfa chartinda gosterilmez.
+  - Veri yoksa `No verified data available yet.` bos durumu gosterilir.
+- `/pathogens/[slug]` detay sayfasina tek pathogen reported cases trend chart eklendi.
+  - API: `GET /api/pathogens/{slug}/stats/trend`
+  - Veri yoksa `No verified trend data available yet.` bos durumu gosterilir.
+- `/news` sayfasina dinamik pathogen/category filtre chipleri eklendi.
+  - `All` -> `/news`
+  - Pathogen chip -> `/news?pathogen={slug}`
+  - Aktif chip API rengini kullanarak vurgulanir.
+- Intelligence Feed kartlarina pathogen/category badge gosterimi eklendi.
+  - `/news`
+  - Homepage `LatestReports`
+  - `/pathogens/[slug]` related intelligence kartlari
+- `/news` metadata dili Hantavirus-only olmaktan global outbreak/pathogen intelligence diline guncellendi.
+
+Notlar:
+
+- Chartlar eksik tarih/degerlerde fake `0` uretmez; eksik noktalar null olarak kalir.
+- Multi-line chart sadece mevcut API history kayitlarina gore kendini otomatik genisletir.

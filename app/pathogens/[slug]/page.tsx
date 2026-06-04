@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Activity, ArrowLeft, ArrowRight, Calendar, ExternalLink, Globe2, ShieldCheck, Skull, Users } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import PathogenCaseTrendChart from '@/components/pathogens/PathogenCaseTrendChart';
 import { getArticlesByPathogen, getPathogenBySlug, getPathogenTrend } from '@/lib/data';
 import type { Article, Pathogen, PathogenStats } from '@/lib/types';
 import { formatDate, formatNumber } from '@/lib/utils';
@@ -120,6 +121,8 @@ export default async function PathogenDetailPage({ params }: { params: Promise<{
                 </div>
               )}
 
+              <PathogenCaseTrendChart trend={trend} color={pathogen.color} />
+
               <div className="glass-card" style={{ padding: '1.1rem', marginBottom: '1.25rem' }}>
                 <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', color: 'var(--text-primary)', marginBottom: '0.8rem' }}>
                   Source and verification
@@ -227,6 +230,11 @@ function RelatedArticle({ article, accent }: { article: Article; accent: string 
   return (
     <Link href={`/news/${article.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
       <article style={{ padding: '0.85rem', border: '1px solid var(--border-subtle)', borderLeft: `3px solid ${accent}`, borderRadius: 10, background: 'rgba(15,23,42,0.42)' }}>
+        {article.pathogen && (
+          <span style={{ display: 'inline-flex', marginBottom: '0.45rem', fontFamily: 'var(--font-mono)', fontSize: '0.56rem', fontWeight: 700, color: article.pathogen.color, background: `${article.pathogen.color}14`, padding: '0.12rem 0.42rem', borderRadius: 999, border: `1px solid ${article.pathogen.color}34` }}>
+            {article.pathogen.displayName}
+          </span>
+        )}
         <h3 style={{ fontFamily: 'var(--font-ui)', color: 'var(--text-primary)', fontSize: '0.82rem', lineHeight: 1.45, marginBottom: '0.45rem' }}>
           {article.title}
         </h3>

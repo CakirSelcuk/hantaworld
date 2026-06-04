@@ -559,6 +559,14 @@ export async function getPathogenTrend(slug: string): Promise<PathogenTrendPoint
     .sort((a, b) => a.date.localeCompare(b.date));
 }
 
+export async function getPathogenStatsTrend(): Promise<PathogenTrendPoint[]> {
+  const trend = await fetchApi<ApiPathogenTrendPoint[]>('/api/pathogen-stats/trend');
+  return (trend ?? [])
+    .map(mapPathogenTrendPoint)
+    .filter((point): point is PathogenTrendPoint => Boolean(point))
+    .sort((a, b) => a.date.localeCompare(b.date) || a.pathogenDisplayName.localeCompare(b.pathogenDisplayName));
+}
+
 export async function getSources(): Promise<Source[]> {
   const sources = await fetchApi<ApiSource[]>('/api/sources');
   const liveSources = (sources ?? []).map(mapSource);

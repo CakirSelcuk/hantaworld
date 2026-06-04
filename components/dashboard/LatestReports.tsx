@@ -41,6 +41,16 @@ function VerificationBadge({ status }: { status: string }) {
   return <span className="badge-base badge-unverified"><AlertCircle size={10} /> UNVERIFIED</span>;
 }
 
+function PathogenBadge({ article }: { article: Article }) {
+  if (!article.pathogen) return null;
+
+  return (
+    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', fontWeight: 700, color: article.pathogen.color, background: `${article.pathogen.color}14`, padding: '0.13rem 0.45rem', borderRadius: 999, border: `1px solid ${article.pathogen.color}34` }}>
+      {article.pathogen.displayName}
+    </span>
+  );
+}
+
 export default function LatestReports({ articles }: { articles: Article[] }) {
   const [featured, ...rest] = articles;
 
@@ -80,6 +90,7 @@ export default function LatestReports({ articles }: { articles: Article[] }) {
                   {CATEGORY_LABELS[featured.category]}
                 </span>
                 <VerificationBadge status={featured.verificationStatus} />
+                <PathogenBadge article={featured} />
                 {featured.source && (
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', color: getSourceAccent(featured), padding: '0.15rem 0.45rem', border: `1px solid ${getSourceAccent(featured)}30`, borderRadius: 999 }}>
                     {featured.source.organization}
@@ -123,6 +134,7 @@ export default function LatestReports({ articles }: { articles: Article[] }) {
                     {CATEGORY_LABELS[article.category]}
                   </span>
                   <VerificationBadge status={article.verificationStatus} />
+                  <PathogenBadge article={article} />
                 </div>
                 <h3 style={{ fontFamily: 'var(--font-ui)', fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-primary)', lineHeight: 1.4, marginBottom: '0.5rem' }}>
                   {article.title}
