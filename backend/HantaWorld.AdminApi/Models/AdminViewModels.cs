@@ -167,6 +167,19 @@ public class PathogenStatsFormViewModel
 
     public string? PathogenSlug { get; set; }
     public string? PathogenDisplayName { get; set; }
+    public string? PathogenColor { get; set; }
+    public DateTime? CurrentCreatedAt { get; set; }
+    public DateTime? CurrentUpdatedAt { get; set; }
+    public int? CurrentReportedCases { get; set; }
+    public int? CurrentTotalDeaths { get; set; }
+    public int? CurrentAffectedCountries { get; set; }
+    public int? CurrentActiveOutbreaks { get; set; }
+    public string? CurrentSourceInstitution { get; set; }
+    public string? CurrentSourceUrl { get; set; }
+    public DateOnly? CurrentOfficialPublishedAt { get; set; }
+    public DateOnly? CurrentLastVerifiedAt { get; set; }
+    public string? CurrentNotes { get; set; }
+    public string? PublicPageUrl { get; set; }
 
     [Range(0, int.MaxValue)]
     public int? ReportedCases { get; set; }
@@ -196,6 +209,20 @@ public class PathogenStatsFormViewModel
     public string? Notes { get; set; }
 
     public List<SelectListItem> AvailablePathogens { get; set; } = new();
+    public List<PathogenStatHistoryRowViewModel> LatestHistory { get; set; } = new();
+}
+
+public class PathogenStatHistoryRowViewModel
+{
+    public DateOnly SnapshotDate { get; set; }
+    public int? ReportedCases { get; set; }
+    public int? TotalDeaths { get; set; }
+    public int? AffectedCountries { get; set; }
+    public int? ActiveOutbreaks { get; set; }
+    public string? SourceInstitution { get; set; }
+    public string? SourceUrl { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 }
 
 public class MobilePushDebugViewModel

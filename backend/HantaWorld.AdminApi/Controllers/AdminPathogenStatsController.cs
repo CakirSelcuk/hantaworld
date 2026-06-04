@@ -36,6 +36,7 @@ public class AdminPathogenStatsController(
             PathogenId = pathogen.Id,
             PathogenSlug = pathogen.Slug,
             PathogenDisplayName = pathogen.DisplayName,
+            PathogenColor = pathogen.Color,
             ReportedCases = stats?.ReportedCases,
             TotalDeaths = stats?.TotalDeaths,
             AffectedCountries = stats?.AffectedCountries,
@@ -45,8 +46,11 @@ public class AdminPathogenStatsController(
             OfficialPublishedAt = stats?.OfficialPublishedAt,
             LastVerifiedAt = stats?.LastVerifiedAt,
             Notes = stats?.Notes,
-            AvailablePathogens = await GetPathogenSelectListAsync(pathogen.Id)
+            PublicPageUrl = $"/pathogens/{pathogen.Slug}",
+            AvailablePathogens = await GetPathogenSelectListAsync(pathogen.Id),
+            LatestHistory = await GetHistoryRowsAsync(pathogen.Id)
         };
+        ApplyCurrentStats(model, stats);
 
         return View(model);
     }
@@ -65,7 +69,7 @@ public class AdminPathogenStatsController(
 
         if (!ModelState.IsValid || pathogen is null)
         {
-            model.AvailablePathogens = await GetPathogenSelectListAsync(model.PathogenId);
+            await HydrateModelAsync(model, pathogen);
             return View(model);
         }
 
@@ -121,6 +125,26 @@ public class AdminPathogenStatsController(
         return RedirectToAction(nameof(Index), new { pathogenSlug = pathogen.Slug });
     }
 
+    private async Task HydrateModelAsync(PathogenStatsFormViewModel model, Pathogen? pathogen)
+    {
+        if (pathogen is not null)
+        {
+            var stats = await dbContext.PathogenStats
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.PathogenId == pathogen.Id);
+
+            model.PathogenId = pathogen.Id;
+            model.PathogenSlug = pathogen.Slug;
+            model.PathogenDisplayName = pathogen.DisplayName;
+            model.PathogenColor = pathogen.Color;
+            ApplyCurrentStats(model, stats);
+            model.PublicPageUrl = $"/pathogens/{pathogen.Slug}";
+            model.LatestHistory = await GetHistoryRowsAsync(pathogen.Id);
+        }
+
+        model.AvailablePathogens = await GetPathogenSelectListAsync(pathogen?.Id ?? model.PathogenId);
+    }
+
     private async Task<Pathogen?> ResolveSelectedPathogenAsync(string? pathogenSlug)
     {
         var normalizedSlug = string.IsNullOrWhiteSpace(pathogenSlug)
@@ -148,6 +172,44 @@ public class AdminPathogenStatsController(
             .ThenBy(x => x.DisplayName)
             .Select(x => new SelectListItem(x.DisplayName, x.Slug, x.Id == selectedPathogenId))
             .ToListAsync();
+    }
+
+    private async Task<List<PathogenStatHistoryRowViewModel>> GetHistoryRowsAsync(Guid pathogenId)
+    {
+        return await dbContext.PathogenStatHistory
+            .AsNoTracking()
+            .Where(x => x.PathogenId == pathogenId)
+            .OrderByDescending(x => x.SnapshotDate)
+            .ThenByDescending(x => x.UpdatedAt)
+            .Take(20)
+            .Select(x => new PathogenStatHistoryRowViewModel
+            {
+                SnapshotDate = x.SnapshotDate,
+                ReportedCases = x.ReportedCases,
+                TotalDeaths = x.TotalDeaths,
+                AffectedCountries = x.AffectedCountries,
+                ActiveOutbreaks = x.ActiveOutbreaks,
+                SourceInstitution = x.SourceInstitution,
+                SourceUrl = x.SourceUrl,
+                CreatedAt = x.CreatedAt,
+                UpdatedAt = x.UpdatedAt
+            })
+            .ToListAsync();
+    }
+
+    private static void ApplyCurrentStats(PathogenStatsFormViewModel model, PathogenStats? stats)
+    {
+        model.CurrentReportedCases = stats?.ReportedCases;
+        model.CurrentTotalDeaths = stats?.TotalDeaths;
+        model.CurrentAffectedCountries = stats?.AffectedCountries;
+        model.CurrentActiveOutbreaks = stats?.ActiveOutbreaks;
+        model.CurrentSourceInstitution = stats?.SourceInstitution;
+        model.CurrentSourceUrl = stats?.SourceUrl;
+        model.CurrentOfficialPublishedAt = stats?.OfficialPublishedAt;
+        model.CurrentLastVerifiedAt = stats?.LastVerifiedAt;
+        model.CurrentNotes = stats?.Notes;
+        model.CurrentCreatedAt = stats?.CreatedAt;
+        model.CurrentUpdatedAt = stats?.UpdatedAt;
     }
 
     private static void ApplyStatsFields(PathogenStats stats, PathogenStatsFormViewModel model, DateTime now, Guid? actorId)
