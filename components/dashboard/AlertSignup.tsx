@@ -17,7 +17,7 @@ export default function AlertSignup() {
             </div>
 
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.45rem,3vw,2.15rem)', fontWeight: 700, letterSpacing: '-0.025em', marginBottom: '0.85rem' }}>
-              Get Hantavirus Outbreak Alerts
+              Get Outbreak Intelligence Alerts
             </h2>
 
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.75, maxWidth: 680 }}>
