@@ -11,7 +11,8 @@ import SocialIntelligence from '@/components/dashboard/SocialIntelligence';
 import MapWrapper from '@/components/map/MapWrapper';
 import MultiPathogenCaseTrendChart from '@/components/pathogens/MultiPathogenCaseTrendChart';
 import PathogenCard from '@/components/pathogens/PathogenCard';
-import { getArticles, getCountryWatchlist, getOutbreaks, getPathogens, getPathogenStatsTrend, getSocialTrends, getTickerItems } from '@/lib/data';
+import { getArticles, getCountryWatchlist, getGlobalStatsTrend, getOutbreaks, getPathogens, getPathogenStatsTrend, getSocialTrends, getTickerItems } from '@/lib/data';
+import type { GlobalStatsTrendPoint, PathogenTrendPoint } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,6 +29,17 @@ export const metadata: Metadata = {
   },
 };
 
+function mapLegacyGlobalTrendToHantavirusTrend(trend: GlobalStatsTrendPoint[]): PathogenTrendPoint[] {
+  return trend.map((point) => ({
+    date: point.date,
+    pathogenSlug: 'hantavirus',
+    pathogenDisplayName: 'Hantavirus',
+    pathogenColor: '#ef4444',
+    reportedCases: point.reportedCases,
+    totalDeaths: point.totalDeaths,
+  }));
+}
+
 export default async function HomePage() {
   const outbreaks = await getOutbreaks();
   const watchlist = await getCountryWatchlist(outbreaks);
@@ -35,6 +47,10 @@ export default async function HomePage() {
   const socialTrends = await getSocialTrends();
   const pathogens = await getPathogens();
   const pathogenStatsTrend = await getPathogenStatsTrend();
+  const legacyGlobalStatsTrend = await getGlobalStatsTrend();
+  const caseTrend = pathogenStatsTrend.length > 0
+    ? pathogenStatsTrend
+    : mapLegacyGlobalTrendToHantavirusTrend(legacyGlobalStatsTrend);
   const tickerItems = await getTickerItems();
 
   return (
@@ -111,12 +127,33 @@ export default async function HomePage() {
                 No active pathogen profiles are available from the live API yet.
               </div>
             )}
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 210px), 1fr))', gap: '0.8rem', marginTop: '1.25rem' }}>
+              {[
+                { label: 'Pathogen Profiles', value: pathogens.length, note: 'Active profiles and categories' },
+                { label: 'Mapped Records', value: outbreaks.length, note: 'Country-level outbreak entries' },
+                { label: 'Intelligence Reports', value: articles.length, note: 'Published source-attributed reports' },
+                { label: 'Trend Snapshots', value: caseTrend.length, note: 'Historical chart points available' },
+              ].map((item) => (
+                <div key={item.label} className="glass-card" style={{ padding: '1rem', borderColor: 'rgba(14,165,233,0.18)' }}>
+                  <div style={{ color: '#bae6fd', fontFamily: 'var(--font-display)', fontSize: '1.7rem', fontWeight: 750, marginBottom: '0.25rem' }}>
+                    {item.value}
+                  </div>
+                  <div style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-ui)', fontWeight: 650, fontSize: '0.82rem', marginBottom: '0.25rem' }}>
+                    {item.label}
+                  </div>
+                  <div style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '0.62rem' }}>
+                    {item.note}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
         <hr className="section-divider" style={{ margin: '0 1.5rem' }} />
 
-        <MultiPathogenCaseTrendChart trend={pathogenStatsTrend} />
+        <MultiPathogenCaseTrendChart trend={caseTrend} />
 
         <hr className="section-divider" style={{ margin: '0 1.5rem' }} />
 

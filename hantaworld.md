@@ -3872,3 +3872,26 @@ Kapsam:
 - Sayi onerileri kompakt hale getirildi; dogrulanmis sayi yoksa sayi uretilmez.
 - `Raporu Taslak Olarak Kaydet` butonu artik dogrudan kaydetmez; once `Taslak Raporu Kontrol Et` modalini acar.
 - Modal su an read-only onay ekranidir; admin `Onayla ve Taslak Kaydet` dediginde taslak olusur.
+
+## 2026-06-05 - Homepage Multi-Pathogen Hotfix
+
+Kurallar:
+
+- Push yapilmadi.
+- Commit yapilmadi.
+- Deploy yapilmadi.
+- Setup endpoint calistirilmadi.
+- Production environment degiskenleri degistirilmedi.
+- Backend ve DB degistirilmedi.
+- Public frontend icinde sadece homepage davranisi duzeltildi.
+
+Kapsam:
+
+- Hantavirus'a ozel buyuk legacy `HeroStats` snapshot homepage'e geri getirilmedi.
+- Homepage icin genel platform snapshot kartlari eklendi:
+  - Pathogen Profiles
+  - Mapped Records
+  - Intelligence Reports
+  - Trend Snapshots
+- `MultiPathogenCaseTrendChart` icin yeni multi-patojen history verisi bos ise legacy global stats trend Hantavirus cizgisi olarak fallback kullanilir.
+- `/pathogens/hantavirus` detay sayfasindaki Hantavirus istatistikleri korunur.
