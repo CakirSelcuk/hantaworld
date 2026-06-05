@@ -3834,3 +3834,41 @@ Guvenlik kararlari:
 - Belirsiz numeric veri varsa `Guncel ve dogrulanmis numerik veri bulunamadi.` mesaji kullanilir.
 - Kaynak basligi, tarih ve snippet bilgileri rapor taslagini zenginlestirmek icin kullanilir.
 - Kaynaklardan biri acilamazsa sayfa hata vermez; kaynak `Kaynaga ulasilamadi.` olarak listelenir.
+
+## 2026-06-05 - Phase 1G Sonrasi Kaynakli Virus Taramasi Sadelestirme
+
+Kurallar:
+
+- Push yapilmadi.
+- Commit yapilmadi.
+- Deploy yapilmadi.
+- Setup endpoint calistirilmadi.
+- Production environment degiskenleri degistirilmedi.
+- DB schema degistirilmedi.
+- Public siteye dokunulmadi.
+- `pathogen_stats` ve `pathogen_stat_history` guncellenmedi.
+- Rapor olusturma akisi draft + pending olarak kaldi.
+- Push bildirimi gonderilmez.
+
+Kapsam:
+
+- `/admin/pathogen-research` teknik kaynak logu gibi gorunmek yerine `Salgın Raporu Taslağı` odakli hale getirildi.
+- Ana cikti `/admin/articles/create` formundaki alan sirasina yaklastirildi:
+  - Rapor Basligi
+  - Rapor ID notu
+  - URL Slug
+  - Kart Kategorisi
+  - Virus / Kategori
+  - Dogrulama
+  - Yayin Durumu
+  - Okuma
+  - Ozet
+  - Icerik
+  - Kaynak Kurum
+  - Kaynak Linki
+  - Yayin Tarihi
+- Uretilen rapor basligi, ozet ve icerik Ingilizce olacak sekilde guncellendi.
+- Kaynak kontrolu sade ve collapsible bolume tasindi.
+- Sayi onerileri kompakt hale getirildi; dogrulanmis sayi yoksa sayi uretilmez.
+- `Raporu Taslak Olarak Kaydet` butonu artik dogrudan kaydetmez; once `Taslak Raporu Kontrol Et` modalini acar.
+- Modal su an read-only onay ekranidir; admin `Onayla ve Taslak Kaydet` dediginde taslak olusur.

@@ -68,7 +68,7 @@ public class AdminPathogenResearchController(
             Category = model.Output.ReportType,
             VerificationStatus = "pending",
             PublicationStatus = "draft",
-            ReadingTimeMin = EstimateReadingTime(model.Output.ReportContent),
+            ReadingTimeMin = model.Output.ReadingTimeMin,
             ConfidenceScore = 0,
             VerificationNotes = model.Output.VerificationNote.Trim(),
             PrimarySourceUrl = string.IsNullOrWhiteSpace(model.Output.SourceUrl) ? null : model.Output.SourceUrl.Trim(),
@@ -240,10 +240,10 @@ public class AdminPathogenResearchController(
         var sections = new List<string>
         {
             output.ReportContent.Trim(),
-            $"Kaynak Kurum: {output.SourceInstitution}".Trim(),
-            string.IsNullOrWhiteSpace(output.SourceUrl) ? "Kaynak Linki: Kaynaklardan kontrol et." : $"Kaynak Linki: {output.SourceUrl.Trim()}",
-            $"Doğrulama Notu: {output.VerificationNote.Trim()}",
-            $"Admin Kontrol Notu: {output.AdminNote.Trim()}"
+            $"Source Institution: {output.SourceInstitution}".Trim(),
+            string.IsNullOrWhiteSpace(output.SourceUrl) ? "Primary Source URL: Review source list before publication." : $"Primary Source URL: {output.SourceUrl.Trim()}",
+            $"Verification Note: {output.VerificationNote.Trim()}",
+            $"Admin Review Note: {output.AdminNote.Trim()}"
         };
 
         return string.Join(Environment.NewLine + Environment.NewLine, sections.Where(x => !string.IsNullOrWhiteSpace(x)));

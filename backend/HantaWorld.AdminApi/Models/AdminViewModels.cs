@@ -247,10 +247,18 @@ public class PathogenResearchViewModel
 
 public class PathogenResearchOutputViewModel
 {
+    public string PublicIdNote { get; set; } = string.Empty;
+    public string SuggestedSlug { get; set; } = string.Empty;
     public string ReportTitle { get; set; } = string.Empty;
     public string ReportSummary { get; set; } = string.Empty;
     public string ReportContent { get; set; } = string.Empty;
     public string ReportType { get; set; } = "outbreak-report";
+    public string ReportTypeLabel { get; set; } = string.Empty;
+    public string VerificationStatus { get; set; } = "pending";
+    public string VerificationStatusLabel { get; set; } = string.Empty;
+    public string PublicationStatus { get; set; } = "draft";
+    public string PublicationStatusLabel { get; set; } = string.Empty;
+    public int ReadingTimeMin { get; set; } = 3;
     public string SourceInstitution { get; set; } = string.Empty;
     public string SourceUrl { get; set; } = string.Empty;
     public DateOnly PublicationDate { get; set; }

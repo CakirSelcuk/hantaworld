@@ -7,8 +7,7 @@
     <div>
         <h1 class="h3 mb-1">Kaynaklı Virüs Taraması</h1>
         <div class="text-muted small">
-            Resmi kaynaklara göre sayı önerisi ve rapor taslağı hazırlar. Sayılar otomatik kaydedilmez.
-            Raporu sen onaylarsan Salgın Raporları içine taslak olarak eklenir.
+            Seçtiğin virüs için resmi kaynakları kontrol eder ve Salgın Raporları ekranına uygun İngilizce taslak hazırlar.
         </div>
     </div>
     <div class="d-flex gap-2">
@@ -30,7 +29,7 @@
 @if (!string.IsNullOrWhiteSpace(Model.CreatedArticleEditUrl))
 {
     <div class="alert alert-success">
-        Rapor taslak olarak oluşturuldu.
+        Taslak rapor oluşturuldu.
         <a href="@Model.CreatedArticleEditUrl" class="alert-link">Düzenlemek için aç</a>.
     </div>
 }
@@ -44,8 +43,7 @@
 }
 
 <div class="alert alert-warning small">
-    Sağlık verileri kritik olduğu için sonuçları yayınlamadan önce kaynak linklerinden kontrol et.
-    Bu ekran sayısal veriyi otomatik olarak Salgın İstatistikleri tablosuna kaydetmez ve raporu otomatik yayınlamaz.
+    Sayılar otomatik kaydedilmez. Rapor sadece sen onaylarsan taslak olarak oluşturulur.
 </div>
 
 <form method="post" class="card shadow-sm mb-4">
@@ -64,7 +62,7 @@
                     <input asp-for="SearchRecentOnly" class="form-check-input" />
                     <label asp-for="SearchRecentOnly" class="form-check-label">Son güncel gelişmeleri tara</label>
                 </div>
-                <div class="form-text">Sadece önceden tanımlı resmi kaynaklar taranır; otomatik yayın yapılmaz.</div>
+                <div class="form-text">Sadece önceden tanımlı resmi kaynaklar taranır.</div>
             </div>
             <div class="col-lg-2">
                 <label asp-for="DateFrom" class="form-label">Başlangıç</label>
@@ -91,199 +89,203 @@ else
 {
     var reachedSources = Model.Output.FetchedSources.Where(x => x.IsSuccess).ToList();
     var failedSources = Model.Output.FetchedSources.Where(x => !x.IsSuccess).ToList();
+    var statisticsLines = Model.Output.StatisticsText.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
 
-    <div class="row g-4">
-        <div class="col-12">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white">
-                    <div class="fw-semibold">Taranan Kaynaklar</div>
-                    <div class="text-muted small">Tarama sadece sistemde tanımlı resmi kaynak URL'leri üzerinden yapılır.</div>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-sm align-middle mb-0">
-                            <thead>
-                            <tr>
-                                <th>Kurum</th>
-                                <th>Link</th>
-                                <th>Not</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach (var source in Model.Output.Sources)
-                            {
-                                <tr>
-                                    <td>@source.Institution</td>
-                                    <td><a href="@source.Url" target="_blank" rel="noopener">@source.Url</a></td>
-                                    <td class="text-muted small">@source.Note</td>
-                                </tr>
-                            }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white">
+            <div class="fw-semibold">Salgın Raporu Taslağı</div>
+            <div class="text-muted small">Aşağıdaki alanlar Salgın Raporları formundaki sıraya göre hazırlanır. İçerik İngilizcedir.</div>
         </div>
+        <div class="card-body">
+            <dl class="row mb-0">
+                <dt class="col-md-3">Rapor Başlığı</dt>
+                <dd class="col-md-9">@Model.Output.ReportTitle</dd>
 
-        <div class="col-12">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white">
-                    <div class="fw-semibold">Ulaşılan Kaynaklar</div>
-                    <div class="text-muted small">Başlık, tarih ve kısa not otomatik çıkarılır; yayın öncesi kaynak linkinden doğrulanmalıdır.</div>
-                </div>
-                <div class="card-body">
+                <dt class="col-md-3">Rapor ID</dt>
+                <dd class="col-md-9">@Model.Output.PublicIdNote</dd>
+
+                <dt class="col-md-3">URL Slug</dt>
+                <dd class="col-md-9"><code>@Model.Output.SuggestedSlug</code></dd>
+
+                <dt class="col-md-3">Kart Kategorisi</dt>
+                <dd class="col-md-9">@Model.Output.ReportTypeLabel <span class="text-muted small">(@Model.Output.ReportType)</span></dd>
+
+                <dt class="col-md-3">Virüs / Kategori</dt>
+                <dd class="col-md-9">@Model.SelectedPathogenDisplayName</dd>
+
+                <dt class="col-md-3">Doğrulama</dt>
+                <dd class="col-md-9">@Model.Output.VerificationStatusLabel <span class="text-muted small">(@Model.Output.VerificationStatus)</span></dd>
+
+                <dt class="col-md-3">Yayın Durumu</dt>
+                <dd class="col-md-9">@Model.Output.PublicationStatusLabel <span class="text-muted small">(@Model.Output.PublicationStatus)</span></dd>
+
+                <dt class="col-md-3">Okuma</dt>
+                <dd class="col-md-9">@Model.Output.ReadingTimeMin min read</dd>
+
+                <dt class="col-md-3">Özet</dt>
+                <dd class="col-md-9">@Model.Output.ReportSummary</dd>
+
+                <dt class="col-md-3">İçerik</dt>
+                <dd class="col-md-9">
+                    <div class="border rounded p-3 bg-light small" style="white-space: pre-wrap;">@Model.Output.ReportContent</div>
+                </dd>
+
+                <dt class="col-md-3">Kaynak Kurum</dt>
+                <dd class="col-md-9">@Model.Output.SourceInstitution</dd>
+
+                <dt class="col-md-3">Kaynak Linki</dt>
+                <dd class="col-md-9">
+                    @if (string.IsNullOrWhiteSpace(Model.Output.SourceUrl))
+                    {
+                        <span class="text-muted">Kaynaklardan kontrol et.</span>
+                    }
+                    else
+                    {
+                        <a href="@Model.Output.SourceUrl" target="_blank" rel="noopener">@Model.Output.SourceUrl</a>
+                    }
+                </dd>
+
+                <dt class="col-md-3">Yayın Tarihi</dt>
+                <dd class="col-md-9">@Model.Output.PublicationDate.ToString("yyyy-MM-dd")</dd>
+            </dl>
+        </div>
+        <div class="card-footer d-flex align-items-center gap-2">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#draftConfirmModal">
+                Raporu Taslak Olarak Kaydet
+            </button>
+            <span class="text-muted small">Taslak + Beklemede olarak kaydedilir. Push gönderilmez, istatistik güncellenmez.</span>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white">
+            <div class="fw-semibold">Salgın İstatistikleri için sayı önerileri</div>
+            <div class="text-muted small">Bu bölüm yalnızca kontrol içindir; DB'ye kaydedilmez ve grafikleri güncellemez.</div>
+        </div>
+        <div class="card-body">
+            @if (statisticsLines.Length == 0)
+            {
+                <div class="text-muted">Doğrulanmış sayı bulunamadı.</div>
+            }
+            else
+            {
+                <ul class="mb-0">
+                    @foreach (var line in statisticsLines)
+                    {
+                        <li>@line</li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+
+    <details class="card shadow-sm mb-4">
+        <summary class="card-header bg-white fw-semibold" style="cursor: pointer;">Kaynak Kontrolü</summary>
+        <div class="card-body">
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <h2 class="h6">Ulaşılan kaynaklar</h2>
                     @if (reachedSources.Count == 0)
                     {
-                        <div class="text-muted">Resmi kaynaklara ulaşılamadı.</div>
+                        <div class="text-muted small">Resmi kaynaklara ulaşılamadı.</div>
                     }
                     else
                     {
-                        <div class="table-responsive">
-                            <table class="table table-sm align-middle mb-0">
-                                <thead>
-                                <tr>
-                                    <th>Kurum</th>
-                                    <th>Başlık</th>
-                                    <th>Tarih</th>
-                                    <th>Link</th>
-                                    <th>Kısa not</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach (var source in reachedSources)
-                                {
-                                    <tr>
-                                        <td>@source.Institution</td>
-                                        <td>@(source.Title ?? "Başlık çıkarılamadı")</td>
-                                        <td>@(source.PublishedDate ?? "Tarih bulunamadı")</td>
-                                        <td><a href="@source.Url" target="_blank" rel="noopener">Aç</a></td>
-                                        <td class="text-muted small">@((source.Snippet ?? "Kısa not çıkarılamadı."))</td>
-                                    </tr>
-                                }
-                                </tbody>
-                            </table>
-                        </div>
+                        <ul class="small">
+                            @foreach (var source in reachedSources)
+                            {
+                                <li>
+                                    <strong>@source.Institution:</strong>
+                                    @(source.Title ?? "Başlık çıkarılamadı")
+                                    <a href="@source.Url" target="_blank" rel="noopener">Aç</a>
+                                </li>
+                            }
+                        </ul>
                     }
                 </div>
-            </div>
-        </div>
-
-        <div class="col-12">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white">
-                    <div class="fw-semibold">Ulaşılamayan Kaynaklar</div>
-                    <div class="text-muted small">Kaynak hataları sayfayı durdurmaz; başarısız kaynaklar burada listelenir.</div>
-                </div>
-                <div class="card-body">
+                <div class="col-lg-6">
+                    <h2 class="h6">Ulaşılamayan kaynaklar</h2>
                     @if (failedSources.Count == 0)
                     {
-                        <div class="text-muted">Ulaşılamayan kaynak yok.</div>
+                        <div class="text-muted small">Ulaşılamayan kaynak yok.</div>
                     }
                     else
                     {
-                        <div class="table-responsive">
-                            <table class="table table-sm align-middle mb-0">
-                                <thead>
-                                <tr>
-                                    <th>Kurum</th>
-                                    <th>Link</th>
-                                    <th>Durum</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach (var source in failedSources)
-                                {
-                                    <tr>
-                                        <td>@source.Institution</td>
-                                        <td><a href="@source.Url" target="_blank" rel="noopener">@source.Url</a></td>
-                                        <td class="text-muted small">@(source.ErrorMessage ?? "Kaynağa ulaşılamadı.")</td>
-                                    </tr>
-                                }
-                                </tbody>
-                            </table>
-                        </div>
+                        <ul class="small">
+                            @foreach (var source in failedSources)
+                            {
+                                <li><strong>@source.Institution:</strong> @(source.ErrorMessage ?? "Kaynağa ulaşılamadı.")</li>
+                            }
+                        </ul>
                     }
                 </div>
-            </div>
-        </div>
-
-        <div class="col-12">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <div>
-                        <div class="fw-semibold">Bulunan Güncel Gelişme</div>
-                        <div class="text-muted small">Resmi kaynak başlıkları ve kısa notlardan oluşturulan admin taslağıdır.</div>
-                    </div>
-                    <button type="button" class="btn btn-sm btn-outline-primary" data-copy-target="currentDevelopmentOutput">Gelişmeyi Kopyala</button>
+                <div class="col-12">
+                    <h2 class="h6">Kullanılan ana kaynak</h2>
+                    @if (string.IsNullOrWhiteSpace(Model.Output.SourceUrl))
+                    {
+                        <div class="text-muted small">Ana kaynak otomatik belirlenemedi.</div>
+                    }
+                    else
+                    {
+                        <a href="@Model.Output.SourceUrl" target="_blank" rel="noopener">@Model.Output.SourceUrl</a>
+                    }
                 </div>
-                <div class="card-body">
-                    <textarea id="currentDevelopmentOutput" class="form-control font-monospace small" rows="7" readonly>@Model.Output.CurrentDevelopmentText</textarea>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-12">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <div>
-                        <div class="fw-semibold">Sayı Önerileri</div>
-                        <div class="text-muted small">
-                            Bu sayılar otomatik kaydedilmez. Belirsiz numeric veri varsa sistem sayı üretmez.
-                        </div>
-                    </div>
-                    <button type="button" class="btn btn-sm btn-outline-primary" data-copy-target="statisticsOutput">Sayıları Kopyala</button>
-                </div>
-                <div class="card-body">
-                    <textarea id="statisticsOutput" class="form-control font-monospace small" rows="11" readonly>@Model.Output.StatisticsText</textarea>
+                <div class="col-12">
+                    <h2 class="h6">Admin kontrol notu</h2>
+                    <div class="text-muted small">@Model.Output.AdminNote</div>
                 </div>
             </div>
         </div>
+    </details>
 
-        <div class="col-12">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <div>
-                        <div class="fw-semibold">Rapor Taslağı</div>
-                        <div class="text-muted small">Taslak rapordur; kaynak doğrulaması sonrası elle düzenlenmelidir.</div>
-                    </div>
-                    <button type="button" class="btn btn-sm btn-outline-primary" data-copy-target="reportOutput">Raporu Kopyala</button>
+    <div class="modal fade" id="draftConfirmModal" tabindex="-1" aria-labelledby="draftConfirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title h5" id="draftConfirmModalLabel">Taslak Raporu Kontrol Et</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
                 </div>
-                <div class="card-body">
-                    <textarea id="reportOutput" class="form-control font-monospace small" rows="12" readonly>@Model.Output.ReportText</textarea>
-
-                    <form method="post" action="/admin/pathogen-research/create-draft" class="mt-3">
+                <div class="modal-body">
+                    <dl class="row">
+                        <dt class="col-md-3">Rapor Başlığı</dt>
+                        <dd class="col-md-9">@Model.Output.ReportTitle</dd>
+                        <dt class="col-md-3">Rapor ID</dt>
+                        <dd class="col-md-9">@Model.Output.PublicIdNote</dd>
+                        <dt class="col-md-3">URL Slug</dt>
+                        <dd class="col-md-9"><code>@Model.Output.SuggestedSlug</code></dd>
+                        <dt class="col-md-3">Kart Kategorisi</dt>
+                        <dd class="col-md-9">@Model.Output.ReportTypeLabel</dd>
+                        <dt class="col-md-3">Virüs / Kategori</dt>
+                        <dd class="col-md-9">@Model.SelectedPathogenDisplayName</dd>
+                        <dt class="col-md-3">Doğrulama</dt>
+                        <dd class="col-md-9">@Model.Output.VerificationStatusLabel</dd>
+                        <dt class="col-md-3">Yayın Durumu</dt>
+                        <dd class="col-md-9">@Model.Output.PublicationStatusLabel</dd>
+                        <dt class="col-md-3">Okuma</dt>
+                        <dd class="col-md-9">@Model.Output.ReadingTimeMin min read</dd>
+                        <dt class="col-md-3">Yayın Tarihi</dt>
+                        <dd class="col-md-9">@Model.Output.PublicationDate.ToString("yyyy-MM-dd")</dd>
+                        <dt class="col-md-3">Özet</dt>
+                        <dd class="col-md-9">@Model.Output.ReportSummary</dd>
+                        <dt class="col-md-3">İçerik</dt>
+                        <dd class="col-md-9">
+                            <div class="border rounded p-3 bg-light small" style="white-space: pre-wrap;">@Model.Output.ReportContent</div>
+                        </dd>
+                        <dt class="col-md-3">Kaynak Linki</dt>
+                        <dd class="col-md-9">@(string.IsNullOrWhiteSpace(Model.Output.SourceUrl) ? "Kaynaklardan kontrol et." : Model.Output.SourceUrl)</dd>
+                    </dl>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                    <form method="post" action="/admin/pathogen-research/create-draft" class="d-inline">
                         @Html.AntiForgeryToken()
                         <input type="hidden" asp-for="SelectedPathogenSlug" />
                         <input type="hidden" asp-for="SearchRecentOnly" />
                         <input type="hidden" asp-for="DateFrom" />
                         <input type="hidden" asp-for="DateTo" />
-                        <button type="submit" class="btn btn-primary">Raporu Taslak Olarak Kaydet</button>
-                        <span class="text-muted small ms-2">
-                            Sadece draft + pending olarak kaydedilir; yayınlamak için raporu düzenleyip onaylaman gerekir.
-                        </span>
+                        <button type="submit" class="btn btn-primary">Onayla ve Taslak Kaydet</button>
                     </form>
                 </div>
-            </div>
-        </div>
-
-        <div class="col-12">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <div>
-                        <div class="fw-semibold">Kaynak Özeti</div>
-                        <div class="text-muted small">Kopyalanabilir kaynak durum çıktısı.</div>
-                    </div>
-                    <button type="button" class="btn btn-sm btn-outline-primary" data-copy-target="sourcesOutput">Kaynakları Kopyala</button>
-                </div>
-                <div class="card-body">
-                    <textarea id="sourcesOutput" class="form-control font-monospace small" rows="8" readonly>@Model.Output.SourcesText</textarea>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-12">
-            <div class="alert alert-info mb-0">
-                <strong>Admin kontrol notu:</strong> @Model.Output.AdminNote
             </div>
         </div>
     </div>
@@ -291,27 +293,4 @@ else
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script>
-        document.querySelectorAll('[data-copy-target]').forEach((button) => {
-            button.addEventListener('click', async () => {
-                const targetId = button.getAttribute('data-copy-target');
-                const target = targetId ? document.getElementById(targetId) : null;
-                if (!target) return;
-
-                target.select();
-                target.setSelectionRange(0, target.value.length);
-
-                try {
-                    await navigator.clipboard.writeText(target.value);
-                    const oldText = button.textContent;
-                    button.textContent = 'Kopyalandı';
-                    window.setTimeout(() => {
-                        button.textContent = oldText;
-                    }, 1500);
-                } catch {
-                    document.execCommand('copy');
-                }
-            });
-        });
-    </script>
 }

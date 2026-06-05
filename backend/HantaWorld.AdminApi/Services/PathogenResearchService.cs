@@ -36,22 +36,31 @@ public static class PathogenResearchService
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
         var sourceUrl = primarySource?.Url ?? sources.FirstOrDefault()?.Url ?? string.Empty;
         var currentDevelopment = BuildCurrentDevelopment(pathogen, reachedSources);
-        var reportTitle = $"{pathogen.DisplayName} resmi kaynak taraması";
+        var reportTitle = BuildReportTitle(pathogen, primaryFetchedSource);
         var reportSummary = reachedSources.Count > 0
-            ? $"{reachedSources.Count} resmi kaynağa ulaşıldı. Yayın öncesi başlık, tarih ve kısa notlar admin tarafından kontrol edilmelidir."
-            : "Güncel bir gelişme bulunamadı. Resmi kaynaklara ulaşılamadı veya güvenilir özet çıkarılamadı.";
+            ? $"Official public health sources were reviewed for {pathogen.DisplayName}. The draft summarizes available source-attributed updates and should be checked before publication."
+            : $"No current source-attributed update could be extracted for {pathogen.DisplayName}. Review official sources manually before publishing.";
         var reportContent = BuildReportContent(pathogen, dateScope, currentDevelopment, reachedSources, fetchedSources);
-        var verificationNote = "Bu rapor kaynaklı virüs taraması ekranında resmi kaynaklardan taslak olarak üretildi. Public site İngilizce olduğu için yayınlamadan önce kaynaklar kontrol edilmeli, metin editlenmeli ve gerekli ise İngilizceye çevrilmelidir.";
+        var verificationNote = "This draft was generated from predefined official-source checks. Review source links, dates, and figures manually before verification or publication.";
         var statisticsText = BuildStatisticsText(pathogen, sourceInstitutions, sourceUrl, dateScope, today);
         var reportText = BuildReportText(pathogen, reportTitle, reportSummary, reportContent, sourceInstitutions, sourceUrl, today, verificationNote);
         var sourcesText = BuildSourcesText(fetchedSources);
+        var readingTime = EstimateReadingTime(reportContent);
 
         return new PathogenResearchOutputViewModel
         {
+            PublicIdNote = "Kaydedilirken otomatik oluşturulacak.",
+            SuggestedSlug = Slugify(reportTitle),
             ReportTitle = reportTitle,
             ReportSummary = reportSummary,
             ReportContent = reportContent,
             ReportType = "outbreak-report",
+            ReportTypeLabel = "Salgın Raporu",
+            VerificationStatus = "pending",
+            VerificationStatusLabel = "Beklemede",
+            PublicationStatus = "draft",
+            PublicationStatusLabel = "Taslak",
+            ReadingTimeMin = readingTime,
             SourceInstitution = sourceInstitutions,
             SourceUrl = sourceUrl,
             PublicationDate = today,
@@ -59,7 +68,7 @@ public static class PathogenResearchService
             StatisticsText = statisticsText,
             ReportText = reportText,
             SourcesText = sourcesText,
-            AdminNote = "Bu çıktı otomatik yayınlanmadı. Sayılar otomatik kaydedilmedi. Kaynaklar kontrol edildikten sonra Salgın İstatistikleri ekranına elle girilebilir veya rapor taslak olarak Salgın Raporları içine eklenebilir.",
+            AdminNote = "Bu çıktı otomatik yayınlanmaz. Sayılar otomatik kaydedilmez. Rapor yalnızca onay modalından sonra Taslak + Beklemede olarak oluşturulur.",
             CurrentDevelopmentText = currentDevelopment,
             Sources = sources,
             FetchedSources = fetchedSources
@@ -157,19 +166,19 @@ public static class PathogenResearchService
     {
         if (reachedSources.Count == 0)
         {
-            return "Güncel bir gelişme bulunamadı.";
+            return "No current official-source development was extracted. Review the source links manually before creating a public report.";
         }
 
         var lines = new List<string>
         {
-            $"{pathogen.DisplayName} için resmi kaynaklardan alınan başlık ve kısa notlar aşağıdadır. Bu bilgiler yayın öncesi admin tarafından kaynak linklerinden tekrar kontrol edilmelidir."
+            $"Official source checks for {pathogen.DisplayName} found the following source-attributed items. Review each source before publication."
         };
 
         foreach (var source in reachedSources.Take(5))
         {
-            var title = string.IsNullOrWhiteSpace(source.Title) ? "Başlık çıkarılamadı" : source.Title;
-            var date = string.IsNullOrWhiteSpace(source.PublishedDate) ? "tarih bulunamadı" : source.PublishedDate;
-            var snippet = string.IsNullOrWhiteSpace(source.Snippet) ? "Kısa not çıkarılamadı." : source.Snippet;
+            var title = string.IsNullOrWhiteSpace(source.Title) ? "No title extracted" : source.Title;
+            var date = string.IsNullOrWhiteSpace(source.PublishedDate) ? "date not extracted" : source.PublishedDate;
+            var snippet = string.IsNullOrWhiteSpace(source.Snippet) ? "No source summary extracted." : source.Snippet;
             lines.Add($"- {source.Institution}: {title} ({date}). {snippet}");
         }
 
@@ -184,22 +193,25 @@ public static class PathogenResearchService
         List<PathogenResearchFetchedSourceViewModel> fetchedSources)
     {
         var reachedText = reachedSources.Count == 0
-            ? "Resmi kaynaklara ulaşılamadı veya güvenilir özet çıkarılamadı."
+            ? "No official source page returned a usable title, date, or summary during this check."
             : string.Join(Environment.NewLine, reachedSources.Take(5).Select(x =>
-                $"- {x.Institution}: {(string.IsNullOrWhiteSpace(x.Title) ? "Başlık çıkarılamadı" : x.Title)} ({(string.IsNullOrWhiteSpace(x.PublishedDate) ? "tarih bulunamadı" : x.PublishedDate)})"));
+                $"- {x.Institution}: {(string.IsNullOrWhiteSpace(x.Title) ? "No title extracted" : x.Title)} ({(string.IsNullOrWhiteSpace(x.PublishedDate) ? "date not extracted" : x.PublishedDate)})"));
         var failedText = fetchedSources.Any(x => !x.IsSuccess)
             ? string.Join(Environment.NewLine, fetchedSources.Where(x => !x.IsSuccess).Take(5).Select(x => $"- {x.Institution}: {x.ErrorMessage}"))
-            : "Ulaşılamayan kaynak yok.";
+            : "No source access failures were reported during this check.";
 
         return string.Join(Environment.NewLine + Environment.NewLine, new[]
         {
-            $"{pathogen.DisplayName} için resmi halk sağlığı kaynakları tarandı.",
-            $"Kontrol kapsamı: {dateScope}",
-            $"Bulunan güncel gelişme:{Environment.NewLine}{currentDevelopment}",
-            $"Ulaşılan kaynaklar:{Environment.NewLine}{reachedText}",
-            $"Ulaşılamayan kaynaklar:{Environment.NewLine}{failedText}",
-            "Sayısal veri otomatik kaydedilmedi. Vaka, ölüm, etkilenen ülke ve aktif salgın sayıları ancak resmi kaynakta açık ve doğrulanabilir şekilde yer alıyorsa admin tarafından Salgın İstatistikleri ekranına elle girilmelidir.",
-            "Bu rapor taslağı resmi kaynaklardan üretilmiştir; yayın öncesi admin kontrolü gerekir."
+            $"HantaWorld reviewed predefined official public health sources for {pathogen.DisplayName}.",
+            $"Review scope: {ToEnglishScope(dateScope)}",
+            "Current source-attributed development:",
+            currentDevelopment,
+            "Reached official sources:",
+            reachedText,
+            "Sources that could not be reached:",
+            failedText,
+            "No statistics were saved by this research workflow. Reported cases, deaths, affected countries, and active outbreaks should only be entered in the statistics screen when they are clearly stated by an official source.",
+            "This is a draft intelligence report for manual review before verification or publication."
         });
     }
 
@@ -208,15 +220,14 @@ public static class PathogenResearchService
         return string.Join(Environment.NewLine, new[]
         {
             $"Virüs / Kategori: {pathogen.DisplayName}",
-            "Vaka Sayısı: Güncel ve doğrulanmış numerik veri bulunamadı.",
-            "Ölüm Sayısı: Güncel ve doğrulanmış numerik veri bulunamadı.",
-            "Etkilenen Ülke: Güncel ve doğrulanmış numerik veri bulunamadı.",
-            "Aktif Salgın: Güncel ve doğrulanmış numerik veri bulunamadı.",
+            "Vaka Sayısı: Doğrulanmış sayı bulunamadı.",
+            "Ölüm Sayısı: Doğrulanmış sayı bulunamadı.",
+            "Etkilenen Ülke: Doğrulanmış sayı bulunamadı.",
+            "Aktif Salgın: Doğrulanmış sayı bulunamadı.",
             $"Kaynak Kurum: {sourceInstitutions}",
             $"Kaynak Linki: {(string.IsNullOrWhiteSpace(sourceUrl) ? "Kaynaklardan kontrol et." : sourceUrl)}",
-            "Resmi Yayın Tarihi: Kaynak linkinden kontrol et.",
-            $"Son Doğrulama Tarihi: {today:yyyy-MM-dd}",
-            $"Notlar: {dateScope} Resmi kaynaklar kontrol edilmeden sayısal veri yayınlanmamalıdır. Bu ekran yalnızca öneri üretir ve istatistik kaydetmez."
+            $"Son Kontrol Tarihi: {today:yyyy-MM-dd}",
+            "Not: Bu öneriler DB'ye kaydedilmez ve grafikleri güncellemez."
         });
     }
 
@@ -232,15 +243,18 @@ public static class PathogenResearchService
     {
         return string.Join(Environment.NewLine, new[]
         {
-            $"Rapor Başlığı: {reportTitle}",
-            $"Virüs / Kategori: {pathogen.DisplayName}",
-            "Rapor Türü: Salgın Raporu",
-            $"Kısa Özet: {reportSummary}",
-            $"Detaylı İçerik: {reportContent}",
-            $"Kaynak Kurum: {sourceInstitutions}",
-            $"Kaynak Linki: {(string.IsNullOrWhiteSpace(sourceUrl) ? "Kaynaklardan kontrol et." : sourceUrl)}",
-            $"Yayın Tarihi: {today:yyyy-MM-dd}",
-            $"Doğrulama Notu: {verificationNote}"
+            $"Title: {reportTitle}",
+            $"Pathogen / Category: {pathogen.DisplayName}",
+            "Category: Outbreak Report",
+            "Verification Status: Pending",
+            "Publication Status: Draft",
+            $"Excerpt: {reportSummary}",
+            "Content:",
+            reportContent,
+            $"Source Institution: {sourceInstitutions}",
+            $"Primary Source URL: {(string.IsNullOrWhiteSpace(sourceUrl) ? "Review source list before publication." : sourceUrl)}",
+            $"Publication Date: {today:yyyy-MM-dd}",
+            $"Verification Note: {verificationNote}"
         });
     }
 
@@ -357,21 +371,66 @@ public static class PathogenResearchService
         return cleaned.Length <= maxLength ? cleaned : $"{cleaned[..maxLength].TrimEnd()}...";
     }
 
+    private static string BuildReportTitle(Pathogen pathogen, PathogenResearchFetchedSourceViewModel? primarySource)
+    {
+        if (!string.IsNullOrWhiteSpace(primarySource?.Title))
+        {
+            return TrimTo($"{pathogen.DisplayName}: {primarySource.Title}", 300);
+        }
+
+        return $"{pathogen.DisplayName} Official Source Review";
+    }
+
+    private static int EstimateReadingTime(string content)
+    {
+        var wordCount = content.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Length;
+        return Math.Clamp((int)Math.Ceiling(wordCount / 200m), 1, 120);
+    }
+
+    private static string Slugify(string value)
+    {
+        var builder = new StringBuilder();
+        foreach (var ch in value.Trim().ToLowerInvariant())
+        {
+            if (char.IsLetterOrDigit(ch))
+            {
+                builder.Append(ch);
+            }
+            else if (builder.Length > 0 && builder[^1] != '-')
+            {
+                builder.Append('-');
+            }
+        }
+
+        var slug = builder.ToString().Trim('-');
+        return slug.Length <= 180 ? slug : slug[..180].TrimEnd('-');
+    }
+
+    private static string ToEnglishScope(string dateScope)
+    {
+        if (dateScope.Contains("Tarih", StringComparison.OrdinalIgnoreCase))
+        {
+            return dateScope;
+        }
+
+        return "Recent official-source review.";
+    }
+
     private static string BuildDateScope(PathogenResearchViewModel model)
     {
         if (model.SearchRecentOnly)
         {
-            return "Son güncel gelişmeler için hazırlanmış resmi kaynak taraması.";
+            return "Recent official-source review.";
         }
 
         if (model.DateFrom.HasValue || model.DateTo.HasValue)
         {
-            var from = model.DateFrom?.ToString("yyyy-MM-dd") ?? "başlangıç belirtilmedi";
-            var to = model.DateTo?.ToString("yyyy-MM-dd") ?? "bitiş belirtilmedi";
-            return $"Tarih aralığı: {from} - {to}.";
+            var from = model.DateFrom?.ToString("yyyy-MM-dd") ?? "start date not specified";
+            var to = model.DateTo?.ToString("yyyy-MM-dd") ?? "end date not specified";
+            return $"Date range: {from} - {to}.";
         }
 
-        return "Tarih aralığı belirtilmedi.";
+        return "No date range specified.";
     }
 
     private static List<PathogenResearchSourceViewModel> GetTrustedSources(string slug)
