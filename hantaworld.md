@@ -3650,3 +3650,52 @@ Notlar:
 
 - Sayisal kartlari besleyen `Data Source Numeric` default public etiketleri degistirilmedi.
 - Public `/news`, `/pathogens`, `/pathogens/[slug]`, homepage ve public chart metinlerine dokunulmadi.
+
+## 2026-06-05 - Phase 1E Kaynakli Virus Taramasi
+
+Kurallar:
+
+- Push yapilmadi.
+- Commit yapilmadi.
+- Deploy yapilmadi.
+- Setup endpoint calistirilmadi.
+- Production environment degiskenleri degistirilmedi.
+- Database schema degistirilmedi; yeni tablo eklenmedi.
+- Public frontend dili ve public route'lar degistirilmedi.
+- Arastirma ciktisi hicbir tabloya otomatik yazmaz.
+- `pathogen_stats` otomatik guncellenmez.
+- `articles` icin otomatik published kayit olusturulmaz.
+
+Kapsam:
+
+- Yeni admin-only route eklendi:
+  - `/admin/pathogen-research`
+- Admin menüsüne `Kaynaklı Virüs Taraması` linki eklendi.
+- Sayfa `RequireEditor` policy ile korunur; public degildir.
+- Sayfa aktif `pathogens` kayitlarini dropdown olarak listeler.
+- `Tarama Yap` butonu secilen virus/kategori icin kopyalanabilir arastirma ciktisi uretir.
+
+Uygulama karari:
+
+- Phase 1E ilk surumde canlı web scraping yapmaz.
+- Bunun yerine resmi ve guvenilir kaynaklardan olusan kontrollu link listesi ve admin tarafindan kopyalanabilecek sablon metinleri uretir.
+- Bu karar, scraping kirilganligi ve saglik verisinde dogrulama hassasiyeti nedeniyle alindi.
+
+Uretilen ciktılar:
+
+- `Salgın İstatistikleri için hazır veri`
+  - Vaka, ölüm, etkilenen ülke ve aktif salgın alanlari icin dogrulanmis veri yoksa `Güncel ve doğrulanmış numerik veri bulunamadı.` yazar.
+  - Sistem otomatik `0` uretmez.
+- `Salgın Raporları için hazır rapor`
+  - Baslik, kisa ozet, detayli icerik, kaynak kurumu, kaynak linki ve dogrulama notu icin copy-ready taslak verir.
+  - Guncel gelisme bulunamiyorsa bunu acikca belirtir.
+- `Kaynaklar`
+  - WHO, CDC, ECDC, Africa CDC, PAHO ve ilgili resmi konu sayfalari listelenir.
+- `Admin kontrol notu`
+  - Ciktinin otomatik yayinlanmadigini ve elle kontrol edilmesi gerektigini hatirlatir.
+
+Notlar:
+
+- Sosyal medya, blog veya dusuk kaliteli kaynak kullanilmadi.
+- Belirsiz veri kesinmis gibi sunulmadi.
+- Bu ekran sadece adminin manuel veri girisini hizlandiran bir yardimci workflow olarak tasarlandi.

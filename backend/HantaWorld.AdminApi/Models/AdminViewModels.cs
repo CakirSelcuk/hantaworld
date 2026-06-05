@@ -225,6 +225,40 @@ public class PathogenStatHistoryRowViewModel
     public DateTime UpdatedAt { get; set; }
 }
 
+public class PathogenResearchViewModel
+{
+    [Required(ErrorMessage = "Virüs / kategori seç.")]
+    public string? SelectedPathogenSlug { get; set; }
+
+    public string? SelectedPathogenDisplayName { get; set; }
+    public bool SearchRecentOnly { get; set; } = true;
+
+    [DataType(DataType.Date)]
+    public DateOnly? DateFrom { get; set; }
+
+    [DataType(DataType.Date)]
+    public DateOnly? DateTo { get; set; }
+
+    public List<SelectListItem> AvailablePathogens { get; set; } = new();
+    public PathogenResearchOutputViewModel? Output { get; set; }
+}
+
+public class PathogenResearchOutputViewModel
+{
+    public string StatisticsText { get; set; } = string.Empty;
+    public string ReportText { get; set; } = string.Empty;
+    public string SourcesText { get; set; } = string.Empty;
+    public string AdminNote { get; set; } = string.Empty;
+    public List<PathogenResearchSourceViewModel> Sources { get; set; } = new();
+}
+
+public class PathogenResearchSourceViewModel
+{
+    public string Institution { get; set; } = string.Empty;
+    public string Url { get; set; } = string.Empty;
+    public string Note { get; set; } = string.Empty;
+}
+
 public class MobilePushDebugViewModel
 {
     public List<MobileDeviceDebugRow> Devices { get; set; } = new();
