@@ -259,7 +259,9 @@ public class PathogenResearchOutputViewModel
     public string ReportText { get; set; } = string.Empty;
     public string SourcesText { get; set; } = string.Empty;
     public string AdminNote { get; set; } = string.Empty;
+    public string CurrentDevelopmentText { get; set; } = string.Empty;
     public List<PathogenResearchSourceViewModel> Sources { get; set; } = new();
+    public List<PathogenResearchFetchedSourceViewModel> FetchedSources { get; set; } = new();
 }
 
 public class PathogenResearchSourceViewModel
@@ -267,6 +269,19 @@ public class PathogenResearchSourceViewModel
     public string Institution { get; set; } = string.Empty;
     public string Url { get; set; } = string.Empty;
     public string Note { get; set; } = string.Empty;
+}
+
+public class PathogenResearchFetchedSourceViewModel
+{
+    public string Institution { get; set; } = string.Empty;
+    public string Url { get; set; } = string.Empty;
+    public string Note { get; set; } = string.Empty;
+    public bool IsSuccess { get; set; }
+    public string StatusText { get; set; } = string.Empty;
+    public string? Title { get; set; }
+    public string? PublishedDate { get; set; }
+    public string? Snippet { get; set; }
+    public string? ErrorMessage { get; set; }
 }
 
 public class MobilePushDebugViewModel

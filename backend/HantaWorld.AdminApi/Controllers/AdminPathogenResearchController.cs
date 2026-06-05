@@ -134,7 +134,7 @@ public class AdminPathogenResearchController(
 
         model.SelectedPathogenSlug = pathogen.Slug;
         model.SelectedPathogenDisplayName = pathogen.DisplayName;
-        model.Output = PathogenResearchService.BuildOutput(pathogen, model);
+        model.Output = await PathogenResearchService.BuildOutputAsync(pathogen, model);
 
         var duplicate = await FindSimilarArticleAsync(pathogen.Id, model.Output);
         if (duplicate is not null)

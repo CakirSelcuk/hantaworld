@@ -3789,3 +3789,48 @@ Kapsam:
   - Bildirim yalnizca kayit kaydedilirken Yayin Durumu = Yayinda ve Dogrulama = Dogrulanmis ise gonderilir.
   - Taslak veya bekleyen kayitlarda bildirim gonderilmez.
 - Liste ekraninda push gonderilemeyen raporlar icin kisa sebep gosterilir.
+
+## 2026-06-05 - Phase 1G Kaynakli Virus Taramasi Resmi Kaynak Fetch
+
+Kurallar:
+
+- Push yapilmadi.
+- Commit yapilmadi.
+- Deploy yapilmadi.
+- Setup endpoint calistirilmadi.
+- Production environment degiskenleri degistirilmedi.
+- DB schema degistirilmedi.
+- Public frontend degistirilmedi.
+- Numeric stats otomatik kaydedilmez.
+- `pathogen_stats` ve `pathogen_stat_history` guncellenmez.
+- Raporlar otomatik publish edilmez; sadece taslak + pending akisi korunur.
+
+Kapsam:
+
+- `/admin/pathogen-research` statik kaynak sablonu yerine kontrollu resmi kaynak fetch akisi kullanacak sekilde gelistirildi.
+- Sadece onceden tanimli resmi/guvenilir kaynak URL'leri taranir:
+  - WHO
+  - CDC
+  - ECDC
+  - Africa CDC
+  - PAHO
+- Google/Bing arama scraping, sosyal medya ve dusuk kaliteli blog kaynaklari kullanilmaz.
+- Fetch icin kisa timeout ve `HantaWorldAdminResearchBot/1.0` User-Agent kullanilir.
+- Ek dependency eklenmedi; HTML baslik/meta/snippet cikarma basit ve konservatif parser ile yapilir.
+
+Admin ciktisi:
+
+- `Taranan Kaynaklar`
+- `Ulasilan Kaynaklar`
+- `Ulasilamayan Kaynaklar`
+- `Bulunan Guncel Gelisme`
+- `Sayi Onerileri`
+- `Rapor Taslagi`
+- `Kaynak Ozeti`
+
+Guvenlik kararlari:
+
+- Numeric extraction otomatik kesin deger uretmez.
+- Belirsiz numeric veri varsa `Guncel ve dogrulanmis numerik veri bulunamadi.` mesaji kullanilir.
+- Kaynak basligi, tarih ve snippet bilgileri rapor taslagini zenginlestirmek icin kullanilir.
+- Kaynaklardan biri acilamazsa sayfa hata vermez; kaynak `Kaynaga ulasilamadi.` olarak listelenir.

@@ -64,7 +64,7 @@
                     <input asp-for="SearchRecentOnly" class="form-check-input" />
                     <label asp-for="SearchRecentOnly" class="form-check-label">Son güncel gelişmeleri tara</label>
                 </div>
-                <div class="form-text">Bu sürüm güvenilir kaynak kontrol şablonu üretir; otomatik yayın yapmaz.</div>
+                <div class="form-text">Sadece önceden tanımlı resmi kaynaklar taranır; otomatik yayın yapılmaz.</div>
             </div>
             <div class="col-lg-2">
                 <label asp-for="DateFrom" class="form-label">Başlangıç</label>
@@ -89,64 +89,17 @@
 }
 else
 {
+    var reachedSources = Model.Output.FetchedSources.Where(x => x.IsSuccess).ToList();
+    var failedSources = Model.Output.FetchedSources.Where(x => !x.IsSuccess).ToList();
+
     <div class="row g-4">
         <div class="col-12">
             <div class="card shadow-sm">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <div>
-                        <div class="fw-semibold">Salgın İstatistikleri için önerilen sayılar</div>
-                        <div class="text-muted small">
-                            Bu sayılar otomatik kaydedilmez. Kontrol ettikten sonra Salgın İstatistikleri ekranına elle gir.
-                            Doğrulanmış veri yoksa 0 üretilmez.
-                        </div>
-                    </div>
-                    <button type="button" class="btn btn-sm btn-outline-primary" data-copy-target="statisticsOutput">Sayıları Kopyala</button>
+                <div class="card-header bg-white">
+                    <div class="fw-semibold">Taranan Kaynaklar</div>
+                    <div class="text-muted small">Tarama sadece sistemde tanımlı resmi kaynak URL'leri üzerinden yapılır.</div>
                 </div>
                 <div class="card-body">
-                    <textarea id="statisticsOutput" class="form-control font-monospace small" rows="11" readonly>@Model.Output.StatisticsText</textarea>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-12">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <div>
-                        <div class="fw-semibold">Salgın Raporları için taslak</div>
-                        <div class="text-muted small">Taslak rapordur; kaynak doğrulaması sonrası elle düzenlenmelidir.</div>
-                    </div>
-                    <button type="button" class="btn btn-sm btn-outline-primary" data-copy-target="reportOutput">Raporu Kopyala</button>
-                </div>
-                <div class="card-body">
-                    <textarea id="reportOutput" class="form-control font-monospace small" rows="10" readonly>@Model.Output.ReportText</textarea>
-
-                    <form method="post" action="/admin/pathogen-research/create-draft" class="mt-3">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" asp-for="SelectedPathogenSlug" />
-                        <input type="hidden" asp-for="SearchRecentOnly" />
-                        <input type="hidden" asp-for="DateFrom" />
-                        <input type="hidden" asp-for="DateTo" />
-                        <button type="submit" class="btn btn-primary">Raporu Taslak Olarak Kaydet</button>
-                        <span class="text-muted small ms-2">
-                            Sadece draft + pending olarak kaydedilir; yayınlamak için raporu düzenleyip onaylaman gerekir.
-                        </span>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-12">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <div>
-                        <div class="fw-semibold">Kaynaklar</div>
-                        <div class="text-muted small">Sadece resmi veya güvenilir halk sağlığı kaynakları listelenir.</div>
-                    </div>
-                    <button type="button" class="btn btn-sm btn-outline-primary" data-copy-target="sourcesOutput">Kaynakları Kopyala</button>
-                </div>
-                <div class="card-body">
-                    <textarea id="sourcesOutput" class="form-control font-monospace small mb-3" rows="8" readonly>@Model.Output.SourcesText</textarea>
-
                     <div class="table-responsive">
                         <table class="table table-sm align-middle mb-0">
                             <thead>
@@ -168,6 +121,162 @@ else
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <div class="fw-semibold">Ulaşılan Kaynaklar</div>
+                    <div class="text-muted small">Başlık, tarih ve kısa not otomatik çıkarılır; yayın öncesi kaynak linkinden doğrulanmalıdır.</div>
+                </div>
+                <div class="card-body">
+                    @if (reachedSources.Count == 0)
+                    {
+                        <div class="text-muted">Resmi kaynaklara ulaşılamadı.</div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-sm align-middle mb-0">
+                                <thead>
+                                <tr>
+                                    <th>Kurum</th>
+                                    <th>Başlık</th>
+                                    <th>Tarih</th>
+                                    <th>Link</th>
+                                    <th>Kısa not</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach (var source in reachedSources)
+                                {
+                                    <tr>
+                                        <td>@source.Institution</td>
+                                        <td>@(source.Title ?? "Başlık çıkarılamadı")</td>
+                                        <td>@(source.PublishedDate ?? "Tarih bulunamadı")</td>
+                                        <td><a href="@source.Url" target="_blank" rel="noopener">Aç</a></td>
+                                        <td class="text-muted small">@((source.Snippet ?? "Kısa not çıkarılamadı."))</td>
+                                    </tr>
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <div class="fw-semibold">Ulaşılamayan Kaynaklar</div>
+                    <div class="text-muted small">Kaynak hataları sayfayı durdurmaz; başarısız kaynaklar burada listelenir.</div>
+                </div>
+                <div class="card-body">
+                    @if (failedSources.Count == 0)
+                    {
+                        <div class="text-muted">Ulaşılamayan kaynak yok.</div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-sm align-middle mb-0">
+                                <thead>
+                                <tr>
+                                    <th>Kurum</th>
+                                    <th>Link</th>
+                                    <th>Durum</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach (var source in failedSources)
+                                {
+                                    <tr>
+                                        <td>@source.Institution</td>
+                                        <td><a href="@source.Url" target="_blank" rel="noopener">@source.Url</a></td>
+                                        <td class="text-muted small">@(source.ErrorMessage ?? "Kaynağa ulaşılamadı.")</td>
+                                    </tr>
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="fw-semibold">Bulunan Güncel Gelişme</div>
+                        <div class="text-muted small">Resmi kaynak başlıkları ve kısa notlardan oluşturulan admin taslağıdır.</div>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-copy-target="currentDevelopmentOutput">Gelişmeyi Kopyala</button>
+                </div>
+                <div class="card-body">
+                    <textarea id="currentDevelopmentOutput" class="form-control font-monospace small" rows="7" readonly>@Model.Output.CurrentDevelopmentText</textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="fw-semibold">Sayı Önerileri</div>
+                        <div class="text-muted small">
+                            Bu sayılar otomatik kaydedilmez. Belirsiz numeric veri varsa sistem sayı üretmez.
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-copy-target="statisticsOutput">Sayıları Kopyala</button>
+                </div>
+                <div class="card-body">
+                    <textarea id="statisticsOutput" class="form-control font-monospace small" rows="11" readonly>@Model.Output.StatisticsText</textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="fw-semibold">Rapor Taslağı</div>
+                        <div class="text-muted small">Taslak rapordur; kaynak doğrulaması sonrası elle düzenlenmelidir.</div>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-copy-target="reportOutput">Raporu Kopyala</button>
+                </div>
+                <div class="card-body">
+                    <textarea id="reportOutput" class="form-control font-monospace small" rows="12" readonly>@Model.Output.ReportText</textarea>
+
+                    <form method="post" action="/admin/pathogen-research/create-draft" class="mt-3">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="SelectedPathogenSlug" />
+                        <input type="hidden" asp-for="SearchRecentOnly" />
+                        <input type="hidden" asp-for="DateFrom" />
+                        <input type="hidden" asp-for="DateTo" />
+                        <button type="submit" class="btn btn-primary">Raporu Taslak Olarak Kaydet</button>
+                        <span class="text-muted small ms-2">
+                            Sadece draft + pending olarak kaydedilir; yayınlamak için raporu düzenleyip onaylaman gerekir.
+                        </span>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="fw-semibold">Kaynak Özeti</div>
+                        <div class="text-muted small">Kopyalanabilir kaynak durum çıktısı.</div>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-copy-target="sourcesOutput">Kaynakları Kopyala</button>
+                </div>
+                <div class="card-body">
+                    <textarea id="sourcesOutput" class="form-control font-monospace small" rows="8" readonly>@Model.Output.SourcesText</textarea>
                 </div>
             </div>
         </div>
