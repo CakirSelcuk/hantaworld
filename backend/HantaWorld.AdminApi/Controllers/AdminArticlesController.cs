@@ -59,7 +59,7 @@ public class AdminArticlesController(
 
         if (model.PathogenId.HasValue && !await dbContext.Pathogens.AnyAsync(x => x.Id == model.PathogenId.Value && x.IsActive))
         {
-            ModelState.AddModelError(nameof(model.PathogenId), "Secilen pathogen/category aktif degil.");
+            ModelState.AddModelError(nameof(model.PathogenId), "Seçilen virüs/kategori aktif değil.");
         }
 
         if (!ModelState.IsValid)
@@ -168,7 +168,7 @@ public class AdminArticlesController(
 
         if (model.PathogenId.HasValue && !await dbContext.Pathogens.AnyAsync(x => x.Id == model.PathogenId.Value && x.IsActive))
         {
-            ModelState.AddModelError(nameof(model.PathogenId), "Secilen pathogen/category aktif degil.");
+            ModelState.AddModelError(nameof(model.PathogenId), "Seçilen virüs/kategori aktif değil.");
         }
 
         if (!ModelState.IsValid)
@@ -223,13 +223,13 @@ public class AdminArticlesController(
 
         if (entity.PublicationStatus != "published" || entity.VerificationStatus != "verified")
         {
-            TempData["ErrorMessage"] = "Push notification sadece verified + published haberler icin gonderilebilir.";
+            TempData["ErrorMessage"] = "Push bildirimi sadece verified + published raporlar için gönderilebilir.";
             return RedirectToAction(nameof(Index));
         }
 
         if (entity.NotificationSendCount > 0 && !confirmResend)
         {
-            TempData["ErrorMessage"] = "Notification was already sent. Send again?";
+            TempData["ErrorMessage"] = "Bu rapor için daha önce bildirim gönderildi. Tekrar göndermek için onay ver.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -243,7 +243,7 @@ public class AdminArticlesController(
             entity.LastNotificationSentAt
         });
 
-        TempData["StatusMessage"] = "Push notification sent.";
+        TempData["StatusMessage"] = "Push bildirimi gönderildi.";
         return RedirectToAction(nameof(Index));
     }
 
@@ -335,6 +335,6 @@ public class AdminArticlesController(
         }
 
         await mobileNotificationService.SendArticleNotificationAsync(article, actorId);
-        TempData["StatusMessage"] = "Article saved and push notification sent.";
+        TempData["StatusMessage"] = "Rapor kaydedildi ve push bildirimi gönderildi.";
     }
 }

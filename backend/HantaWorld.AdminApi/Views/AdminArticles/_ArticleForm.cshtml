@@ -12,12 +12,12 @@
         <input type="hidden" asp-for="VerificationNotes" />
 
         <div class="alert alert-info small">
-            Bu ekran ana sayfadaki Intelligence Feed kartlarini ve /news raporlarini yonetir. Public sitede gorunmesi icin kayit `verified` ve `published` olmalidir.
+            Bu ekran ana sayfadaki Salgın Raporları kartlarını ve /news raporlarını yönetir. Public sitede görünmesi için kayıt `verified` ve `published` olmalıdır.
         </div>
 
         <div class="row g-3">
             <div class="col-md-6">
-                <label asp-for="Title" class="form-label">Rapor basligi</label>
+                <label asp-for="Title" class="form-label">Rapor Başlığı</label>
                 <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger small"></span>
             </div>
@@ -33,23 +33,23 @@
             </div>
 
             <div class="col-md-4">
-                <label asp-for="Category" class="form-label">Kart kategorisi</label>
+                <label asp-for="Category" class="form-label">Kart Kategorisi</label>
                 <select asp-for="Category" class="form-select">
-                    <option value="outbreak-report">Outbreak Report</option>
-                    <option value="scientific-research">Research</option>
-                    <option value="public-health">Public Health</option>
-                    <option value="travel-advisory">Travel Advisory</option>
-                    <option value="prevention">Prevention</option>
-                    <option value="analysis">Analysis</option>
+                    <option value="outbreak-report">Salgın Raporu</option>
+                    <option value="scientific-research">Araştırma</option>
+                    <option value="public-health">Halk Sağlığı</option>
+                    <option value="travel-advisory">Seyahat Uyarısı</option>
+                    <option value="prevention">Önleme</option>
+                    <option value="analysis">Analiz</option>
                 </select>
             </div>
             <div class="col-md-4">
-                <label asp-for="PathogenId" class="form-label">Pathogen / Category</label>
+                <label asp-for="PathogenId" class="form-label">Virüs / Kategori</label>
                 <select asp-for="PathogenId" asp-items="Model.AvailablePathogens" class="form-select"></select>
-                <div class="form-text">This controls which pathogen page and filtered feed the article appears under. Defaults to Hantavirus when no selection exists.</div>
+                <div class="form-text">Bu seçim raporun hangi virüs sayfasında ve filtreli haber akışında görüneceğini belirler.</div>
             </div>
             <div class="col-md-3">
-                <label asp-for="VerificationStatus" class="form-label">Dogrulama</label>
+                <label asp-for="VerificationStatus" class="form-label">Doğrulama</label>
                 <select asp-for="VerificationStatus" class="form-select">
                     <option value="verified">verified</option>
                     <option value="pending">pending</option>
@@ -58,7 +58,7 @@
                 </select>
             </div>
             <div class="col-md-2">
-                <label asp-for="PublicationStatus" class="form-label">Yayin</label>
+                <label asp-for="PublicationStatus" class="form-label">Yayın Durumu</label>
                 <select asp-for="PublicationStatus" class="form-select">
                     <option value="draft">draft</option>
                     <option value="published">published</option>
@@ -73,57 +73,57 @@
             <div class="col-12">
                 <div class="form-check">
                     <input asp-for="SendPushOnPublish" class="form-check-input" />
-                    <label asp-for="SendPushOnPublish" class="form-check-label">Send push notification when published</label>
+                    <label asp-for="SendPushOnPublish" class="form-check-label">Yayınlanınca push bildirimi gönder</label>
                 </div>
-                <div class="form-text">Default is off. Push is sent only when this is checked and the report is verified + published.</div>
+                <div class="form-text">Varsayılan kapalıdır. Sadece bu seçenek işaretliyse ve rapor verified + published ise bildirim gönderilir.</div>
             </div>
 
             @if (Model.NotificationSendCount > 0)
             {
                 <div class="col-12">
                     <div class="alert alert-warning small mb-0">
-                        Push notification was already sent @Model.NotificationSendCount time(s).
-                        Last sent: @(Model.LastNotificationSentAt?.ToLocalTime().ToString("yyyy-MM-dd HH:mm") ?? "unknown").
+                        Bu rapor için push bildirimi daha önce @Model.NotificationSendCount kez gönderildi.
+                        Son gönderim: @(Model.LastNotificationSentAt?.ToLocalTime().ToString("yyyy-MM-dd HH:mm") ?? "bilinmiyor").
                     </div>
                 </div>
             }
 
             <div class="col-12">
-                <label asp-for="Excerpt" class="form-label">Kart ozeti</label>
+                <label asp-for="Excerpt" class="form-label">Özet</label>
                 <textarea asp-for="Excerpt" rows="3" class="form-control"></textarea>
                 <span asp-validation-for="Excerpt" class="text-danger small"></span>
             </div>
 
             <div class="col-12">
-                <label asp-for="Content" class="form-label">Rapor detayi</label>
+                <label asp-for="Content" class="form-label">İçerik</label>
                 <textarea asp-for="Content" rows="12" class="form-control"></textarea>
                 <span asp-validation-for="Content" class="text-danger small"></span>
             </div>
 
             <div class="col-md-6">
-                <label asp-for="PublicationDate" class="form-label">Yayin tarihi</label>
+                <label asp-for="PublicationDate" class="form-label">Yayın Tarihi</label>
                 <input asp-for="PublicationDate" class="form-control" />
             </div>
             <div class="col-md-6">
-                <label asp-for="LastVerifiedDate" class="form-label">Son dogrulama</label>
+                <label asp-for="LastVerifiedDate" class="form-label">Son Doğrulama Tarihi</label>
                 <input asp-for="LastVerifiedDate" class="form-control" />
             </div>
 
             <div class="col-12">
-                <label asp-for="PrimarySourceUrl" class="form-label">Ana kaynak URL</label>
+                <label asp-for="PrimarySourceUrl" class="form-label">Kaynak Linki</label>
                 <input asp-for="PrimarySourceUrl" class="form-control" />
             </div>
 
             <div class="col-12">
-                <label asp-for="SelectedSourceIds" class="form-label">Kaynak rozetleri</label>
+                <label asp-for="SelectedSourceIds" class="form-label">Kaynak Rozetleri</label>
                 <select asp-for="SelectedSourceIds" asp-items="Model.AvailableSources" class="form-select" multiple size="5"></select>
-                <div class="form-text">Ilk secilen kaynak kartta gorunur; digerleri detay sayfasinda citation olarak kullanilir.</div>
+                <div class="form-text">İlk seçilen kaynak kartta görünür; diğerleri detay sayfasında kaynak olarak kullanılır.</div>
             </div>
 
             <div class="col-12">
                 <label asp-for="TagsCsv" class="form-label">Etiketler</label>
                 <input asp-for="TagsCsv" class="form-control" placeholder="Andes virus, MV Hondius, WHO" />
-                <div class="form-text">Virgulle ayir. Kart altinda hashtag olarak gorunur.</div>
+                <div class="form-text">Virgülle ayır. Kart altında hashtag olarak görünür.</div>
             </div>
         </div>
     </div>

@@ -64,7 +64,7 @@ public class OutbreakFormViewModel
     public decimal GrowthRate { get; set; }
     [Range(0, 100)] public byte ConfidenceScore { get; set; }
     public string? VerificationNotes { get; set; }
-    [Url, MaxLength(2048)] public string? PrimarySourceUrl { get; set; }
+    [Url(ErrorMessage = "Geçerli bir link gir."), MaxLength(2048)] public string? PrimarySourceUrl { get; set; }
     [DataType(DataType.Date)] public DateOnly? PublicationDate { get; set; }
     [DataType(DataType.Date)] public DateOnly? LastVerifiedDate { get; set; }
     [Required, DataType(DataType.Date)] public DateOnly StartedAt { get; set; } = DateOnly.FromDateTime(DateTime.UtcNow);
@@ -97,7 +97,7 @@ public class ArticleFormViewModel
     [Range(1, 120)] public int ReadingTimeMin { get; set; } = 3;
     [Range(0, 100)] public byte ConfidenceScore { get; set; }
     public string? VerificationNotes { get; set; }
-    [Url, MaxLength(2048)] public string? PrimarySourceUrl { get; set; }
+    [Url(ErrorMessage = "Geçerli bir link gir."), MaxLength(2048)] public string? PrimarySourceUrl { get; set; }
     [DataType(DataType.Date)] public DateOnly? PublicationDate { get; set; }
     [DataType(DataType.Date)] public DateOnly? LastVerifiedDate { get; set; }
     [Url, MaxLength(2048)] public string? CoverImageUrl { get; set; }
@@ -181,22 +181,22 @@ public class PathogenStatsFormViewModel
     public string? CurrentNotes { get; set; }
     public string? PublicPageUrl { get; set; }
 
-    [Range(0, int.MaxValue)]
+    [Range(0, int.MaxValue, ErrorMessage = "Negatif değer girilemez.")]
     public int? ReportedCases { get; set; }
 
-    [Range(0, int.MaxValue)]
+    [Range(0, int.MaxValue, ErrorMessage = "Negatif değer girilemez.")]
     public int? TotalDeaths { get; set; }
 
-    [Range(0, int.MaxValue)]
+    [Range(0, int.MaxValue, ErrorMessage = "Negatif değer girilemez.")]
     public int? AffectedCountries { get; set; }
 
-    [Range(0, int.MaxValue)]
+    [Range(0, int.MaxValue, ErrorMessage = "Negatif değer girilemez.")]
     public int? ActiveOutbreaks { get; set; }
 
     [MaxLength(200)]
     public string? SourceInstitution { get; set; }
 
-    [Url, MaxLength(2048)]
+    [Url(ErrorMessage = "Geçerli bir link gir."), MaxLength(2048)]
     public string? SourceUrl { get; set; }
 
     [DataType(DataType.Date)]

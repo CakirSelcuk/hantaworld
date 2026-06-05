@@ -64,7 +64,7 @@ public class AdminPathogenStatsController(
 
         if (pathogen is null)
         {
-            ModelState.AddModelError(nameof(model.PathogenId), "Secilen pathogen/category bulunamadi.");
+            ModelState.AddModelError(nameof(model.PathogenId), "Seçilen virüs/kategori bulunamadı.");
         }
 
         if (!ModelState.IsValid || pathogen is null)
@@ -121,7 +121,7 @@ public class AdminPathogenStatsController(
         await dbContext.SaveChangesAsync();
         await auditLogService.LogAsync(HttpContext, "upsert", "pathogen_stats", stats.Id, pathogen.Slug, oldValues, stats);
 
-        TempData["StatusMessage"] = "Pathogen/category stats saved.";
+        TempData["StatusMessage"] = "Salgın istatistikleri kaydedildi.";
         return RedirectToAction(nameof(Index), new { pathogenSlug = pathogen.Slug });
     }
 

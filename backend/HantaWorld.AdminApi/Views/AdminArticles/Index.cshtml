@@ -1,12 +1,12 @@
 @model IEnumerable<HantaWorld.AdminApi.Domain.Article>
 @{
-    ViewData["Title"] = "Intelligence Feed";
+    ViewData["Title"] = "Salgın Raporları";
 }
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <h1 class="h3 mb-1">Intelligence Feed</h1>
-        <div class="text-muted small">Ana sayfadaki feed ve /news rapor kartlari.</div>
+        <h1 class="h3 mb-1">Salgın Raporları</h1>
+        <div class="text-muted small">Ana sayfadaki rapor kartlarını ve /news sayfasındaki içerikleri buradan yönet.</div>
     </div>
     <a class="btn btn-primary" href="/admin/articles/create">Yeni Rapor</a>
 </div>
@@ -27,8 +27,8 @@
                 <tr>
                     <th>Rapor</th>
                     <th>Kategori</th>
-                    <th>Pathogen</th>
-                    <th>Gorunum</th>
+                    <th>Virüs / Kategori</th>
+                    <th>Görünüm</th>
                     <th>Push</th>
                     <th>Tarih</th>
                     <th></th>
@@ -59,7 +59,7 @@
                     </td>
                     <td>
                         <div class="small text-muted">
-                            Sent: @item.NotificationSendCount
+                            Gönderim: @item.NotificationSendCount
                         </div>
                         @if (item.LastNotificationSentAt.HasValue)
                         {
@@ -68,10 +68,10 @@
                     </td>
                     <td>
                         <div>@item.PublishedAt?.ToLocalTime().ToString("yyyy-MM-dd")</div>
-                        <div class="text-muted small">@item.ReadingTimeMin min read</div>
+                        <div class="text-muted small">@item.ReadingTimeMin dk okuma</div>
                     </td>
                     <td class="text-end">
-                        <a class="btn btn-sm btn-outline-primary" href="/admin/articles/@item.Id/edit">Duzenle</a>
+                        <a class="btn btn-sm btn-outline-primary" href="/admin/articles/@item.Id/edit">Düzenle</a>
                         @if (item.PublicationStatus == "published" && item.VerificationStatus == "verified")
                         {
                             <form method="post" action="/admin/articles/@item.Id/send-push" class="d-inline">
@@ -80,8 +80,8 @@
                                 <button
                                     type="submit"
                                     class="btn btn-sm btn-outline-success"
-                                    onclick="@(item.NotificationSendCount > 0 ? "return confirm('Notification was already sent. Send again?');" : "return confirm('Send push notification for this report?');")">
-                                    Send Push
+                                    onclick="@(item.NotificationSendCount > 0 ? "return confirm('Bu rapor için daha önce bildirim gönderildi. Tekrar gönderilsin mi?');" : "return confirm('Bu rapor için push bildirimi gönderilsin mi?');")">
+                                    Push Gönder
                                 </button>
                             </form>
                         }

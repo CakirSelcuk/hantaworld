@@ -3589,3 +3589,64 @@ Notlar:
 
 - Chartlar eksik tarih/degerlerde fake `0` uretmez; eksik noktalar null olarak kalir.
 - Multi-line chart sadece mevcut API history kayitlarina gore kendini otomatik genisletir.
+
+## 2026-06-05 - Phase 1D Admin Turkcelestirme ve Sadelesme
+
+Kurallar:
+
+- Push yapilmadi.
+- Commit yapilmadi.
+- Deploy yapilmadi.
+- Setup endpoint calistirilmadi.
+- Production environment degiskenleri degistirilmedi.
+- Database schema, tablo/entity adlari ve public frontend rotalari degistirilmedi.
+- Public site dili Ingilizce olarak korundu; sadece private admin ekran metinleri guncellendi.
+
+Kapsam:
+
+- Admin panel daha sade, pratik ve site sahibi icin Turkce olacak sekilde kopya/metin odakli guncellendi.
+- `/admin/pathogen-stats` route'u degismeden `Salgın İstatistikleri` ekranina donusturuldu.
+- `/admin/articles` route'u degismeden admin tarafinda `Salgın Raporları` olarak adlandirildi.
+
+Yapilan admin UI guncellemeleri:
+
+- Admin navigasyonunda:
+  - `Pathogen Stats` -> `Salgın İstatistikleri`
+  - `Intelligence Feed` -> `Salgın Raporları`
+  - `Map Markers` -> `Harita Noktaları`
+- `/admin/pathogen-stats` sayfasinda:
+  - Baslik ve aciklama Turkcelestirildi.
+  - Kisa yardim kutusu eklendi.
+  - Bolumler sadelestirildi:
+    - `Mevcut Değerler`
+    - `Verileri Güncelle`
+    - `Kaynak ve Doğrulama`
+    - `Son Kayıt Geçmişi`
+  - Form etiketleri Turkcelestirildi:
+    - `Virüs / Kategori`
+    - `Vaka Sayısı`
+    - `Ölüm Sayısı`
+    - `Etkilenen Ülke`
+    - `Aktif Salgın`
+    - `Kaynak Kurum`
+    - `Kaynak Linki`
+    - `Resmi Yayın Tarihi`
+    - `Son Doğrulama Tarihi`
+    - `Notlar`
+  - `Sitede Gör` linki korundu ve Turkcelestirildi.
+  - Bos durumlar Turkcelestirildi:
+    - `Henüz kayıt yok.`
+    - `Bu virüs için doğrulanmış istatistik bulunmuyor.`
+- Salgın Raporları admin ekranlarinda:
+  - Liste, create/edit basliklari ve form etiketleri Turkcelestirildi.
+  - `Virüs / Kategori` yardim metni sade hale getirildi.
+  - Push bildirimi uyarilari ve buton metinleri Turkcelestirildi.
+  - Kategori seceneklerinin gorunen metinleri Turkcelestirildi; veritabanina giden value degerleri degistirilmedi.
+- Validation mesajlari:
+  - Negatif sayi icin `Negatif değer girilemez.`
+  - Link validasyonu icin `Geçerli bir link gir.`
+
+Notlar:
+
+- Sayisal kartlari besleyen `Data Source Numeric` default public etiketleri degistirilmedi.
+- Public `/news`, `/pathogens`, `/pathogens/[slug]`, homepage ve public chart metinlerine dokunulmadi.
