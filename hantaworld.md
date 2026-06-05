@@ -3699,3 +3699,93 @@ Notlar:
 - Sosyal medya, blog veya dusuk kaliteli kaynak kullanilmadi.
 - Belirsiz veri kesinmis gibi sunulmadi.
 - Bu ekran sadece adminin manuel veri girisini hizlandiran bir yardimci workflow olarak tasarlandi.
+
+## 2026-06-05 - Phase 1F Kaynakli Virus Taramasi Rapor Taslagi Akisi
+
+Kurallar:
+
+- Push yapilmadi.
+- Commit yapilmadi.
+- Deploy yapilmadi.
+- Setup endpoint calistirilmadi.
+- Production environment degiskenleri degistirilmedi.
+- Public frontend dili degistirilmedi.
+- Public route'lara dokunulmadi.
+- `pathogen_stats` ve `pathogen_stat_history` otomatik guncellenmez.
+- Sayisal veri otomatik kaydedilmez.
+- Fake production data eklenmedi.
+
+Kapsam:
+
+- `/admin/pathogen-research` ekrani kontrollu research-to-report akisi olacak sekilde gelistirildi.
+- Admin once virus/kategori secer, sonra `Tarama Yap` ile dort blok gorur:
+  - `Salgin Istatistikleri icin onerilen sayilar`
+  - `Salgin Raporlari icin taslak`
+  - `Kaynaklar`
+  - `Admin kontrol notu`
+- Sayisal blok sadece kopyalanabilir metin olarak kalir.
+- Sayilar otomatik olarak istatistik tablolarina yazilmaz.
+- Dogrulanmis numerik veri yoksa sistem `0` uretmez; `Guncel ve dogrulanmis numerik veri bulunamadi.` mesajini kullanir.
+
+Rapor taslagi:
+
+- `Raporu Taslak Olarak Kaydet` butonu eklendi.
+- Bu buton sadece Salgin Raporlari icine `draft` + `pending` durumunda kayit olusturur.
+- Otomatik publish yapmaz.
+- Push notification tetiklemez.
+- Benzer taslak varsa yeni kayit acmaz, mevcut taslaga link verir.
+
+Article alan eslemesi:
+
+- `Title`: uretilecek rapor basligi.
+- `PathogenId`: secilen virus/kategori.
+- `Category`: `outbreak-report`.
+- `Excerpt`: kisa ozet.
+- `Content`: taslak detay metni.
+- `PrimarySourceUrl`: ilk resmi kaynak linki.
+- `PublicationDate` ve `LastVerifiedDate`: taslak olusturma tarihi.
+- `VerificationStatus`: `pending`.
+- `PublicationStatus`: `draft`.
+- `VerificationNotes`: admin kontrol ve kaynak dogrulama notu.
+- `SendPushOnPublish`: `false`.
+
+Teknik karar:
+
+- Canli scraping/fetching eklenmedi.
+- Resmi kaynak linklerinden kontrollu sablon ureten `PathogenResearchService` eklendi.
+- Bu tercih, saglik verisinde hatali otomatik yorumlama riskini azaltmak icin yapildi.
+
+## 2026-06-05 - Phase 1F Admin Push ve Durum Etiketi Sadelestirmesi
+
+Kurallar:
+
+- Push yapilmadi.
+- Commit yapilmadi.
+- Deploy yapilmadi.
+- Setup endpoint calistirilmadi.
+- Production environment degiskenleri degistirilmedi.
+- DB schema degistirilmedi.
+- Public siteye dokunulmadi.
+- Push gonderme kosullari gevsetilmedi.
+
+Kapsam:
+
+- Salgin Raporlari create/edit formunda durum seceneklerinin gorunen metinleri Turkcelestirildi.
+- Ic value degerleri korunur:
+  - `draft`
+  - `published`
+  - `archived`
+  - `pending`
+  - `verified`
+  - `rejected`
+- Admin gorunen etiketler:
+  - `draft` -> `Taslak`
+  - `published` -> `Yayinda`
+  - `archived` -> `Arsiv`
+  - `pending` -> `Beklemede`
+  - `verified` -> `Dogrulanmis`
+  - `rejected` -> `Reddedildi`
+- Push yardim metni netlestirildi:
+  - Bildirim yalnizca kayit kaydedilirken Yayin Durumu = Yayinda ve Dogrulama = Dogrulanmis ise gonderilir.
+  - Taslak veya bekleyen kayitlarda bildirim gonderilmez.
+- Liste ekraninda push gonderilemeyen raporlar icin kisa sebep gosterilir.

@@ -326,10 +326,18 @@ public class AdminArticlesController(
 
     private async Task TrySendAutomaticPushAsync(Article article, Guid? actorId)
     {
-        if (!article.SendPushOnPublish ||
-            article.NotificationSentAt.HasValue ||
-            article.PublicationStatus != "published" ||
-            article.VerificationStatus != "verified")
+        if (!article.SendPushOnPublish)
+        {
+            return;
+        }
+
+        if (article.PublicationStatus != "published" || article.VerificationStatus != "verified")
+        {
+            TempData["ErrorMessage"] = "Push seçildi ancak rapor Yayında + Doğrulanmış olmadığı için bildirim gönderilmedi.";
+            return;
+        }
+
+        if (article.NotificationSentAt.HasValue)
         {
             return;
         }

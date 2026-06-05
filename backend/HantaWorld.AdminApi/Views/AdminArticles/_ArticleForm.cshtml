@@ -12,7 +12,7 @@
         <input type="hidden" asp-for="VerificationNotes" />
 
         <div class="alert alert-info small">
-            Bu ekran ana sayfadaki Salgın Raporları kartlarını ve /news raporlarını yönetir. Public sitede görünmesi için kayıt `verified` ve `published` olmalıdır.
+            Bu ekran ana sayfadaki Salgın Raporları kartlarını ve /news raporlarını yönetir. Public sitede görünmesi için kayıt Doğrulanmış ve Yayında olmalıdır.
         </div>
 
         <div class="row g-3">
@@ -51,18 +51,18 @@
             <div class="col-md-3">
                 <label asp-for="VerificationStatus" class="form-label">Doğrulama</label>
                 <select asp-for="VerificationStatus" class="form-select">
-                    <option value="verified">verified</option>
-                    <option value="pending">pending</option>
-                    <option value="unverified">unverified</option>
-                    <option value="rejected">rejected</option>
+                    <option value="verified">Doğrulanmış</option>
+                    <option value="pending">Beklemede</option>
+                    <option value="unverified">Doğrulanmamış</option>
+                    <option value="rejected">Reddedildi</option>
                 </select>
             </div>
             <div class="col-md-2">
                 <label asp-for="PublicationStatus" class="form-label">Yayın Durumu</label>
                 <select asp-for="PublicationStatus" class="form-select">
-                    <option value="draft">draft</option>
-                    <option value="published">published</option>
-                    <option value="archived">archived</option>
+                    <option value="draft">Taslak</option>
+                    <option value="published">Yayında</option>
+                    <option value="archived">Arşiv</option>
                 </select>
             </div>
             <div class="col-md-2">
@@ -75,7 +75,11 @@
                     <input asp-for="SendPushOnPublish" class="form-check-input" />
                     <label asp-for="SendPushOnPublish" class="form-check-label">Yayınlanınca push bildirimi gönder</label>
                 </div>
-                <div class="form-text">Varsayılan kapalıdır. Sadece bu seçenek işaretliyse ve rapor verified + published ise bildirim gönderilir.</div>
+                <div class="form-text">
+                    Bildirim yalnızca kayıt kaydedilirken Yayın Durumu = Yayında ve Doğrulama = Doğrulanmış ise gönderilir.
+                    Taslak veya bekleyen kayıtlarda bildirim gönderilmez.
+                    Gönderim durumunu <a href="/admin/mobile-push-debug" target="_blank" rel="noopener">Mobil Push Debug</a> ekranından kontrol edebilirsin.
+                </div>
             </div>
 
             @if (Model.NotificationSendCount > 0)

@@ -241,10 +241,20 @@ public class PathogenResearchViewModel
 
     public List<SelectListItem> AvailablePathogens { get; set; } = new();
     public PathogenResearchOutputViewModel? Output { get; set; }
+    public string? CreatedArticleEditUrl { get; set; }
+    public string? SimilarArticleEditUrl { get; set; }
 }
 
 public class PathogenResearchOutputViewModel
 {
+    public string ReportTitle { get; set; } = string.Empty;
+    public string ReportSummary { get; set; } = string.Empty;
+    public string ReportContent { get; set; } = string.Empty;
+    public string ReportType { get; set; } = "outbreak-report";
+    public string SourceInstitution { get; set; } = string.Empty;
+    public string SourceUrl { get; set; } = string.Empty;
+    public DateOnly PublicationDate { get; set; }
+    public string VerificationNote { get; set; } = string.Empty;
     public string StatisticsText { get; set; } = string.Empty;
     public string ReportText { get; set; } = string.Empty;
     public string SourcesText { get; set; } = string.Empty;

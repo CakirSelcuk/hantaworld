@@ -11,6 +11,46 @@
     <a class="btn btn-primary" href="/admin/articles/create">Yeni Rapor</a>
 </div>
 
+@functions {
+    private static string DisplayPublicationStatus(string? status)
+    {
+        return status switch
+        {
+            "draft" => "Taslak",
+            "published" => "Yayında",
+            "archived" => "Arşiv",
+            _ => status ?? "-"
+        };
+    }
+
+    private static string DisplayVerificationStatus(string? status)
+    {
+        return status switch
+        {
+            "verified" => "Doğrulanmış",
+            "pending" => "Beklemede",
+            "unverified" => "Doğrulanmamış",
+            "rejected" => "Reddedildi",
+            _ => status ?? "-"
+        };
+    }
+
+    private static string PushUnavailableReason(HantaWorld.AdminApi.Domain.Article item)
+    {
+        if (item.PublicationStatus == "draft")
+        {
+            return "Taslak olduğu için gönderilemez";
+        }
+
+        if (item.VerificationStatus == "pending")
+        {
+            return "Doğrulama beklediği için gönderilemez";
+        }
+
+        return "Push için Yayında + Doğrulanmış olmalı";
+    }
+}
+
 @if (TempData["StatusMessage"] is string statusMessage)
 {
     <div class="alert alert-success">@statusMessage</div>
@@ -54,8 +94,8 @@
                         }
                     </td>
                     <td>
-                        <span class="badge text-bg-light">@item.VerificationStatus</span>
-                        <span class="badge text-bg-light">@item.PublicationStatus</span>
+                        <span class="badge text-bg-light">@DisplayVerificationStatus(item.VerificationStatus)</span>
+                        <span class="badge text-bg-light">@DisplayPublicationStatus(item.PublicationStatus)</span>
                     </td>
                     <td>
                         <div class="small text-muted">
@@ -64,6 +104,10 @@
                         @if (item.LastNotificationSentAt.HasValue)
                         {
                             <div class="small text-muted">@item.LastNotificationSentAt.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</div>
+                        }
+                        @if (item.NotificationSentAt.HasValue)
+                        {
+                            <div class="small text-muted">Bildirim daha önce gönderilmiş</div>
                         }
                     </td>
                     <td>
@@ -84,6 +128,10 @@
                                     Push Gönder
                                 </button>
                             </form>
+                        }
+                        else
+                        {
+                            <div class="small text-muted mt-1">@PushUnavailableReason(item)</div>
                         }
                         <form method="post" action="/admin/articles/@item.Id/delete" class="d-inline">
                             @Html.AntiForgeryToken()
