@@ -9,15 +9,20 @@ import { getPathogens } from '@/lib/data';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Pathogen Watch | HantaWorld',
+  title: { absolute: 'Pathogen Watch | HantaWorld' },
   description:
-    'Browse HantaWorld pathogen and outbreak intelligence profiles with source-attributed public health updates.',
+    'Explore verified outbreak intelligence by pathogen, including Hantavirus, Mpox, Dengue, Measles, Avian Influenza, Ebola / Marburg, and emerging public health threats.',
   alternates: { canonical: 'https://www.hantaworld.com/pathogens' },
   openGraph: {
     title: 'Pathogen Watch | HantaWorld',
-    description: 'Source-attributed pathogen and outbreak intelligence profiles from HantaWorld.',
+    description: 'Explore verified outbreak intelligence by pathogen, including Hantavirus, Mpox, Dengue, Measles, Avian Influenza, Ebola / Marburg, and emerging public health threats.',
     url: 'https://www.hantaworld.com/pathogens',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Pathogen Watch | HantaWorld',
+    description: 'Explore verified outbreak intelligence by pathogen and source-attributed public health category.',
   },
 };
 

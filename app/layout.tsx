@@ -8,13 +8,15 @@ const shouldLoadAdsense = process.env.NODE_ENV === 'production' && Boolean(adsen
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.hantaworld.com'),
   title: {
-    default: 'HantaWorld - Global Hantavirus Intelligence Platform',
+    default: 'HantaWorld | Global Outbreak & Virus Intelligence',
     template: '%s | HantaWorld',
   },
   description:
-    'Source-attributed global hantavirus outbreak tracking, intelligence feeds, interactive maps, and public health data for researchers and public health professionals.',
+    'Verified outbreak updates, pathogen profiles, source-attributed reports, and global public health intelligence from trusted official sources.',
   keywords: [
-    'hantavirus',
+    'outbreak intelligence',
+    'virus intelligence',
+    'pathogen profiles',
     'outbreak tracking',
     'global health intelligence',
     'disease surveillance',
@@ -27,15 +29,16 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     siteName: 'HantaWorld',
-    title: 'HantaWorld - Global Hantavirus Intelligence Platform',
-    description: 'Source-attributed global hantavirus outbreak tracking and public health intelligence.',
+    title: 'HantaWorld | Global Outbreak & Virus Intelligence',
+    description: 'Verified outbreak updates, pathogen profiles, source-attributed reports, and global public health intelligence from trusted official sources.',
     url: 'https://www.hantaworld.com',
     images: [{ url: '/hantaLogo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'HantaWorld - Global Hantavirus Intelligence',
-    description: 'Source-attributed global hantavirus outbreak tracking.',
+    title: 'HantaWorld | Global Outbreak & Virus Intelligence',
+    description: 'Verified outbreak updates, pathogen profiles, and source-attributed public health intelligence.',
+    images: ['/hantaLogo.png'],
   },
 };
 
@@ -71,9 +74,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               '@context': 'https://schema.org',
               '@type': 'Organization',
               name: 'HantaWorld',
-              url: 'https://hantaworld.com',
-              description: 'Global hantavirus outbreak intelligence platform',
-              logo: 'https://hantaworld.com/hantaLogo.png',
+              url: 'https://www.hantaworld.com',
+              description: 'Global outbreak and virus intelligence platform with source-attributed public health updates.',
+              logo: 'https://www.hantaworld.com/hantaLogo.png',
             }),
           }}
         />

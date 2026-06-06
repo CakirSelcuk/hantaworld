@@ -13,11 +13,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/hantavirus',
     '/hantavirus-symptoms',
     '/andes-virus',
+    '/privacy-policy',
+    '/legal/disclaimer',
+    '/legal/editorial-policy',
   ].map((path) => ({
     url: `${baseUrl}${path}`,
     lastModified: siteLastModified,
     changeFrequency: 'weekly' as const,
-    priority: 0.85,
+    priority: path.startsWith('/legal') ? 0.35 : 0.85,
   }));
 
   const countryUrls = countries.map((country) => ({

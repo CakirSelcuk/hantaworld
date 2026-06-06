@@ -18,15 +18,20 @@ import type { GlobalStatsTrendPoint } from '@/lib/types';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'HantaWorld - Global Outbreak and Virus Intelligence',
+  title: { absolute: 'HantaWorld | Global Outbreak & Virus Intelligence' },
   description:
-    'Verified outbreak updates, pathogen profiles, public health signals, and official source-attributed intelligence.',
+    'Verified outbreak updates, pathogen profiles, source-attributed reports, and global public health intelligence from trusted official sources.',
   alternates: { canonical: 'https://www.hantaworld.com' },
   openGraph: {
-    title: 'HantaWorld - Global Outbreak and Virus Intelligence',
-    description: 'Verified outbreak updates, pathogen profiles, and public health signals from HantaWorld.',
+    title: 'HantaWorld | Global Outbreak & Virus Intelligence',
+    description: 'Verified outbreak updates, pathogen profiles, source-attributed reports, and global public health intelligence from trusted official sources.',
     url: 'https://www.hantaworld.com',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'HantaWorld | Global Outbreak & Virus Intelligence',
+    description: 'Verified outbreak updates, pathogen profiles, and source-attributed public health intelligence.',
   },
 };
 

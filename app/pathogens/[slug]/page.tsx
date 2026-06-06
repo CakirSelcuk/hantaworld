@@ -20,8 +20,65 @@ function hasAnyStats(stats?: PathogenStats | null) {
   return [stats.reportedCases, stats.totalDeaths, stats.affectedCountries, stats.activeOutbreaks].some(hasValue);
 }
 
+const PATHOGEN_SEO: Record<string, { title: string; description: string }> = {
+  hantavirus: {
+    title: 'Hantavirus Outbreak Intelligence | HantaWorld',
+    description:
+      'Verified Hantavirus outbreak updates, case trends, source-attributed reports, and public health intelligence from trusted official sources.',
+  },
+  mpox: {
+    title: 'Mpox Outbreak Intelligence | HantaWorld',
+    description:
+      'Verified mpox outbreak updates, official public health reports, case trend signals, and source-attributed intelligence from WHO, CDC, ECDC and other trusted sources.',
+  },
+  dengue: {
+    title: 'Dengue Outbreak Intelligence | HantaWorld',
+    description:
+      'Verified dengue outbreak updates, public health reports, regional signals, and source-attributed intelligence from official health sources.',
+  },
+  measles: {
+    title: 'Measles Outbreak Intelligence | HantaWorld',
+    description:
+      'Verified measles outbreak updates, public health alerts, regional outbreak reports, and source-attributed intelligence from trusted official sources.',
+  },
+  'avian-influenza': {
+    title: 'Avian Influenza Intelligence | HantaWorld',
+    description:
+      'Verified avian influenza updates, outbreak reports, public health signals, and source-attributed intelligence from official health organizations.',
+  },
+  'ebola-marburg': {
+    title: 'Ebola and Marburg Outbreak Intelligence | HantaWorld',
+    description:
+      'Verified Ebola and Marburg outbreak updates, official public health reports, and source-attributed intelligence from trusted health authorities.',
+  },
+  'covid-respiratory-viruses': {
+    title: 'COVID and Respiratory Virus Intelligence | HantaWorld',
+    description:
+      'Verified COVID and respiratory virus updates, public health signals, and source-attributed outbreak intelligence from trusted official sources.',
+  },
+  'unknown-emerging-outbreaks': {
+    title: 'Emerging Outbreak Intelligence | HantaWorld',
+    description:
+      'Source-attributed intelligence for unknown, emerging, or developing outbreak signals from trusted official public health sources.',
+  },
+  'official-updates': {
+    title: 'Official Public Health Updates | HantaWorld',
+    description:
+      'Official outbreak updates, public health alerts, and source-attributed reports from trusted health authorities.',
+  },
+  'weekly-risk-brief': {
+    title: 'Weekly Outbreak Risk Brief | HantaWorld',
+    description:
+      'Weekly source-attributed outbreak intelligence and public health risk signals across monitored pathogens and regions.',
+  },
+};
+
 function buildDescription(pathogen: Pathogen) {
-  return pathogen.shortDescription || `${pathogen.displayName} outbreak intelligence and source-attributed public health updates.`;
+  return PATHOGEN_SEO[pathogen.slug]?.description || pathogen.shortDescription || `${pathogen.displayName} outbreak intelligence and source-attributed public health updates.`;
+}
+
+function buildTitle(pathogen: Pathogen) {
+  return PATHOGEN_SEO[pathogen.slug]?.title || `${pathogen.displayName} Outbreak Intelligence | HantaWorld`;
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -33,17 +90,23 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 
   const canonical = `https://www.hantaworld.com/pathogens/${pathogen.slug}`;
+  const title = buildTitle(pathogen);
   const description = buildDescription(pathogen);
 
   return {
-    title: `${pathogen.displayName} Intelligence | HantaWorld`,
+    title: { absolute: title },
     description,
     alternates: { canonical },
     openGraph: {
-      title: `${pathogen.displayName} Intelligence | HantaWorld`,
+      title,
       description,
       url: canonical,
       type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
     },
   };
 }

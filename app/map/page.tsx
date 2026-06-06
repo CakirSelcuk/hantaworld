@@ -5,14 +5,19 @@ import { getOutbreaks } from '@/lib/data';
 import { formatNumber, getSeverityColor, timeAgo } from '@/lib/utils';
 
 export const metadata: Metadata = {
-  title: 'Live Hantavirus Outbreak Map',
-  description: 'Track verified hantavirus outbreaks worldwide with a live map of cases, deaths, affected countries, and official source attribution.',
+  title: 'Global Outbreak Map',
+  description: 'Explore source-attributed outbreak records, country-level public health signals, and verified updates across monitored pathogens.',
   alternates: { canonical: 'https://www.hantaworld.com/map' },
   openGraph: {
-    title: 'Live Hantavirus Outbreak Map',
-    description: 'Verified global hantavirus outbreak map with official public health source attribution.',
+    title: 'Global Outbreak Map | HantaWorld',
+    description: 'Explore source-attributed outbreak records, country-level public health signals, and verified updates across monitored pathogens.',
     url: 'https://www.hantaworld.com/map',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Global Outbreak Map | HantaWorld',
+    description: 'Country-level outbreak intelligence and source-attributed public health signals from HantaWorld.',
   },
 };
 

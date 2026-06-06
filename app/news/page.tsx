@@ -8,14 +8,19 @@ import type { Article } from '@/lib/types';
 import { timeAgo } from '@/lib/utils';
 
 export const metadata: Metadata = {
-  title: 'Intelligence Feed',
-  description: 'Verified outbreak reports, pathogen updates, scientific research, travel advisories, and public health intelligence from source-attributed records.',
+  title: 'Outbreak Intelligence Feed',
+  description: 'Verified outbreak reports, pathogen updates, official public health alerts, and source-attributed intelligence from trusted health sources.',
   alternates: { canonical: 'https://www.hantaworld.com/news' },
   openGraph: {
-    title: 'HantaWorld Intelligence Feed',
-    description: 'Verified outbreak reports and source-attributed public health updates from HantaWorld.',
+    title: 'Outbreak Intelligence Feed | HantaWorld',
+    description: 'Verified outbreak reports, pathogen updates, official public health alerts, and source-attributed intelligence from trusted health sources.',
     url: 'https://www.hantaworld.com/news',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Outbreak Intelligence Feed | HantaWorld',
+    description: 'Verified outbreak reports and source-attributed public health updates from HantaWorld.',
   },
 };
 

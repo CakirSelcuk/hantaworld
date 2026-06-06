@@ -3895,3 +3895,26 @@ Kapsam:
   - Trend Snapshots
 - `MultiPathogenCaseTrendChart` icin yeni multi-patojen history verisi bos ise legacy global stats trend Hantavirus cizgisi olarak fallback kullanilir.
 - `/pathogens/hantavirus` detay sayfasindaki Hantavirus istatistikleri korunur.
+
+## 2026-06-06 - Multi-Pathogen SEO Metadata Phase
+
+Kurallar:
+
+- Push yapilmadi.
+- Commit yapilmadi.
+- Deploy yapilmadi.
+- Setup endpoint calistirilmadi.
+- Production environment degiskenleri degistirilmedi.
+- Backend, DB ve admin panel degistirilmedi.
+- Public site copy Ingilizce tutuldu.
+- Fake veri eklenmedi.
+- Tibbi tani/tedavi iddiasi eklenmedi.
+
+Kapsam:
+
+- Global metadata Hantavirus-only dilden multi-pathogen outbreak intelligence diline tasindi.
+- Homepage title/description Open Graph ve Twitter metadata guncellendi.
+- `/pathogens` metadata Hantavirus, Mpox, Dengue, Measles, Avian Influenza, Ebola / Marburg ve emerging threats kapsayacak sekilde guncellendi.
+- `/pathogens/[slug]` icin slug bazli title/description haritasi eklendi.
+- `/news` ve `/map` metadata multi-pathogen/source-attributed public health intelligence diline cekildi.
+- Sitemap'e pathogen detaylari fallback ile korunacak sekilde devam edildi; privacy, disclaimer ve editorial policy gibi onemli public sayfalar eklendi.
