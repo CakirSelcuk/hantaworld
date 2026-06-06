@@ -4,6 +4,7 @@ import { ArrowRight, Bell, ShieldCheck } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import LiveTicker from '@/components/dashboard/LiveTicker';
+import HeroStats from '@/components/dashboard/HeroStats';
 import CountryWatchlist from '@/components/dashboard/CountryWatchlist';
 import LatestReports from '@/components/dashboard/LatestReports';
 import AlertSignup from '@/components/dashboard/AlertSignup';
@@ -11,8 +12,8 @@ import SocialIntelligence from '@/components/dashboard/SocialIntelligence';
 import MapWrapper from '@/components/map/MapWrapper';
 import MultiPathogenCaseTrendChart from '@/components/pathogens/MultiPathogenCaseTrendChart';
 import PathogenCard from '@/components/pathogens/PathogenCard';
-import { getArticles, getCountryWatchlist, getGlobalStatsTrend, getOutbreaks, getPathogens, getPathogenStatsTrend, getSocialTrends, getTickerItems } from '@/lib/data';
-import type { GlobalStatsTrendPoint, PathogenTrendPoint } from '@/lib/types';
+import { getArticles, getCountryWatchlist, getGlobalStats, getGlobalStatsTrend, getOutbreaks, getPathogens, getPathogenStatsTrend, getSocialTrends, getTickerItems } from '@/lib/data';
+import type { GlobalStatsTrendPoint } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -29,15 +30,25 @@ export const metadata: Metadata = {
   },
 };
 
-function mapLegacyGlobalTrendToHantavirusTrend(trend: GlobalStatsTrendPoint[]): PathogenTrendPoint[] {
-  return trend.map((point) => ({
-    date: point.date,
-    pathogenSlug: 'hantavirus',
-    pathogenDisplayName: 'Hantavirus',
-    pathogenColor: '#ef4444',
-    reportedCases: point.reportedCases,
-    totalDeaths: point.totalDeaths,
-  }));
+function calculateCaseChange7d(trend: GlobalStatsTrendPoint[]) {
+  const sortedTrend = [...trend].sort((a, b) => a.date.localeCompare(b.date));
+  const latest = sortedTrend.at(-1);
+
+  if (!latest || sortedTrend.length < 2) {
+    return 0;
+  }
+
+  const sevenDaysBeforeLatest = new Date(`${latest.date}T00:00:00Z`);
+  sevenDaysBeforeLatest.setUTCDate(sevenDaysBeforeLatest.getUTCDate() - 7);
+  const baseline =
+    [...sortedTrend].reverse().find((point) => new Date(`${point.date}T00:00:00Z`) <= sevenDaysBeforeLatest) ??
+    sortedTrend[0];
+
+  if (!baseline || baseline.date === latest.date || baseline.reportedCases === 0) {
+    return 0;
+  }
+
+  return Math.round(((latest.reportedCases - baseline.reportedCases) / baseline.reportedCases) * 1000) / 10;
 }
 
 export default async function HomePage() {
@@ -45,12 +56,15 @@ export default async function HomePage() {
   const watchlist = await getCountryWatchlist(outbreaks);
   const articles = await getArticles();
   const socialTrends = await getSocialTrends();
+  const globalStats = await getGlobalStats();
+  const globalStatsTrend = await getGlobalStatsTrend();
   const pathogens = await getPathogens();
   const pathogenStatsTrend = await getPathogenStatsTrend();
-  const legacyGlobalStatsTrend = await getGlobalStatsTrend();
-  const caseTrend = pathogenStatsTrend.length > 0
-    ? pathogenStatsTrend
-    : mapLegacyGlobalTrendToHantavirusTrend(legacyGlobalStatsTrend);
+  const displayStats = {
+    ...globalStats,
+    growthRate7d: calculateCaseChange7d(globalStatsTrend),
+  };
+  const verifiedAt = new Date().toISOString();
   const tickerItems = await getTickerItems();
 
   return (
@@ -85,14 +99,14 @@ export default async function HomePage() {
               </p>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '1.15rem' }}>
-                <Link href="/map" className="btn btn-ghost" style={{ padding: '0.72rem 1rem' }}>
-                  View Global Map
-                </Link>
                 <Link href="/pathogens" className="btn btn-primary" style={{ padding: '0.72rem 1rem' }}>
-                  Browse Pathogens <ArrowRight size={14} />
+                  Explore Pathogens <ArrowRight size={14} />
+                </Link>
+                <Link href="/map" className="btn btn-ghost" style={{ padding: '0.72rem 1rem' }}>
+                  View Live Map
                 </Link>
                 <Link href="/news" className="btn btn-ghost" style={{ padding: '0.72rem 1rem' }}>
-                  Read Intelligence Reports
+                  Read Intelligence Feed
                 </Link>
               </div>
 
@@ -127,33 +141,16 @@ export default async function HomePage() {
                 No active pathogen profiles are available from the live API yet.
               </div>
             )}
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 210px), 1fr))', gap: '0.8rem', marginTop: '1.25rem' }}>
-              {[
-                { label: 'Pathogen Profiles', value: pathogens.length, note: 'Active profiles and categories' },
-                { label: 'Mapped Records', value: outbreaks.length, note: 'Country-level outbreak entries' },
-                { label: 'Intelligence Reports', value: articles.length, note: 'Published source-attributed reports' },
-                { label: 'Trend Snapshots', value: caseTrend.length, note: 'Historical chart points available' },
-              ].map((item) => (
-                <div key={item.label} className="glass-card" style={{ padding: '1rem', borderColor: 'rgba(14,165,233,0.18)' }}>
-                  <div style={{ color: '#bae6fd', fontFamily: 'var(--font-display)', fontSize: '1.7rem', fontWeight: 750, marginBottom: '0.25rem' }}>
-                    {item.value}
-                  </div>
-                  <div style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-ui)', fontWeight: 650, fontSize: '0.82rem', marginBottom: '0.25rem' }}>
-                    {item.label}
-                  </div>
-                  <div style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '0.62rem' }}>
-                    {item.note}
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         </section>
 
         <hr className="section-divider" style={{ margin: '0 1.5rem' }} />
 
-        <MultiPathogenCaseTrendChart trend={caseTrend} />
+        <HeroStats stats={displayStats} verifiedAt={verifiedAt} />
+
+        <hr className="section-divider" style={{ margin: '0 1.5rem' }} />
+
+        <MultiPathogenCaseTrendChart trend={pathogenStatsTrend} />
 
         <hr className="section-divider" style={{ margin: '0 1.5rem' }} />
 
@@ -202,7 +199,7 @@ export default async function HomePage() {
                   <Bell size={17} color="#38bdf8" />
                 </div>
                 <div>
-                  <strong style={{ display: 'block', color: 'var(--text-primary)', fontFamily: 'var(--font-ui)', fontSize: '0.9rem' }}>Get Outbreak Intelligence Alerts</strong>
+                  <strong style={{ display: 'block', color: 'var(--text-primary)', fontFamily: 'var(--font-ui)', fontSize: '0.9rem' }}>Get Hantavirus Outbreak Alerts</strong>
                   <span style={{ color: 'var(--text-secondary)', fontSize: '0.78rem' }}>Source-attributed updates and weekly intelligence briefings. No spam.</span>
                 </div>
               </div>
