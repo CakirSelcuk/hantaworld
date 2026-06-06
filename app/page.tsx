@@ -132,7 +132,7 @@ export default async function HomePage() {
 
             {pathogens.length > 0 ? (
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))', gap: '0.9rem' }}>
-                {pathogens.slice(0, 8).map((pathogen) => (
+                {pathogens.map((pathogen) => (
                   <PathogenCard key={pathogen.slug} pathogen={pathogen} featured={pathogen.slug === 'hantavirus'} />
                 ))}
               </div>

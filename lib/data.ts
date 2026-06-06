@@ -14,6 +14,109 @@ const API_BASE_URL =
 
 const DEFAULT_LAST_UPDATED = '2026-05-11T00:00:00Z';
 
+const fallbackPathogenRows: Pathogen[] = [
+  {
+    slug: 'hantavirus',
+    name: 'Hantavirus',
+    displayName: 'Hantavirus',
+    shortDescription: 'Source-attributed outbreak intelligence for hantavirus and Andes virus updates.',
+    color: '#ef4444',
+    sortOrder: 10,
+    isActive: true,
+    stats: null,
+  },
+  {
+    slug: 'ebola-marburg',
+    name: 'Ebola / Marburg',
+    displayName: 'Ebola / Marburg',
+    shortDescription: 'Official-source monitoring for Ebola virus disease and Marburg virus disease reports.',
+    color: '#f97316',
+    sortOrder: 20,
+    isActive: true,
+    stats: null,
+  },
+  {
+    slug: 'mpox',
+    name: 'Mpox',
+    displayName: 'Mpox',
+    shortDescription: 'Public health updates and official reports for mpox outbreaks and risk signals.',
+    color: '#a855f7',
+    sortOrder: 30,
+    isActive: true,
+    stats: null,
+  },
+  {
+    slug: 'dengue',
+    name: 'Dengue',
+    displayName: 'Dengue',
+    shortDescription: 'Regional and global dengue surveillance updates from public health sources.',
+    color: '#f59e0b',
+    sortOrder: 40,
+    isActive: true,
+    stats: null,
+  },
+  {
+    slug: 'measles',
+    name: 'Measles',
+    displayName: 'Measles',
+    shortDescription: 'Verified-source measles outbreak reports, vaccination signals, and health advisories.',
+    color: '#38bdf8',
+    sortOrder: 50,
+    isActive: true,
+    stats: null,
+  },
+  {
+    slug: 'avian-influenza',
+    name: 'Avian Influenza',
+    displayName: 'Avian Influenza',
+    shortDescription: 'Official updates on avian influenza events and cross-border public health signals.',
+    color: '#22c55e',
+    sortOrder: 60,
+    isActive: true,
+    stats: null,
+  },
+  {
+    slug: 'covid-respiratory-viruses',
+    name: 'COVID / Respiratory Viruses',
+    displayName: 'COVID / Respiratory Viruses',
+    shortDescription: 'Source-attributed respiratory virus intelligence, including COVID-related updates.',
+    color: '#6366f1',
+    sortOrder: 70,
+    isActive: true,
+    stats: null,
+  },
+  {
+    slug: 'unknown-emerging-outbreaks',
+    name: 'Unknown / Emerging Outbreaks',
+    displayName: 'Unknown / Emerging Outbreaks',
+    shortDescription: 'Monitoring category for emerging outbreak signals that require official verification.',
+    color: '#94a3b8',
+    sortOrder: 80,
+    isActive: true,
+    stats: null,
+  },
+  {
+    slug: 'official-updates',
+    name: 'Official Updates',
+    displayName: 'Official Updates',
+    shortDescription: 'Category-like feed for official health agency updates and public health notices.',
+    color: '#0ea5e9',
+    sortOrder: 90,
+    isActive: true,
+    stats: null,
+  },
+  {
+    slug: 'weekly-risk-brief',
+    name: 'Weekly Risk Brief',
+    displayName: 'Weekly Risk Brief',
+    shortDescription: 'Category-like feed for weekly outbreak risk briefings and editorial intelligence summaries.',
+    color: '#14b8a6',
+    sortOrder: 100,
+    isActive: true,
+    stats: null,
+  },
+];
+
 type ApiCountry = {
   slug?: string;
   isoCode?: string;
@@ -539,16 +642,18 @@ export async function getArticleBySlug(slug: string): Promise<Article | undefine
 
 export async function getPathogens(): Promise<Pathogen[]> {
   const pathogens = await fetchApi<ApiPathogen[]>('/api/pathogens');
-  return (pathogens ?? [])
+  const livePathogens = (pathogens ?? [])
     .map(mapPathogen)
     .filter((pathogen): pathogen is Pathogen => Boolean(pathogen))
     .filter((pathogen) => pathogen.isActive)
     .sort((a, b) => a.sortOrder - b.sortOrder || a.displayName.localeCompare(b.displayName));
+
+  return livePathogens.length > 0 ? livePathogens : fallbackPathogenRows;
 }
 
 export async function getPathogenBySlug(slug: string): Promise<Pathogen | undefined> {
   const pathogen = await fetchApi<ApiPathogen>(`/api/pathogens/${encodeURIComponent(slug)}`);
-  return mapPathogen(pathogen ?? {}) ?? undefined;
+  return mapPathogen(pathogen ?? {}) ?? fallbackPathogenRows.find((entry) => entry.slug === slug);
 }
 
 export async function getPathogenTrend(slug: string): Promise<PathogenTrendPoint[]> {
