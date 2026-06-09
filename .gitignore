@@ -40,3 +40,22 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# mobile / expo
+mobile/node_modules/
+mobile/.expo/
+mobile/dist/
+mobile/build/
+mobile/android/app/build/
+mobile/ios/build/
+
+# mobile build artifacts
+*.apk
+*.aab
+*.keystore
+*.jks
+*.p8
+
+# local native build output
+android/app/build/
+ios/build/

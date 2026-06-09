@@ -3918,3 +3918,44 @@ Kapsam:
 - `/pathogens/[slug]` icin slug bazli title/description haritasi eklendi.
 - `/news` ve `/map` metadata multi-pathogen/source-attributed public health intelligence diline cekildi.
 - Sitemap'e pathogen detaylari fallback ile korunacak sekilde devam edildi; privacy, disclaimer ve editorial policy gibi onemli public sayfalar eklendi.
+
+## 2026-06-09 - Mobile M1 Multi-Pathogen Foundation
+
+Kurallar:
+
+- Push yapilmadi.
+- Commit yapilmadi.
+- Deploy yapilmadi.
+- Setup endpoint calistirilmadi.
+- Production environment degiskenleri degistirilmedi.
+- Backend, admin panel ve DB degistirilmedi.
+- Android AAB/APK build alinmadi.
+- Push notification registration akisi degistirilmedi.
+- Mobil uygulama copy dili Ingilizce tutuldu.
+- Fake production data eklenmedi.
+
+Kapsam:
+
+- Mobil app positioning Hantavirus-only dilden `Global Outbreak & Virus Intelligence` diline cekildi.
+- Dashboard'a `Pathogen Watch` bolumu eklendi.
+- `/api/pathogens` icin mobil API helper ve guvenli fallback taxonomy listesi eklendi.
+- Fallback taxonomy:
+  - Hantavirus
+  - Ebola / Marburg
+  - Mpox
+  - Dengue
+  - Measles
+  - Avian Influenza
+  - COVID / Respiratory Viruses
+  - Unknown / Emerging Outbreaks
+  - Official Updates
+  - Weekly Risk Brief
+- Yeni mobil ekranlar eklendi:
+  - `/pathogens`
+  - `/pathogens/[slug]`
+- Pathogen detail ekraninda stats varsa Reported Cases, Total Deaths, Affected Countries ve Active Outbreaks gosterilir.
+- Stats yoksa `No verified statistics available yet.` empty state gosterilir; sahte sifir uretilmez.
+- Pathogen trend endpointi eklendi; eksik/null trend degerleri chart'a sahte sifir olarak verilmez.
+- News listesine basit pathogen filter chip'leri eklendi.
+- News kartlari ve news detail ekranlari API donerse pathogen/category badge gosterir.
+- Eski Hantavirus info ekranlari ve legacy Hantavirus snapshot kartlari korunur.

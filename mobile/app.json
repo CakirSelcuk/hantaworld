@@ -1,0 +1,47 @@
+{
+  "expo": {
+    "name": "HantaWorld",
+    "slug": "hantaworld-mobile",
+    "version": "1.0.3",
+    "orientation": "portrait",
+    "scheme": "hantaworld",
+    "userInterfaceStyle": "dark",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": false
+    },
+    "android": {
+      "package": "com.hantaworld.mobile",
+      "googleServicesFile": "./google-services.json",
+      "versionCode": 6,
+      "permissions": [
+        "POST_NOTIFICATIONS"
+      ]
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "expo-notifications",
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-1333313233367768~9415536183",
+          "iosAppId": "ca-app-pub-3940256099942544~1458002511",
+          "optimizeInitialization": true,
+          "optimizeAdLoading": true
+        }
+      ]
+    ],
+    "extra": {
+      "apiBaseUrl": "https://hantaapi.sinavio.com.tr",
+      "adMobAndroidAppId": "ca-app-pub-1333313233367768~9415536183",
+      "adMobBannerAdUnitId": "ca-app-pub-1333313233367768/5033438042",
+      "router": {},
+      "eas": {
+        "projectId": "878f308d-7ffa-43f3-94ab-fc405222df86"
+      }
+    }
+  }
+}
